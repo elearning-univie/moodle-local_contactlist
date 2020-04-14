@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 function xmldb_local_contactlist_uninstall() {
     global $DB;
-    
+
     try {
         $userinfocategory = $DB->get_record('user_info_category', array('name' => 'Privacy Settings'));
         $id = $userinfocategory->id;

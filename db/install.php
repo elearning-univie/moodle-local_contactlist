@@ -33,10 +33,10 @@ defined('MOODLE_INTERNAL') || die();
  */
 function xmldb_local_contactlist_install() {
     global $DB;
-   
+
     try {
         $userinfocategory = $DB->get_record('user_info_category', array('name' => 'Privacy Settings'));
-        if(!$userinfocategory) {
+        if (!$userinfocategory) {
             $record = new stdClass();
             $record->name         = 'Privacy Settings';
             $id = $DB->insert_record('user_info_category', $record);
