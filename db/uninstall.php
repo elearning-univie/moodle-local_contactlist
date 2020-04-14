@@ -17,8 +17,7 @@
 /**
  * Uninstall script for local contactlist plugin
  *
- * @package       local
- * @subpackage    contactlist
+ * @package       local_contactlist
  * @author        Angela Baier
  * @copyright     2020 University of Vienna
  * @since         Moodle 3.8+
