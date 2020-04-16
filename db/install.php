@@ -49,7 +49,7 @@ function xmldb_local_contactlist_install() {
         if (!$userinfofield) {
             $record = new stdClass();
             $record->shortname    = 'contactlistdd';
-            $record->name         = 'Contact list visibility';
+            $record->name         = 'Global contact list visibility';
             $record->datatype     = 'menu';
             $record->categoryid   = $id;
             $record->sortorder    = 2;

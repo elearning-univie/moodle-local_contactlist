@@ -25,4 +25,5 @@
  */
 
 $string['pluginname'] = 'Contactlist';
+$string['pagetitle'] = 'Contactlist';
 
