@@ -32,24 +32,67 @@ defined('MOODLE_INTERNAL') || die;
  * @param stdClass $course The course to object for the report
  * @param stdClass $context The context of the course
  */
-function local_contactlist_extend_navigation_course($navigation, $course, $context) {
-    global $CFG, $OUTPUT;
+function local_contactlist_extend_navigation($navigation) {
+    global $USER, $PAGE, $DB;
 
-//    require_once($CFG->libdir.'/completionlib.php');
+    if (empty($USER->id)) {
+        return;
+    }
 
-    $url = new moodle_url('/local/contactlist/studentview.php', array('course'=>$course->id));
-    $navigation->add(get_string('pluginname','local_contactlist'), $url, navigation_node::TYPE_COURSE, null, null, null);
-    
-//     $showonnavigation = has_capability('report/progress:view', $context);
-//     $group = groups_get_course_group($course,true); // Supposed to verify group
-//     if($group===0 && $course->groupmode==SEPARATEGROUPS) {
-//         $showonnavigation = ($showonnavigation && has_capability('moodle/site:accessallgroups', $context));
-//     }
+    if ('admin-index' === $PAGE->pagetype) {
+        $exists = $DB->record_exists('capabilities', array('name' => 'local/contactlist:view'));
 
-//     $completion = new completion_info($course);
-//     $showonnavigation = ($showonnavigation && $completion->is_enabled() && $completion->has_activities());
-//     if ($showonnavigation) {
-//         $url = new moodle_url('/report/progress/index.php', array('course'=>$course->id));
-//         $navigation->add(get_string('pluginname','report_progress'), $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
-//     }
+        if (!$exists) {
+            return;
+        }
+    }
+
+    $context = context::instance_by_id($PAGE->context->id);
+    $isvalidcontext = ($context instanceof context_course || $context instanceof context_module) ? true : false;
+    if (!$isvalidcontext) {
+        return;
+    }
+
+    $coursecontext = null;
+    if ($context instanceof context_module) {
+        $coursecontext = $context->get_course_context();
+    } else {
+        $coursecontext = $context;
+    }
+
+    if(!has_capability('local/contactlist:view', $coursecontext, $USER)) {
+        return;
+    }
+
+    $icon = null;
+    $pluginname = get_string('pluginname','local_contactlist');
+    $url = new moodle_url('/local/contactlist/studentview.php', array('courseid'=>$coursecontext->instanceid));
+
+    $currentCourseNode = $navigation->find('currentcourse', $navigation::TYPE_ROOTNODE);
+    if (isNodeNotEmpty($currentCourseNode)) {
+        $currentCourseNode->add($pluginname, $url, navigation_node::NODETYPE_LEAF, $pluginname, null, $icon);
+    }
+
+    $myCoursesNode = $navigation->find('mycourses', $navigation::TYPE_ROOTNODE);
+    if(isNodeNotEmpty($myCoursesNode)) {
+        $currentCourseInMyCourses = $myCoursesNode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
+        if($currentCourseInMyCourses) {
+            $currentCourseInMyCourses->add($pluginname, $url, navigation_node::NODETYPE_LEAF, $pluginname, null, $icon);
+        }
+    }
+
+    $coursesNode = $navigation->find('courses', $navigation::TYPE_ROOTNODE);
+    if (isNodeNotEmpty($coursesNode)) {
+        $currentCourseInCourses = $coursesNode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
+        if ($currentCourseInCourses) {
+            $currentCourseInCourses->add($pluginname, $url, navigation_node::NODETYPE_LEAF, $pluginname, null, $icon);
+        }
+    }
+
 }
+
+function isNodeNotEmpty(navigation_node $node) {
+    return $node !== false && $node->has_children();
+}
+
+
