@@ -89,7 +89,6 @@ $formdata = $mform->get_data();
 
 if($formdata) {
     local_contactlist_save_update($USER->id, $courseid, $formdata->localvisibility);
-    echo 'hellooooooo';
     //print_object($formdata);
 }
 

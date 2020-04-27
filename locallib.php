@@ -35,20 +35,27 @@ function local_contactlist_get_participants(int $courseid, $userid){
     global $DB;
 
     $params = array();
-    $params['courseid'] = $courseid;
-    $sql = "SELECT USER.id, USER.firstname, USER.lastname , USER.email
-            FROM {role_assignments} AS asg
-            JOIN {context} AS context ON asg.contextid = context.id AND context.contextlevel = 50
-            JOIN {user} AS USER ON USER.id = asg.userid
-            JOIN {course} AS course ON context.instanceid = course.id
-            JOIN {user_info_data} AS uid ON uid.userid = USER.id 
-            WHERE asg.roleid = 5
-            AND uid.data LIKE 'Yes'
-            AND course.id =:courseid
-            ORDER BY USER.lastname DESC";
-    
+    $params['cid'] = $courseid;
+    $params['cid2'] = $courseid;
+
+    $sql ="SELECT uid, firstname, lastname, email FROM
+          (SELECT * FROM
+          (SELECT USER.id as uid, USER.firstname, USER.lastname, USER.email
+          FROM {role_assignments} AS asg
+          JOIN {context} AS context ON asg.contextid = context.id AND context.contextlevel = 50
+          JOIN {user} AS USER ON USER.id = asg.userid
+          JOIN {course} AS course ON context.instanceid = course.id
+          WHERE asg.roleid = 5
+          AND course.id =:cid) AS table1
+          LEFT JOIN {user_info_data} as table2 on table1.uid = table2.userid ) as join1
+          LEFT JOIN (SELECT * FROM {local_contactlist_course_vis} WHERE courseid =:cid2) as table3 on join1.uid = table3.userid
+          WHERE (join1.data IS NULL AND visib = 1)
+          OR (join1.data LIKE 'Yes' AND visib IS NULL)
+          OR (join1.data LIKE 'Yes' AND visib = 1)
+          ORDER BY join1.lastname ASC";
+
     $participants = $DB->get_records_sql($sql, $params);
-    
+
     return $participants;
 }
 
@@ -62,7 +69,7 @@ function local_contactlist_save_update($userid, $courseid, $show) {
     $sql = "SELECT * FROM {local_contactlist_course_vis} AS cv 
             WHERE cv.courseid =:courseid
             AND cv.userid =:userid";
-    
+
     $record = $DB->get_record_sql($sql, $params);
     
     if ($record) {
