@@ -26,4 +26,14 @@
 
 $string['pluginname'] = 'Contactlist';
 $string['pagetitle'] = 'Contactlist';
-
+$string['name'] = 'First name';
+$string['surname'] = 'Surname';
+$string['email'] = 'Email address';
+$string['role'] = 'Role';
+$string['localvisibility'] = 'Course contact list visibility';
+$string['localvisibility_help'] = 'Info';
+$string['localvisibilitydefault'] = 'Default: Global Visibility';
+$string['visible'] = 'visible';
+$string['invisible'] = 'invisible';
+$string['globaldefault'] = 'default (global)';
+$string['personalvisibilityinfo'] = 'Here will be the information about your global vs local visibility if there is a difference.';
