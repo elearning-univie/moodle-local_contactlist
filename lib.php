@@ -94,4 +94,3 @@ function local_contactlist_extend_navigation($navigation) {
 function isNodeNotEmpty(navigation_node $node) {
     return $node !== false && $node->has_children();
 }
-
