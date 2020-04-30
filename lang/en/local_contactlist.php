@@ -37,3 +37,4 @@ $string['visible'] = 'visible';
 $string['invisible'] = 'invisible';
 $string['globaldefault'] = 'default (global)';
 $string['personalvisibilityinfo'] = 'Here will be the information about your global vs local visibility if there is a difference.';
+$string['totalvsvisible'] = '{$a->visible} participants out of {$a->total} registered in this course are sharing their contact information.';

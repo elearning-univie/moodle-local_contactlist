@@ -19,10 +19,11 @@ namespace local_contactlist\form;
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/formslib.php');
+require_once($CFG->dirroot . '/local/contactlist/locallib.php');
 
-define('CONTACTLIST_DEFAULT', get_string('globaldefault', 'local_contactlist'));
-define('CONTACTLIST_VISIBLE', get_string('visible', 'local_contactlist'));
-define('CONTACTLIST_INVISIBLE', get_string('invisible', 'local_contactlist'));
+//define('CONTACTLIST_DEFAULT', get_string('globaldefault', 'local_contactlist'));
+//define('CONTACTLIST_VISIBLE', get_string('visible', 'local_contactlist'));
+//define('CONTACTLIST_INVISIBLE', get_string('invisible', 'local_contactlist'));
 
 /**
  * Form to update local course contactlist visibility
@@ -30,7 +31,7 @@ define('CONTACTLIST_INVISIBLE', get_string('invisible', 'local_contactlist'));
  * @package       local_contactlist
  * @author        Angela Baier
  * @copyright     2020 University of Vienna
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class contactlist_form extends \moodleform {
 
@@ -38,7 +39,7 @@ class contactlist_form extends \moodleform {
      * Form definition method.
      */
     public function definition() {
-        global $PAGE;
+        global $PAGE, $USER;
 
         $courseid     = optional_param('id', 0, PARAM_INT); // This are required.
 
@@ -49,16 +50,18 @@ class contactlist_form extends \moodleform {
         $localvsglobal = get_string('personalvisibilityinfo', 'local_contactlist');
 
         echo '<p>'. $localvsglobal.'</p>';
-       
+
         $options = array(
             0 => CONTACTLIST_DEFAULT,
             1 => CONTACTLIST_VISIBLE,
             2 => CONTACTLIST_INVISIBLE
         );
 
-        $mform->addElement('select', 'localvisibility', get_string('localvisibility', 'local_contactlist'), $options);
-        $mform->setType('localvisibility', PARAM_INT);
-        $mform->addHelpButton('localvisibility', 'localvisibility','local_contactlist');
+        $visib =  local_contactlist_courselevel_visibility($USER->id, $courseid);
+        $mform->addElement('select', 'visib', get_string('localvisibility', 'local_contactlist'), $options);
+        $mform->setType('visib', PARAM_INT);
+        $mform->setDefault('visib', $visib);
+        $mform->addHelpButton('visib', 'visib','local_contactlist');
         $this->add_action_buttons();
     }
 

@@ -26,6 +26,8 @@ require_once(__DIR__ . '/../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 require_once($CFG->libdir.'/dataformatlib.php');
 require_once($CFG->dirroot . '/local/contactlist/locallib.php');
+require_once($CFG->dirroot . '/local/contactlist/contactlist_table.php');
+
 require_once($CFG->libdir.'/tablelib.php');
 
 
@@ -35,6 +37,8 @@ $page         = optional_param('page', 0, PARAM_INT);
 $perpage      = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
 $contextid    = optional_param('contextid', 0, PARAM_INT);
 $courseid     = optional_param('id', 0, PARAM_INT);
+$filtersapplied = optional_param_array('unified-filters', [], PARAM_NOTAGS);
+$filterwassubmitted = optional_param('unified-filter-submitted', 0, PARAM_BOOL);
 
 $PAGE->set_url('/contactlist/studentview.php', array(
     'page' => $page,
@@ -88,45 +92,73 @@ $mform->display();
 $formdata = $mform->get_data();
 
 if($formdata) {
-    local_contactlist_save_update($USER->id, $courseid, $formdata->localvisibility);
-    //print_object($formdata);
+    local_contactlist_save_update($USER->id, $courseid, $formdata->visib);
 }
 
-// Initialise the table.
-$table = new flexible_table('localcontactlist_table');
-//$table = new html_table();
-$table->head = array(
-    get_string('name', 'local_contactlist'),
-    get_string('surname', 'local_contactlist'),
-    get_string('email', 'local_contactlist'));
-$table->data = array();
-$table->initialbars(true);
-$table->class = '';
-$table->id = '';
-
-$table->sortable(true, 'lastname');
-$table->initialbars(true);
-$table->print_initials_bar();
-
-
-$table->define_columns(array('firstname', 'lastname', 'email'));
-$table->define_headers(array(
-    get_string('name', 'local_contactlist'),
-    get_string('surname', 'local_contactlist'),
-    get_string('email', 'local_contactlist')));
-$table->define_baseurl($PAGE->url);
-
-$table->setup();
-
-$tabledata = [];
-$tabledata = local_contactlist_get_participants($courseid, $USER->id);
-$tablearray = [];
-foreach ($tabledata as $values) {
-    $tablearray = array('firstname' => $values->firstname, 'lastname' => $values->lastname, 'email' => $values->email);
-    $table->add_data($tablearray);
+$hasgroupfilter = false;
+$lastaccess = 0;
+$searchkeywords = [];
+$enrolid = 0;
+$status = -1;
+foreach ($filtersapplied as $filter) {
+    $filtervalue = explode(':', $filter, 2);
+    $value = null;
+    if (count($filtervalue) == 2) {
+        $key = clean_param($filtervalue[0], PARAM_INT);
+        $value = clean_param($filtervalue[1], PARAM_INT);
+    } else {
+        // Search string.
+        $key = USER_FILTER_STRING;
+        $value = clean_param($filtervalue[0], PARAM_TEXT);
+    }
+    
+    switch ($key) {
+        case USER_FILTER_ENROLMENT:
+            $enrolid = $value;
+            break;
+        case USER_FILTER_GROUP:
+            $groupid = $value;
+            $hasgroupfilter = true;
+            break;
+        case USER_FILTER_LAST_ACCESS:
+            $lastaccess = $value;
+            break;
+        case USER_FILTER_ROLE:
+            $roleid = $value;
+            break;
+        case USER_FILTER_STATUS:
+            // We only accept active/suspended statuses.
+            if ($value == ENROL_USER_ACTIVE || $value == ENROL_USER_SUSPENDED) {
+                $status = $value;
+            }
+            break;
+        default:
+            // Search string.
+            $searchkeywords[] = $value;
+            break;
+    }
 }
 
-$table->print_html();
+$perpage = 20;
+$baseurl = new moodle_url('/local/contactlist/studentview.php', array(
+    'contextid' => $context->id,
+    'id' => $courseid,
+    'perpage' => $perpage));
+$participanttable = new contactlist_table($courseid, $searchkeywords);
+$participanttable->define_baseurl($baseurl);
+
+// Do this so we can get the total number of rows.
+ob_start();
+$participanttable->out($perpage, true);
+$participanttablehtml = ob_get_contents();
+ob_end_clean();
+
+$visibleno = local_contactlist_get_total_visible($courseid);
+$totalno = local_contactlist_get_total_course($courseid);
+$visbilityinfo = "<b>".get_string('totalvsvisible','local_contactlist', ['visible' => $visibleno, 'total' => $totalno])."</b>";
+echo $visbilityinfo;
+
+echo $participanttablehtml;
 
 echo $OUTPUT->footer();
 die();
