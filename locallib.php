@@ -29,9 +29,12 @@ define('CONTACTLIST_DEFAULT', get_string('globaldefault', 'local_contactlist'));
 define('CONTACTLIST_VISIBLE', get_string('visible', 'local_contactlist'));
 define('CONTACTLIST_INVISIBLE', get_string('invisible', 'local_contactlist'));
 /**
- * get course participants from DB.
+ * get participants list
  * 
- * @param int $couseid
+ * @param int $courseid
+ * @param int $userid
+ * @param array $additionalwhere
+ * @param array $additionalparams
  * @return array
  */
 function local_contactlist_get_participants(int $courseid, $userid, $additionalwhere, $additionalparams){
@@ -69,7 +72,7 @@ function local_contactlist_get_participants(int $courseid, $userid, $additionalw
 /**
  * get number of visible course participants from DB.
  *
- * @param int $couseid
+ * @param int $courseid
  * @return int
  */
 function local_contactlist_get_total_visible(int $courseid){
@@ -101,7 +104,7 @@ function local_contactlist_get_total_visible(int $courseid){
 /**
  * get total number of course participants from DB.
  *
- * @param int $couseid
+ * @param int $courseid
  * @return int
  */
 function local_contactlist_get_total_course(int $courseid){
@@ -155,6 +158,7 @@ function local_contactlist_save_update($userid, $courseid, $show) {
     }
 }
 /**
+ * get visibility status for course.
  * 
  * @param int $userid
  * @param int $courseid

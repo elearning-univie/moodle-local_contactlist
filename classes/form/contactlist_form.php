@@ -14,16 +14,21 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Contactlist form for course level
+ *
+ * @package    local_contactlist
+ * @author     Angela Baier
+ * @copyright  2020 University of Vienna
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace local_contactlist\form;
 
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/formslib.php');
 require_once($CFG->dirroot . '/local/contactlist/locallib.php');
-
-//define('CONTACTLIST_DEFAULT', get_string('globaldefault', 'local_contactlist'));
-//define('CONTACTLIST_VISIBLE', get_string('visible', 'local_contactlist'));
-//define('CONTACTLIST_INVISIBLE', get_string('invisible', 'local_contactlist'));
 
 /**
  * Form to update local course contactlist visibility

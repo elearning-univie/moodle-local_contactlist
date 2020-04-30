@@ -28,9 +28,7 @@ defined('MOODLE_INTERNAL') || die;
 /**
  * This function extends the navigation with the contactlist item
  *
- * @param navigation_node $navigation The navigation node to extend
- * @param stdClass $course The course to object for the report
- * @param stdClass $context The context of the course
+ * @param navigation_node $navigation
  */
 function local_contactlist_extend_navigation($navigation) {
     global $USER, $PAGE, $DB;
@@ -90,7 +88,12 @@ function local_contactlist_extend_navigation($navigation) {
     }
     
 }
-
+/**
+ * isNodeNotEmpty.
+ * 
+ * @param navigation_node $node
+ * @return boolean
+ */
 function isNodeNotEmpty(navigation_node $node) {
     return $node !== false && $node->has_children();
 }
