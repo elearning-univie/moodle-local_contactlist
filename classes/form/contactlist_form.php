@@ -46,7 +46,7 @@ class contactlist_form extends \moodleform {
     public function definition() {
         global $PAGE, $USER;
 
-        $courseid     = optional_param('id', 0, PARAM_INT); // This are required.
+        $courseid     = required_param('id', PARAM_INT); // This are required.
 
         $PAGE->set_url('/local/contactlist/studentview.php', array(
             'id' => $courseid));
