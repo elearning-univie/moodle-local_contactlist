@@ -188,7 +188,7 @@ class contactlist_table extends \table_sql {
         if ($useinitialsbar) {
             $this->initialbars(true);
         }
-      }
+    }
 
     /**
      * Override the table show_hide_link to not show for select column.

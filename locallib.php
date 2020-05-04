@@ -55,7 +55,7 @@ function local_contactlist_get_participants (int $courseid, $userid, $additional
              JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
              JOIN {user} u ON u.id = asg.userid
              JOIN {course} course ON context.instanceid = course.id
-             LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid 
+             LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
              LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = :cid2
              WHERE asg.roleid = 5
              AND course.id = :cid) join1
@@ -87,7 +87,7 @@ function local_contactlist_get_total_visible (int $courseid) {
              JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
              JOIN {user} u ON u.id = asg.userid
              JOIN {course} course ON context.instanceid = course.id
-             LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid 
+             LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
              LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = :cid2
              WHERE asg.roleid = 5
              AND course.id = :cid) join1
@@ -203,7 +203,7 @@ function local_contactlist_get_participants_sql($courseid, $additionalwhere = ''
              JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
              JOIN {user} u ON u.id = asg.userid
              JOIN {course} course ON context.instanceid = course.id
-             LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid 
+             LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
              LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = :courseid2
              WHERE asg.roleid = 5
              AND course.id = :courseid) join1 ";
