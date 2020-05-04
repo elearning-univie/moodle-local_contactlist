@@ -127,7 +127,8 @@ function local_contactlist_get_total_course (int $courseid){
     return $participants;
 }
 /**
- *
+ * local_contactlist_save_update
+ * 
  * @param int $userid
  * @param int $courseid
  * @param int $show
