@@ -198,7 +198,7 @@ class contactlist_table extends \table_sql {
      * @return string HTML fragment.
      */
     protected function show_hide_link($column, $index) {
-        if ($index > 0) {
+        if ($index > 1) {
             return parent::show_hide_link($column, $index);
         }
         return '';
