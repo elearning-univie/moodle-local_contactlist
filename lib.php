@@ -32,69 +32,68 @@ defined('MOODLE_INTERNAL') || die;
  */
 function local_contactlist_extend_navigation($navigation) {
     global $USER, $PAGE, $DB;
-    
+
     if (empty($USER->id)) {
         return;
     }
-    
+
     if ('admin-index' === $PAGE->pagetype) {
         $exists = $DB->record_exists('capabilities', array('name' => 'local/contactlist:view'));
-        
+
         if (!$exists) {
             return;
         }
     }
-    
+
     $context = context::instance_by_id($PAGE->context->id);
     $isvalidcontext = ($context instanceof context_course || $context instanceof context_module) ? true : false;
     if (!$isvalidcontext) {
         return;
     }
-    
+
     $coursecontext = null;
     if ($context instanceof context_module) {
         $coursecontext = $context->get_course_context();
     } else {
         $coursecontext = $context;
     }
-    
-    if(!has_capability('local/contactlist:view', $coursecontext, $USER)) {
+
+    if (!has_capability('local/contactlist:view', $coursecontext, $USER)) {
         return;
     }
-    
+
     $icon = null;
-    $pluginname = get_string('pluginname','local_contactlist');
-    $url = new moodle_url('/local/contactlist/studentview.php', array('id'=>$coursecontext->instanceid));
-    
-    $currentCourseNode = $navigation->find('currentcourse', $navigation::TYPE_ROOTNODE);
-    if (isNodeNotEmpty($currentCourseNode)) {
-        $currentCourseNode->add($pluginname, $url, navigation_node::NODETYPE_LEAF, $pluginname, null, $icon);
+    $pluginname = get_string('pluginname', 'local_contactlist');
+    $url = new moodle_url('/local/contactlist/studentview.php', array('id' => $coursecontext->instanceid));
+
+    $currentcoursenode = $navigation->find('currentcourse', $navigation::TYPE_ROOTNODE);
+    if (isnodenotempty($currentcoursenode)) {
+        $currentcoursenode->add($pluginname, $url, navigation_node::NODETYPE_LEAF, $pluginname, null, $icon);
     }
-    
-    $myCoursesNode = $navigation->find('mycourses', $navigation::TYPE_ROOTNODE);
-    if(isNodeNotEmpty($myCoursesNode)) {
-        $currentCourseInMyCourses = $myCoursesNode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
-        if($currentCourseInMyCourses) {
-            $currentCourseInMyCourses->add($pluginname, $url, navigation_node::NODETYPE_LEAF, $pluginname, null, $icon);
+
+    $mycoursesnode = $navigation->find('mycourses', $navigation::TYPE_ROOTNODE);
+    if (isnodenotempty($mycoursesnode)) {
+        $currentcourseinmycourses = $mycoursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
+        if ($currentcourseinmycourses) {
+            $currentcourseinmycourses->add($pluginname, $url, navigation_node::NODETYPE_LEAF, $pluginname, null, $icon);
         }
     }
-    
-    $coursesNode = $navigation->find('courses', $navigation::TYPE_ROOTNODE);
-    if (isNodeNotEmpty($coursesNode)) {
-        $currentCourseInCourses = $coursesNode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
-        if ($currentCourseInCourses) {
-            $currentCourseInCourses->add($pluginname, $url, navigation_node::NODETYPE_LEAF, $pluginname, null, $icon);
+
+    $coursesnode = $navigation->find('courses', $navigation::TYPE_ROOTNODE);
+    if (isnodenotempty($coursesnode)) {
+        $currentcourseincourses = $coursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
+        if ($currentcourseincourses) {
+            $currentcourseincourses->add($pluginname, $url, navigation_node::NODETYPE_LEAF, $pluginname, null, $icon);
         }
     }
-    
 }
 /**
  * isNodeNotEmpty.
- * 
+ *
  * @param navigation_node $node
  * @return boolean
  */
-function isNodeNotEmpty(navigation_node $node) {
+function isnodenotempty(navigation_node $node) {
     return $node !== false && $node->has_children();
 }
 

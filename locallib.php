@@ -30,14 +30,14 @@ define('CONTACTLIST_VISIBLE', get_string('visible', 'local_contactlist'));
 define('CONTACTLIST_INVISIBLE', get_string('invisible', 'local_contactlist'));
 /**
  * get participants list
- * 
+ *
  * @param int $courseid
  * @param int $userid
  * @param array $additionalwhere
  * @param array $additionalparams
  * @return array
  */
-function local_contactlist_get_participants(int $courseid, $userid, $additionalwhere, $additionalparams){
+function local_contactlist_get_participants (int $courseid, $userid, $additionalwhere, $additionalparams){
     global $DB;
 
     $params = array();
@@ -49,7 +49,8 @@ function local_contactlist_get_participants(int $courseid, $userid, $additionalw
         $params = array_merge($params, $additionalparams);
     }
 
-    $sql ="SELECT uid, firstname, lastname, email FROM
+
+    $sql = "SELECT uid, firstname, lastname, email FROM
           (SELECT * FROM
           (SELECT USER.id as uid, USER.firstname, USER.lastname, USER.email
           FROM {role_assignments} AS asg
@@ -75,14 +76,14 @@ function local_contactlist_get_participants(int $courseid, $userid, $additionalw
  * @param int $courseid
  * @return int
  */
-function local_contactlist_get_total_visible(int $courseid){
+function local_contactlist_get_total_visible (int $courseid){
     global $DB;
-    
+
     $params = array();
     $params['cid'] = $courseid;
     $params['cid2'] = $courseid;
 
-    $sql ="SELECT COUNT(uid) FROM
+    $sql = "SELECT COUNT(uid) FROM
           (SELECT * FROM
           (SELECT USER.id as uid, USER.firstname, USER.lastname, USER.email
           FROM {role_assignments} AS asg
@@ -96,9 +97,9 @@ function local_contactlist_get_total_visible(int $courseid){
           WHERE (join1.data IS NULL AND visib = 1)
           OR (join1.data LIKE 'Yes' AND visib IS NULL)
           OR (join1.data LIKE 'Yes' AND visib = 1)";
-    
+
     $participants = $DB->count_records_sql($sql, $params);
-    
+
     return $participants;
 }
 /**
@@ -107,27 +108,26 @@ function local_contactlist_get_total_visible(int $courseid){
  * @param int $courseid
  * @return int
  */
-function local_contactlist_get_total_course(int $courseid){
+function local_contactlist_get_total_course (int $courseid){
     global $DB;
-    
+
     $params = array();
     $params['cid'] = $courseid;
 
-    $sql ="SELECT COUNT(USER.id)
+    $sql = "SELECT COUNT(USER.id)
           FROM {role_assignments} AS asg
           JOIN {context} AS context ON asg.contextid = context.id AND context.contextlevel = 50
           JOIN {user} AS USER ON USER.id = asg.userid
           JOIN {course} AS course ON context.instanceid = course.id
           WHERE asg.roleid = 5
           AND course.id =:cid";
-    
+
     $participants = $DB->count_records_sql($sql, $params);
-    
+
     return $participants;
 }
 /**
-/**
- * 
+ *
  * @param int $userid
  * @param int $courseid
  * @param int $show
@@ -140,7 +140,7 @@ function local_contactlist_save_update($userid, $courseid, $show) {
     $params['courseid'] = $courseid;
     $params['userid'] = $userid;
 
-    $sql = "SELECT * FROM {local_contactlist_course_vis} AS cv 
+    $sql = "SELECT * FROM {local_contactlist_course_vis} AS cv
             WHERE cv.courseid =:courseid
             AND cv.userid =:userid";
 
@@ -159,12 +159,12 @@ function local_contactlist_save_update($userid, $courseid, $show) {
 }
 /**
  * get visibility status for course.
- * 
+ *
  * @param int $userid
  * @param int $courseid
  * @return int
  */
- function local_contactlist_courselevel_visibility($userid, $courseid){
+function local_contactlist_courselevel_visibility ($userid, $courseid){
     global $DB;
 
     $params = array();
@@ -173,11 +173,11 @@ function local_contactlist_save_update($userid, $courseid, $show) {
 
     $visib  = $DB->get_record('local_contactlist_course_vis', $params);
 
-    if(!$visib){
+    if (!$visib) {
         return 0;
     }
     return $visib->visib;
-    }
+}
 
 /**
  * Returns the SQL used by the contactlist table.
@@ -230,22 +230,6 @@ function local_contactlist_get_participants_sql($courseid, $additionalwhere = ''
 }
 
 /**
- * Returns the total number of visible participants for a given course.
- *
- * @param int $courseid The course id
- * @param string $additionalwhere Any additional SQL to add to where
- * @param array $additionalparams The additional params
- * @return int
- */
-// function local_contactlist_get_total_participants($courseid, $additionalwhere = '', $additionalparams = array()) {
-//     global $DB;
-
-//     list($select, $from, $where, $params) = local_contactlist_get_participants_sql($courseid, $additionalwhere, $additionalparams);
-
-//     return $DB->count_records_sql("SELECT COUNT(id) $from $where", $params);
-// }
-
-/**
  * Returns the participants for a given course.
  *
  * @param int $courseid The course id
@@ -253,7 +237,7 @@ function local_contactlist_get_participants_sql($courseid, $additionalwhere = ''
  * @param array $additionalparams The additional params
  * @return moodle_recordset
  */
-function local_contactlist_get_list($courseid, $additionalwhere = '', $additionalparams = array()) {
+function local_contactlist_get_list ($courseid, $additionalwhere = '', $additionalparams = array()) {
     global $DB;
 
     list($select, $from, $where, $params) = local_contactlist_get_participants_sql($courseid, $additionalwhere, $additionalparams);

@@ -50,49 +50,9 @@ class contactlist_table extends \table_sql {
     protected $courseid;
 
     /**
-     * @var int|false False if groups not used, int if groups used, 0 for all groups.
-     */
-    protected $currentgroup;
-
-    /**
-     * @var int $accesssince The time the user last accessed the site
-     */
-    protected $accesssince;
-
-    /**
-     * @var int $roleid The role we are including, 0 means all enrolled users
-     */
-    protected $roleid;
-
-    /**
-     * @var int $enrolid The applied filter for the user enrolment ID.
-     */
-    protected $enrolid;
-
-    /**
-     * @var int $status The applied filter for the user's enrolment status.
-     */
-    protected $status;
-
-    /**
      * @var string $search The string being searched.
      */
     protected $search;
-
-    /**
-     * @var bool $selectall Has the user selected all users on the page?
-     */
-    protected $selectall;
-
-    /**
-     * @var string[] The list of countries.
-     */
-    protected $countries;
-
-    /**
-     * @var \stdClass[] The list of groups with membership info for the course.
-     */
-    protected $groups;
 
     /**
      * @var string[] Extra fields to display.
@@ -108,29 +68,6 @@ class contactlist_table extends \table_sql {
      * @var  context $context The course context.
      */
     protected $context;
-
-    /**
-     * @var \stdClass[] List of roles indexed by roleid.
-     */
-    protected $allroles;
-
-    /**
-     * @var \stdClass[] List of roles indexed by roleid.
-     */
-    protected $allroleassignments;
-
-    /**
-     * @var \stdClass[] Assignable roles in this course.
-     */
-    protected $assignableroles;
-
-    /**
-     * @var \stdClass[] Profile roles in this course.
-     */
-    protected $profileroles;
-
-    /** @var \stdClass[] $viewableroles */
-    private $viewableroles;
 
     /**
      * Sets up the table.
@@ -230,15 +167,15 @@ class contactlist_table extends \table_sql {
             return '';
         }
         return s($data->{$colname});
-    }
+     }
 
-    /**
-     * Query the database for results to display in the table.
-     *
-     * @param int $pagesize size of page for paginated displayed table.
-     * @param bool $useinitialsbar do you want to use the initials bar.
-     */
-    public function query_db($pagesize, $useinitialsbar = true) {
+      /**
+      * Query the database for results to display in the table.
+      *
+      * @param int $pagesize size of page for paginated displayed table.
+      * @param bool $useinitialsbar do you want to use the initials bar.
+      */
+      public function query_db($pagesize, $useinitialsbar = true) {
         global $USER;
         list($twhere, $tparams) = $this->get_sql_where();
 

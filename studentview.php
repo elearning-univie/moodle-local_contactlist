@@ -91,7 +91,7 @@ $mform->display();
 
 $formdata = $mform->get_data();
 
-if($formdata) {
+if ($formdata) {
     local_contactlist_save_update($USER->id, $courseid, $formdata->visib);
 }
 
@@ -111,7 +111,7 @@ foreach ($filtersapplied as $filter) {
         $key = USER_FILTER_STRING;
         $value = clean_param($filtervalue[0], PARAM_TEXT);
     }
-    
+
     switch ($key) {
         case USER_FILTER_ENROLMENT:
             $enrolid = $value;
@@ -155,7 +155,7 @@ ob_end_clean();
 
 $visibleno = local_contactlist_get_total_visible($courseid);
 $totalno = local_contactlist_get_total_course($courseid);
-$visbilityinfo = "<b>".get_string('totalvsvisible','local_contactlist', ['visible' => $visibleno, 'total' => $totalno])."</b>";
+$visbilityinfo = "<b>".get_string('totalvsvisible', 'local_contactlist', ['visible' => $visibleno, 'total' => $totalno])."</b>";
 echo $visbilityinfo;
 
 echo $participanttablehtml;
