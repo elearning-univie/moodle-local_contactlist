@@ -103,20 +103,9 @@ class contactlist_table extends \table_sql {
         $this->define_columns($columns);
         $this->define_headers($headers);
 
-        // Make this table sorted by first name by default.
-       // $this->sortable(true, 'firstname');
-
         $this->set_attribute('id', 'contactlist');
 
-        // Set the variables we need to use later.
-       // $this->currentgroup = $currentgroup;
-//         $this->accesssince = $accesssince;
-//         $this->roleid = $roleid;
-//         $this->search = $search;
-//         $this->enrolid = $enrolid;
-//         $this->status = $status;
-//         $this->countries = get_string_manager()->get_list_of_countries(true);
-         $this->extrafields = $extrafields;
+        $this->extrafields = $extrafields;
         $this->context = $context;
     }
 
@@ -132,10 +121,6 @@ class contactlist_table extends \table_sql {
 
         parent::out($pagesize, $useinitialsbar, $downloadhelpbutton);
 
-//         if (has_capability('moodle/course:enrolreview', $this->context)) {
-//             $params = ['contextid' => $this->context->id, 'courseid' => $this->course->id];
-//             $PAGE->requires->js_call_amd('core_user/status_field', 'init', [$params]);
-//         }
     }
 
     /**
@@ -167,15 +152,15 @@ class contactlist_table extends \table_sql {
             return '';
         }
         return s($data->{$colname});
-     }
+    }
 
       /**
-      * Query the database for results to display in the table.
-      *
-      * @param int $pagesize size of page for paginated displayed table.
-      * @param bool $useinitialsbar do you want to use the initials bar.
-      */
-      public function query_db($pagesize, $useinitialsbar = true) {
+       * Query the database for results to display in the table.
+       *
+       * @param int $pagesize size of page for paginated displayed table.
+       * @param bool $useinitialsbar do you want to use the initials bar.
+       */
+    public function query_db($pagesize, $useinitialsbar = true) {
         global $USER;
         list($twhere, $tparams) = $this->get_sql_where();
 
@@ -203,7 +188,7 @@ class contactlist_table extends \table_sql {
         if ($useinitialsbar) {
             $this->initialbars(true);
         }
-    }
+      }
 
     /**
      * Override the table show_hide_link to not show for select column.

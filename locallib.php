@@ -37,7 +37,7 @@ define('CONTACTLIST_INVISIBLE', get_string('invisible', 'local_contactlist'));
  * @param array $additionalparams
  * @return array
  */
-function local_contactlist_get_participants (int $courseid, $userid, $additionalwhere, $additionalparams){
+function local_contactlist_get_participants (int $courseid, $userid, $additionalwhere, $additionalparams) {
     global $DB;
 
     $params = array();
@@ -48,7 +48,6 @@ function local_contactlist_get_participants (int $courseid, $userid, $additional
         $wheres[] = $additionalwhere;
         $params = array_merge($params, $additionalparams);
     }
-
 
     $sql = "SELECT uid, firstname, lastname, email FROM
           (SELECT * FROM
@@ -76,7 +75,7 @@ function local_contactlist_get_participants (int $courseid, $userid, $additional
  * @param int $courseid
  * @return int
  */
-function local_contactlist_get_total_visible (int $courseid){
+function local_contactlist_get_total_visible (int $courseid) {
     global $DB;
 
     $params = array();
@@ -108,7 +107,7 @@ function local_contactlist_get_total_visible (int $courseid){
  * @param int $courseid
  * @return int
  */
-function local_contactlist_get_total_course (int $courseid){
+function local_contactlist_get_total_course (int $courseid) {
     global $DB;
 
     $params = array();
@@ -128,13 +127,13 @@ function local_contactlist_get_total_course (int $courseid){
 }
 /**
  * local_contactlist_save_update
- * 
+ *
  * @param int $userid
  * @param int $courseid
  * @param int $show
  * @return number
  */
-function local_contactlist_save_update($userid, $courseid, $show) {
+function local_contactlist_save_update ($userid, $courseid, $show) {
     global $DB;
 
     $params = array();
@@ -165,7 +164,7 @@ function local_contactlist_save_update($userid, $courseid, $show) {
  * @param int $courseid
  * @return int
  */
-function local_contactlist_courselevel_visibility ($userid, $courseid){
+function local_contactlist_courselevel_visibility ($userid, $courseid) {
     global $DB;
 
     $params = array();
@@ -209,7 +208,8 @@ function local_contactlist_get_participants_sql($courseid, $additionalwhere = ''
              WHERE asg.roleid = 5
              AND course.id = :courseid) AS table1
              LEFT JOIN {user_info_data} as table2 on table1.uid = table2.userid ) as join1
-             LEFT JOIN (SELECT * FROM {local_contactlist_course_vis} WHERE courseid = :courseid2) as table3 on join1.uid = table3.userid ";
+             LEFT JOIN (SELECT * FROM {local_contactlist_course_vis} WHERE courseid = :courseid2) 
+             as table3 on join1.uid = table3.userid ";
 
     $where1 = "WHERE ((join1.data IS NULL AND visib = 1)
                OR (join1.data LIKE 'Yes' AND visib IS NULL)
