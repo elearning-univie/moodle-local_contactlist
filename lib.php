@@ -46,7 +46,7 @@ function local_contactlist_extend_navigation($navigation) {
     }
 
     $context = context::instance_by_id($PAGE->context->id);
-    $isvalidcontext = ($context instanceof context_course || $context instanceof context_module) ? true : false;
+    $isvalidcontext = ($context instanceof context_course || $context instanceof context_module);
     if (!$isvalidcontext) {
         return;
     }
@@ -62,20 +62,20 @@ function local_contactlist_extend_navigation($navigation) {
         return;
     }
 
-    $icon = null;
-    $pluginname = get_string('pluginname', 'local_contactlist');
+    $icon = new \pix_icon('t/addcontact', get_string('nodename', 'local_contactlist'));
+    $nodename = get_string('nodename', 'local_contactlist');
     $url = new moodle_url('/local/contactlist/studentview.php', array('id' => $coursecontext->instanceid));
 
     $currentcoursenode = $navigation->find('currentcourse', $navigation::TYPE_ROOTNODE);
     if (isnodenotempty($currentcoursenode)) {
-        $currentcoursenode->add($pluginname, $url, navigation_node::NODETYPE_LEAF, $pluginname, null, $icon);
+        $currentcoursenode->add($nodename, $url, navigation_node::NODETYPE_LEAF, $nodename, null, $icon);
     }
 
     $mycoursesnode = $navigation->find('mycourses', $navigation::TYPE_ROOTNODE);
     if (isnodenotempty($mycoursesnode)) {
         $currentcourseinmycourses = $mycoursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
         if ($currentcourseinmycourses) {
-            $currentcourseinmycourses->add($pluginname, $url, navigation_node::NODETYPE_LEAF, $pluginname, null, $icon);
+            $currentcourseinmycourses->add($nodename, $url, navigation_node::NODETYPE_LEAF, $nodename, null, $icon);
         }
     }
 
@@ -83,7 +83,7 @@ function local_contactlist_extend_navigation($navigation) {
     if (isnodenotempty($coursesnode)) {
         $currentcourseincourses = $coursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
         if ($currentcourseincourses) {
-            $currentcourseincourses->add($pluginname, $url, navigation_node::NODETYPE_LEAF, $pluginname, null, $icon);
+            $currentcourseincourses->add($nodename, $url, navigation_node::NODETYPE_LEAF, $nodename, null, $icon);
         }
     }
 }

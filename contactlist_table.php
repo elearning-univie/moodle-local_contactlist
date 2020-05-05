@@ -80,8 +80,6 @@ class contactlist_table extends \table_sql {
 
         parent::__construct('user-index-participants-' . $courseid);
 
-        $this->selectall = $selectall;
-
         // Get the context.
         $this->course = get_course($courseid);
         $context = \context_course::instance($courseid, MUST_EXIST);
@@ -106,7 +104,6 @@ class contactlist_table extends \table_sql {
         $this->set_attribute('id', 'contactlist');
 
         $this->extrafields = $extrafields;
-        $this->context = $context;
     }
 
     /**
@@ -117,7 +114,6 @@ class contactlist_table extends \table_sql {
      * @param string $downloadhelpbutton
      */
     public function out($pagesize, $useinitialsbar, $downloadhelpbutton = '') {
-        global $PAGE;
 
         parent::out($pagesize, $useinitialsbar, $downloadhelpbutton);
 

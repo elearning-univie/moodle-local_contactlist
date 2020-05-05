@@ -24,17 +24,18 @@
  * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname'] = 'Contactlist';
-$string['pagetitle'] = 'Contactlist';
-$string['name'] = 'First name';
-$string['surname'] = 'Surname';
 $string['email'] = 'Email address';
-$string['role'] = 'Role';
+$string['globaldefault'] = 'default (global)';
+$string['invisible'] = 'invisible';
 $string['localvisibility'] = 'Course contact list visibility';
 $string['localvisibility_help'] = 'Info';
 $string['localvisibilitydefault'] = 'Default: Global Visibility';
-$string['visible'] = 'visible';
-$string['invisible'] = 'invisible';
-$string['globaldefault'] = 'default (global)';
+$string['name'] = 'First name';
+$string['nodename'] = 'Contactlist';
+$string['pagetitle'] = 'Contactlist';
 $string['personalvisibilityinfo'] = 'Here will be the information about your global vs local visibility if there is a difference.';
+$string['pluginname'] = 'Contactlist';
+$string['role'] = 'Role';
+$string['surname'] = 'Surname';
 $string['totalvsvisible'] = '{$a->visible} participants out of {$a->total} registered in this course are sharing their contact information.';
+$string['visible'] = 'visible';

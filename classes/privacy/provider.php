@@ -40,7 +40,14 @@ class provider implements \core_privacy\local\metadata\null_provider {
      *
      * @return  string
      */
-    public static function get_reason() : string {
-        return 'privacy:metadata';
+    public static function get_metadata(collection $collection) : collection {
+        
+        $collection->add_subsystem_link(
+            'core_files',
+            [],
+            'privacy:metadata:core_files'
+            );
+        
+        return $collection;
     }
 }

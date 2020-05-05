@@ -25,18 +25,18 @@
 
 namespace local_contactlist\form;
 
-defined('MOODLE_INTERNAL') || die();
-
+//require_once($CFG->dirroot.'/weblib.php');
 require_once($CFG->libdir.'/formslib.php');
-require_once($CFG->dirroot . '/local/contactlist/locallib.php');
+require_once($CFG->dirroot.'/local/contactlist/locallib.php');
 
+defined('MOODLE_INTERNAL') || die();
 /**
  * Form to update local course contactlist visibility
  *
- * @package       local_contactlist
- * @author        Angela Baier
- * @copyright     2020 University of Vienna
- * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    local_contactlist
+ * @author     Angela Baier
+ * @copyright  2020 University of Vienna
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class contactlist_form extends \moodleform {
 
@@ -46,10 +46,9 @@ class contactlist_form extends \moodleform {
     public function definition() {
         global $PAGE, $USER;
 
-        $courseid     = required_param('id', PARAM_INT); // This are required.
-
-        $PAGE->set_url('/local/contactlist/studentview.php', array(
-            'id' => $courseid));
+        $courseid = required_param('id', PARAM_INT); // This are required.
+        $PAGE->set_url('/local/contactlist/studentview.php', ['id' => $courseid]);
+      //  $PAGE->set_url(new moodle_url('/local/contactlist/studentview.php', ['id' => $courseid]));
         $mform = $this->_form;
 
         $localvsglobal = get_string('personalvisibilityinfo', 'local_contactlist');
