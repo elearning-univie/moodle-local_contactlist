@@ -35,6 +35,14 @@ $string['nodename'] = 'Contactlist';
 $string['pagetitle'] = 'Contactlist';
 $string['personalvisibilityinfo'] = 'Here will be the information about your global vs local visibility if there is a difference.';
 $string['pluginname'] = 'Contactlist';
+$string['privacy:metadata:local_contactlist_course_vis'] = 'Information about the contact list visibility for a certain course. This information may differ from the optional instance wide setting.';
+$string['privacy:metadata:local_contactlist_course_vis:courseid'] = 'The ID of the course in which the user is (in)visible.';
+$string['privacy:metadata:local_contactlist_course_vis:userid'] = 'The ID of the user (in)visible in this course.';
+$string['privacy:metadata:local_contactlist_course_vis:visib'] = 'The visibility setting for a certain course.';
+$string['privacy:metadata:user_info_data'] = 'Information about the contact list visibility for the whole moodle instance. Default is invisible.';
+$string['privacy:metadata:user_info_data:data'] = 'The visibility for the whole moodle instance.';
+$string['privacy:metadata:user_info_data:userid'] = 'The ID of the user.';
+
 $string['role'] = 'Role';
 $string['surname'] = 'Surname';
 $string['totalvsvisible'] = '{$a->visible} participants out of {$a->total} registered in this course are sharing their contact information.';

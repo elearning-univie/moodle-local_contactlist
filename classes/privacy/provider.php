@@ -41,11 +41,24 @@ class provider implements \core_privacy\local\metadata\null_provider {
      * @return  string
      */
     public static function get_metadata(collection $collection) : collection {
-        
-        $collection->add_subsystem_link(
-            'core_files',
-            [],
-            'privacy:metadata:core_files'
+
+        $collection->add_database_table(
+            'user_info_data',
+            [
+                'userid' => 'privacy:metadata:user_info_data:userid',
+                'data' => 'privacy:metadata:user_info_data:data',
+            ],
+            'privacy:metadata:user_info_data'
+            );
+
+        $collection->add_database_table(
+            'local_contactlist_course_vis',
+            [
+                'userid' => 'privacy:metadata:local_contactlist_course_vis:userid',
+                'courseid' => 'privacy:metadata:local_contactlist_course_vis:courseid',
+                'visib' => 'privacy:metadata:local_contactlist_course_vis:visib',
+            ],
+            'privacy:metadata:local_contactlist_course_vis'
             );
         
         return $collection;
