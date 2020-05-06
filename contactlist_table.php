@@ -73,7 +73,6 @@ class contactlist_table extends \table_sql {
      * Sets up the table.
      *
      * @param int $courseid
-     * @param string|array $search The search string(s)
      */
     public function __construct($courseid) {
 
