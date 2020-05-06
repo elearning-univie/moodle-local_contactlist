@@ -299,7 +299,7 @@ function get_extra_user_fields_contactlist($context, $already = array()) {
  * @param int $courseid
  * @return string
  */
-function get_visibility_info_string ($userid, $courseid){
+function get_visibility_info_string ($userid, $courseid) {
     global $DB;
 
     $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
@@ -319,7 +319,7 @@ function get_visibility_info_string ($userid, $courseid){
             } else {
                 $infostring = "";
             }
-        } 
+        }
         if ($globalvisib->data = "No") { // global = No
             if ($localvisib = 1) { // local yes
                 return get_string('gnly', 'local_contactlist');
