@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-  <XMLDB PATH="local/contactlist/db" VERSION="20200409" COMMENT="XMLDB file for Moodle local/contactlist">
-    <TABLES>
-      <TABLE NAME="local_contactlist" COMMENT="Default comment for local_contactlist, please edit me">
-        <FIELDS>
-          <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" />
-        </FIELDS>
-        <KEYS>
-          <KEY NAME="primary" TYPE="primary" FIELDS="id" />
-        </KEYS>
-      </TABLE>
-    </TABLES>
-  </XMLDB>
+<XMLDB PATH="local/contactlist/db" VERSION="20200427" COMMENT="XMLDB file for Moodle local/contactlist"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="local_contactlist" COMMENT="Default comment for local_contactlist, please edit me">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="local_contactlist_course_vis" COMMENT="Contactlist visibility for User on Course level">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="visib" TYPE="int" LENGTH="20" NOTNULL="true" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="local_contactlist_course_idx" TYPE="unique" FIELDS="courseid, userid"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>
