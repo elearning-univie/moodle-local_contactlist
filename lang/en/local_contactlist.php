@@ -27,6 +27,8 @@
 $string['email'] = 'Email address';
 $string['errornotallowedonpage'] = 'You are not registerd in this course!';
 $string['globaldefault'] = 'default (instance-wide)';
+$string['gnly'] = 'Your contactlist visibility settings in this course (visible) are different from your instance-wide settings (vot visible). You can change your Instance-wide settings here.';
+$string['gyln'] = 'Your contactlist visibility settings in this course (not visible) are different from your instance-wide settings (visible). You can change your Instance-wide settings here.';
 $string['invisible'] = 'invisible';
 $string['localvisibility'] = 'Course contact list visibility';
 $string['localvisibility_help'] = 'Info';

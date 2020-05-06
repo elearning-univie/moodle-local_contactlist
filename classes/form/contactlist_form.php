@@ -49,8 +49,7 @@ class contactlist_form extends \moodleform {
         $courseid = required_param('id', PARAM_INT); // This are required.
         $PAGE->set_url(new \moodle_url('/local/contactlist/studentview.php', ['id' => $courseid]));
         $mform = $this->_form;
-
-        $localvsglobal = get_string('personalvisibilityinfo', 'local_contactlist');
+        $localvsglobal = "";
 
         echo '<p>'. $localvsglobal.'</p>';
 

@@ -293,3 +293,48 @@ function get_extra_user_fields_contactlist($context, $already = array()) {
 
     return $extra;
 }
+/**
+ * WIP: get comparison info global/local visibility
+ * @param int $userid
+ * @param int $courseid
+ * @return string
+ */
+function get_visibility_info_string ($userid, $courseid){
+    global $DB;
+
+    $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
+
+    $infostring = "";
+    $params = array();
+    $params['userid'] = $userid;
+    $params['fieldid'] = $globalinfofield->id;
+
+    $globalvisib  = $DB->get_record('user_info_data', $params);
+    $localvisib = local_contactlist_courselevel_visibility ($userid, $courseid);
+
+    if ($globalvisib) {
+        if ($globalvisib->data = "Yes") {
+            if ($localvisib = 2) { // local no
+                return get_string('gyln', 'local_contactlist');
+            } else {
+                $infostring = "";
+            }
+        } 
+        if ($globalvisib->data = "No") { // global = No
+            if ($localvisib = 1) { // local yes
+                return get_string('gnly', 'local_contactlist');
+            } else {
+                $infostring = "";
+            }
+        }
+    } else { // global not set
+        if ($localvisib = 1) { // local yes
+            return get_string('gnly', 'local_contactlist');
+        } else {
+            $infostring = "";
+        }
+    }
+
+    return $infostring;
+}
+
