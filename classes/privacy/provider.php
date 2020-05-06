@@ -17,7 +17,7 @@
 /**
  * Privacy Subsystem implementation for local_contactlist.
  *
- * @package    mod_flashcards
+ * @package    local_contactlist
  * @copyright  2020 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
