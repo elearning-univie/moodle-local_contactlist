@@ -25,10 +25,11 @@
 
 namespace local_contactlist\form;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->libdir.'/formslib.php');
 require_once($CFG->dirroot.'/local/contactlist/locallib.php');
 
-defined('MOODLE_INTERNAL') || die();
 /**
  * Form to update local course contactlist visibility
  *

@@ -75,8 +75,7 @@ class contactlist_table extends \table_sql {
      * @param int $courseid
      * @param string|array $search The search string(s)
      */
-    public function __construct($courseid, $search) {
-        global $CFG, $OUTPUT;
+    public function __construct($courseid) {
 
         parent::__construct('user-index-participants-' . $courseid);
 
@@ -157,7 +156,7 @@ class contactlist_table extends \table_sql {
        * @param bool $useinitialsbar do you want to use the initials bar.
        */
     public function query_db($pagesize, $useinitialsbar = true) {
-        global $USER;
+
         list($twhere, $tparams) = $this->get_sql_where();
 
         $sort = $this->get_sql_sort();

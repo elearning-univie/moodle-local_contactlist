@@ -68,7 +68,7 @@ if (!has_capability('local/contactlist:view', $context) ) {
     $pagetitle = get_string('pagetitle', 'local_contactlist');
     $PAGE->set_title($pagetitle);
     $PAGE->set_heading($course->fullname);
-    
+
     echo $OUTPUT->header();
     echo $OUTPUT->heading(get_string('errornotallowedonpage', 'local_contactlist'));
     echo $OUTPUT->footer();

@@ -36,7 +36,7 @@ defined('MOODLE_INTERNAL') || die();
 class provider implements \core_privacy\local\metadata\null_provider {
     /**
      * Database info.
-     * 
+     *
      * @param collection $collection
      * @return collection
      */
@@ -60,7 +60,6 @@ class provider implements \core_privacy\local\metadata\null_provider {
             ],
             'privacy:metadata:local_contactlist_course_vis'
             );
-        
         return $collection;
     }
 }

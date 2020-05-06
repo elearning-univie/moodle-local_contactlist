@@ -258,38 +258,38 @@ function get_extra_user_fields_contactlist($context, $already = array()) {
     if (!has_capability('local/contactlist:viewuseridentity', $context)) {
         return array();
     }
-    
+
     // Split showuseridentity on comma (filter needed in case the showuseridentity is empty).
     $extra = array_filter(explode(',', $CFG->showuseridentity));
-    
+
     foreach ($extra as $key => $field) {
         if (in_array($field, $already)) {
             unset($extra[$key]);
         }
     }
-    
+
     // If the identity fields are also among hidden fields, make sure the user can see them.
     $hiddenfields = array_filter(explode(',', $CFG->hiddenuserfields));
     $hiddenidentifiers = array_intersect($extra, $hiddenfields);
-    
+
     if ($hiddenidentifiers) {
         if ($context->get_course_context(false)) {
             // We are somewhere inside a course.
             $canviewhiddenuserfields = has_capability('local/contactlist:viewhiddenuserfields', $context);
-            
+
         } else {
             // We are not inside a course.
             $canviewhiddenuserfields = has_capability('local/contactlist:viewhiddendetails', $context);
         }
-        
+
         if (!$canviewhiddenuserfields) {
             // Remove hidden identifiers from the list.
             $extra = array_diff($extra, $hiddenidentifiers);
         }
     }
-    
+
     // Re-index the entries.
     $extra = array_values($extra);
-    
+
     return $extra;
 }

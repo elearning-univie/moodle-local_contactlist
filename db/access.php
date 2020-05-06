@@ -48,7 +48,6 @@ $capabilities = array(
             'manager' => CAP_ALLOW)
     ),
     'local/contactlist:viewuseridentity' => array(
-        
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
@@ -60,9 +59,7 @@ $capabilities = array(
         )
     ),
     'local/contactlist:viewhiddendetails' => array(
-        
         'riskbitmask' => RISK_PERSONAL,
-        
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
