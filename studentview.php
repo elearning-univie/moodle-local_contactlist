@@ -59,6 +59,22 @@ if ($contextid) {
 
 require_login($course);
 
+if (!has_capability('local/contactlist:view', $context) ) {
+    $PAGE->set_url(new moodle_url("/local/contactlist/studentview.php", ['id' => $id]));
+    $node = $PAGE->settingsnav->find('contactlist', navigation_node::TYPE_CONTAINER);
+    if ($node) {
+        $node->make_active();
+    }
+    $pagetitle = get_string('pagetitle', 'local_contactlist');
+    $PAGE->set_title($pagetitle);
+    $PAGE->set_heading($course->fullname);
+    
+    echo $OUTPUT->header();
+    echo $OUTPUT->heading(get_string('errornotallowedonpage', 'local_contactlist'));
+    echo $OUTPUT->footer();
+    die();
+}
+
 $systemcontext = context_system::instance();
 $isfrontpage = ($course->id == SITEID);
 
@@ -155,7 +171,7 @@ ob_end_clean();
 
 $visibleno = local_contactlist_get_total_visible($courseid);
 $totalno = local_contactlist_get_total_course($courseid);
-$visbilityinfo = "<b>".get_string('totalvsvisible', 'local_contactlist', ['visible' => $visibleno, 'total' => $totalno])."</b>";
+$visbilityinfo = get_string('totalvsvisible', 'local_contactlist', ['visible' => $visibleno, 'total' => $totalno]);
 echo $visbilityinfo;
 
 echo $participanttablehtml;

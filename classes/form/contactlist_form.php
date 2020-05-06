@@ -25,7 +25,6 @@
 
 namespace local_contactlist\form;
 
-//require_once($CFG->dirroot.'/weblib.php');
 require_once($CFG->libdir.'/formslib.php');
 require_once($CFG->dirroot.'/local/contactlist/locallib.php');
 
@@ -47,8 +46,7 @@ class contactlist_form extends \moodleform {
         global $PAGE, $USER;
 
         $courseid = required_param('id', PARAM_INT); // This are required.
-        $PAGE->set_url('/local/contactlist/studentview.php', ['id' => $courseid]);
-      //  $PAGE->set_url(new moodle_url('/local/contactlist/studentview.php', ['id' => $courseid]));
+        $PAGE->set_url(new \moodle_url('/local/contactlist/studentview.php', ['id' => $courseid]));
         $mform = $this->_form;
 
         $localvsglobal = get_string('personalvisibilityinfo', 'local_contactlist');

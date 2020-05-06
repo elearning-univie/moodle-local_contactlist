@@ -42,7 +42,6 @@ function local_contactlist_get_participants (int $courseid, $userid, $additional
 
     $params = array();
     $params['cid'] = $courseid;
-    $params['cid2'] = $courseid;
 
     if (!empty($additionalwhere)) {
         $wheres[] = $additionalwhere;
@@ -56,7 +55,7 @@ function local_contactlist_get_participants (int $courseid, $userid, $additional
              JOIN {user} u ON u.id = asg.userid
              JOIN {course} course ON context.instanceid = course.id
              LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
-             LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = :cid2
+             LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
              WHERE asg.roleid = 5
              AND course.id = :cid) join1
           WHERE (join1.data IS NULL AND visib = 1)
@@ -79,7 +78,6 @@ function local_contactlist_get_total_visible (int $courseid) {
 
     $params = array();
     $params['cid'] = $courseid;
-    $params['cid2'] = $courseid;
 
     $sql = "SELECT COUNT(uid) FROM
           (SELECT u.id as uid, uinfo.data, clvis.visib
@@ -88,7 +86,7 @@ function local_contactlist_get_total_visible (int $courseid) {
              JOIN {user} u ON u.id = asg.userid
              JOIN {course} course ON context.instanceid = course.id
              LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
-             LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = :cid2
+             LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
              WHERE asg.roleid = 5
              AND course.id = :cid) join1
           WHERE (join1.data IS NULL AND visib = 1)
@@ -194,7 +192,6 @@ function local_contactlist_get_participants_sql($courseid, $additionalwhere = ''
     $params['contextlevel'] = CONTEXT_USER;
 
     $params['courseid'] = $courseid;
-    $params['courseid2'] = $courseid;
 
     $select = "SELECT uid AS id, picture, firstname, lastname, email, join1.data, visib ";
     $from = "FROM
@@ -204,7 +201,7 @@ function local_contactlist_get_participants_sql($courseid, $additionalwhere = ''
              JOIN {user} u ON u.id = asg.userid
              JOIN {course} course ON context.instanceid = course.id
              LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
-             LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = :courseid2
+             LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
              WHERE asg.roleid = 5
              AND course.id = :courseid) join1 ";
 
@@ -245,4 +242,54 @@ function local_contactlist_get_list ($courseid, $additionalwhere = '', $addition
 
     return $DB->get_recordset_sql("$select $from $where $sort", $params, $limitfrom, $limitnum);
 }
+/**
+ * extra user field function with alternative capabilities for contactlist.
+ *
+ * @param object $context Context
+ * @param array $already Array of fields that we're going to show anyway
+ *   so don't bother listing them
+ * @return array Array of field names from user table, not including anything
+ *   listed in $already
+ */
+function get_extra_user_fields_contactlist($context, $already = array()) {
+    global $CFG;
 
+    // Only users with permission get the extra fields.
+    if (!has_capability('local/contactlist:viewuseridentity', $context)) {
+        return array();
+    }
+    
+    // Split showuseridentity on comma (filter needed in case the showuseridentity is empty).
+    $extra = array_filter(explode(',', $CFG->showuseridentity));
+    
+    foreach ($extra as $key => $field) {
+        if (in_array($field, $already)) {
+            unset($extra[$key]);
+        }
+    }
+    
+    // If the identity fields are also among hidden fields, make sure the user can see them.
+    $hiddenfields = array_filter(explode(',', $CFG->hiddenuserfields));
+    $hiddenidentifiers = array_intersect($extra, $hiddenfields);
+    
+    if ($hiddenidentifiers) {
+        if ($context->get_course_context(false)) {
+            // We are somewhere inside a course.
+            $canviewhiddenuserfields = has_capability('local/contactlist:viewhiddenuserfields', $context);
+            
+        } else {
+            // We are not inside a course.
+            $canviewhiddenuserfields = has_capability('local/contactlist:viewhiddendetails', $context);
+        }
+        
+        if (!$canviewhiddenuserfields) {
+            // Remove hidden identifiers from the list.
+            $extra = array_diff($extra, $hiddenidentifiers);
+        }
+    }
+    
+    // Re-index the entries.
+    $extra = array_values($extra);
+    
+    return $extra;
+}

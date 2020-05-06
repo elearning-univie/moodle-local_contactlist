@@ -25,7 +25,8 @@
  */
 
 $string['email'] = 'Email address';
-$string['globaldefault'] = 'default (global)';
+$string['errornotallowedonpage'] = 'You are not registerd in this course!';
+$string['globaldefault'] = 'default (instance-wide)';
 $string['invisible'] = 'invisible';
 $string['localvisibility'] = 'Course contact list visibility';
 $string['localvisibility_help'] = 'Info';
@@ -42,8 +43,7 @@ $string['privacy:metadata:local_contactlist_course_vis:visib'] = 'The visibility
 $string['privacy:metadata:user_info_data'] = 'Information about the contact list visibility for the whole moodle instance. Default is invisible.';
 $string['privacy:metadata:user_info_data:data'] = 'The visibility for the whole moodle instance.';
 $string['privacy:metadata:user_info_data:userid'] = 'The ID of the user.';
-
 $string['role'] = 'Role';
 $string['surname'] = 'Surname';
-$string['totalvsvisible'] = '{$a->visible} participants out of {$a->total} registered in this course are sharing their contact information.';
+$string['totalvsvisible'] = '<p><b>{$a->visible} participants out of {$a->total} registered in this course are sharing their contact information.</b></p>';
 $string['visible'] = 'visible';

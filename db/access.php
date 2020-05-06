@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 $capabilities = array(
     'local/contactlist:view' => array(
         'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
+        'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
             'guest' => CAP_PROHIBIT,
             'student' => CAP_ALLOW,
@@ -37,19 +37,39 @@ $capabilities = array(
             'manager' => CAP_ALLOW
         )
     ),
-    'local/contactlist:studentview' => array(
+    'local/contactlist:viewhiddendetails' => array(
         'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
+        'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
+            'guest' => CAP_PROHIBIT,
             'student' => CAP_ALLOW,
-        )
-    ),
-    'local/contactlist:teacherview' => array(
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_MODULE,
-        'archetypes' => array(
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW)
+    ),
+    'local/contactlist:viewuseridentity' => array(
+        
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'guest' => CAP_PROHIBIT,
+            'student' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        )
+    ),
+    'local/contactlist:viewhiddendetails' => array(
+        
+        'riskbitmask' => RISK_PERSONAL,
+        
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'student' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
         )
     )
 );
