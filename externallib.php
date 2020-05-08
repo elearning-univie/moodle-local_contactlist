@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
+require_once($CFG->dirroot . '/local/contactlist/locallib.php');
 
 /**
  * Class local_contactlist_external
@@ -42,7 +43,8 @@ class local_contactlist_external extends external_api {
     public static function update_settings_parameters() {
         return new external_function_parameters(
             array(
-                'updateval' => new external_value(PARAM_INT, 'intval')
+                'courseid' => new external_value(PARAM_INT, 'course id'),
+                'updateval' => new external_value(PARAM_INT, 'visibility 0 = hidden, 1 = visible')
             )
         );
     }
@@ -54,10 +56,11 @@ class local_contactlist_external extends external_api {
      * @return string|null
      * @throws dml_exception
      */
-    public static function update_settings($updateval) {
-        global $DB, $USER;
+    public static function update_settings($courseid, $updateval) {
+        global $USER;
 
-        $params = self::validate_parameters(self::update_settings_parameters(), array('updateval' => $updateval));
+        $params = self::validate_parameters(self::update_settings_parameters(), array('courseid' => $courseid, 'updateval' => $updateval));
+        local_contactlist_save_update($USER->id, $params['courseid'], $params['updateval']);
 
         return $updateval;
     }
