@@ -60,16 +60,15 @@ if ($contextid) {
 require_login($course);
 
 $pagetitle = get_string('pagetitle', 'local_contactlist');
-$node = $PAGE->settingsnav->find('contactlist', navigation_node::TYPE_CONTAINER);
 $PAGE->set_title("$course->shortname: " . $pagetitle);
 $PAGE->set_heading($course->fullname);
+$node = $PAGE->settingsnav->find('contactlist', navigation_node::TYPE_CONTAINER);
+
+if ($node) {
+    $node->make_active();
+}
 
 if (!has_capability('local/contactlist:view', $context) ) {
-    $PAGE->set_url(new moodle_url("/local/contactlist/studentview.php", ['id' => $id]));
-    if ($node) {
-        $node->make_active();
-    }
-
     echo $OUTPUT->header();
     echo $OUTPUT->heading(get_string('errornotallowedonpage', 'local_contactlist'));
     echo $OUTPUT->footer();
@@ -99,9 +98,6 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($pagetitle);
 
 if (!local_contactlist_courselevel_visibility($USER->id, $courseid)) {
-    $PAGE->requires->js_call_amd('local_contactlist/studentsettings','init', ['courseid' => $courseid]);
-    //echo '<button onclick="$.local_contactlist_create_modal(' . $courseid . ')">create-modal</button>';
-} else {
     $PAGE->requires->js_call_amd('local_contactlist/studentsettings','init', ['courseid' => $courseid]);
 }
 

@@ -50,7 +50,7 @@ class local_contactlist_external extends external_api {
     }
 
     /**
-     * Updates the Settings for a User
+     * Updates the visibility setting for an user
      *
      * @param int $updateval
      * @return string|null
@@ -60,9 +60,10 @@ class local_contactlist_external extends external_api {
         global $USER;
 
         $params = self::validate_parameters(self::update_settings_parameters(), array('courseid' => $courseid, 'updateval' => $updateval));
-        local_contactlist_save_update($USER->id, $params['courseid'], $params['updateval']);
-
-        return $updateval;
+        $context = context_course::instance($courseid, MUST_EXIST);
+        if (has_capability('local/contactlist:view', $context) && ($updateval == 1 || $updateval == 0)) {
+            local_contactlist_save_update($USER->id, $params['courseid'], $params['updateval']);
+        }
     }
 
     /**
@@ -71,6 +72,6 @@ class local_contactlist_external extends external_api {
      * @return external_value
      */
     public static function update_settings_returns() {
-        return new external_value(PARAM_INT, '0/1');
+        return null;
     }
 }
