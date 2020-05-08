@@ -100,6 +100,8 @@ if ($node) {
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pagetitle', 'local_contactlist'));
+$PAGE->requires->js_call_amd('local_contactlist/studentsettings');
+echo '<button id="create-modal">create-modal</button>';
 
 $mform = new \local_contactlist\form\contactlist_form(array('id' => $courseid));
 
