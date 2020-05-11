@@ -166,4 +166,3 @@ $visbilityinfo = get_string('totalvsvisible', 'local_contactlist', ['visible' =>
 echo $visbilityinfo;
 echo $participanttablehtml;
 echo $OUTPUT->footer();
-die();
