@@ -52,6 +52,7 @@ class local_contactlist_external extends external_api {
     /**
      * Updates the visibility setting for an user
      *
+     * @param int $courseid
      * @param int $updateval
      * @return string|null
      * @throws dml_exception
