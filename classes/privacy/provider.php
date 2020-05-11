@@ -22,6 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace local_contactlist\privacy;
+use core_privacy\local\metadata\collection;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -33,7 +34,11 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright     2020 University of Vienna
  * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements \core_privacy\local\metadata\provider {
+class provider implements 
+// This plugin has data.
+\core_privacy\local\metadata\provider
+
+{
     /**
      * Database info.
      *
@@ -62,4 +67,95 @@ class provider implements \core_privacy\local\metadata\provider {
             );
         return $collection;
     }
+    /**
+     * Get the list of contexts that contain user information for the specified user.
+     *
+     * @param int $userid the userid.
+     * @return contextlist the list of contexts containing user info for the user.
+     */
+    public static function get_contexts_for_userid(int $userid) : contextlist {
+        $contextlist = new contextlist();
+
+        // local plugin visibility settings
+        $params = ['userid' => $userid, 'contextlevel' => CONTEXT_COURSE];
+        $sql = "SELECT ctx.id
+                FROM {context} ctx
+                JOIN {course} c ON ctx.instanceid = c.id AND ctx.contextlevel = :contextlevel
+                JOIN {local_contactlist_course_vis} ctl ON c.id = ctl.courseid
+                WHERE ctl.userid = :userid";
+
+        $contextlist->add_from_sql($sql, $params);
+
+        // global visibility settings controlled by plugin
+        $params = ['userid' => $userid, 'contextlevel' => CONTEXT_USER];
+        $sql = "SELECT ctx.id
+                FROM {context} ctx
+                JOIN {user_info_data} uid ON uid.userid = ctx.instanceid AND uid.userid = :userid
+                WHERE ctx.contextlevel = :contextlevel";
+        $contextlist->add_from_sql($sql, $params);
+
+        return $contextlist;
+    }
+    /**
+     * 
+     * @param userlist $userlist
+     */
+    public static function get_users_in_context(userlist $userlist) {
+        global $DB;
+
+        $context = $userlist->get_context();
+
+        $params = [
+            'instanceid'    => $context->instanceid,
+        ];
+        // userlist for course context.
+        $sql = "SELECT ctl.userid 
+                FROM {local_contactlist_course_vis} ctl
+                WHERE ctl.courseid = :instanceid";
+
+        $userlist->add_from_sql('userid', $sql, $params);
+
+        // userlist for global setting controlled by plugin.
+//         $sql = "SELECT ctl.userid
+//                 FROM {user_info_data} uid
+//                 WHERE uid.userid = :instanceid";
+
+//         $userlist->add_from_sql('userid', $sql, $params);
+    }
+    /**
+     * Export personal data for the given approved_contextlist. User and context information is contained within the contextlist.
+     *
+     * @param approved_contextlist $contextlist a list of contexts approved for export.
+     */
+    public static function export_user_data(approved_contextlist $contextlist) {
+        global $DB;
+        if (empty($contextlist->get_contextids())) {
+            return;
+        }
+        
+
+    }
+    /**
+     * Delete all data for all users in the specified context.
+     *
+     * @param   context $context The specific context to delete data for.
+     */
+    public static function delete_data_for_all_users_in_context(\context $context) {
+        global $DB;
+        if ($context->contextlevel != CONTEXT_COURSE) {
+            return;
+       }
+
+    }
+    
+    /**
+     * Delete all user data for the specified user, in the specified contexts.
+     *
+     * @param   approved_contextlist $contextlist The approved contexts and user information to delete information for.
+     */
+    public static function delete_data_for_user(approved_contextlist $contextlist) {
+        global $DB;
+
+    }
+
 }
