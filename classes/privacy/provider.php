@@ -108,19 +108,23 @@ class provider implements
         $params = [
             'instanceid'    => $context->instanceid,
         ];
+
+        if ($context->contextlevel = CONTEXT_COURSE) {
         // userlist for course context.
         $sql = "SELECT ctl.userid 
                 FROM {local_contactlist_course_vis} ctl
                 WHERE ctl.courseid = :instanceid";
 
         $userlist->add_from_sql('userid', $sql, $params);
+        }
 
-        // userlist for global setting controlled by plugin.
-//         $sql = "SELECT ctl.userid
-//                 FROM {user_info_data} uid
-//                 WHERE uid.userid = :instanceid";
+        if ($context->contextlevel = CONTEXT_USER) {
+        $sql = "SELECT ctl.userid
+                FROM {user_info_data} uid
+                WHERE uid.userid = :instanceid";
 
-//         $userlist->add_from_sql('userid', $sql, $params);
+        $userlist->add_from_sql('userid', $sql, $params);
+        }
     }
     /**
      * Export personal data for the given approved_contextlist. User and context information is contained within the contextlist.
