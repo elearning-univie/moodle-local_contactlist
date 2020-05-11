@@ -33,6 +33,7 @@ $string['invisible'] = 'invisible';
 $string['localvisibility'] = 'Course contact list visibility';
 $string['localvisibility_help'] = 'Info';
 $string['localvisibilitydefault'] = 'Default: Global Visibility';
+$string['modalwarning'] = 'You are currently not visible in the contactlist. Do you want to be listed?';
 $string['name'] = 'First name';
 $string['nodename'] = 'Contactlist';
 $string['pagetitle'] = 'Contactlist';

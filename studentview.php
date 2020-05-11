@@ -40,11 +40,11 @@ $courseid     = optional_param('id', 0, PARAM_INT);
 $filtersapplied = optional_param_array('unified-filters', [], PARAM_NOTAGS);
 $filterwassubmitted = optional_param('unified-filter-submitted', 0, PARAM_BOOL);
 
-$PAGE->set_url('/contactlist/studentview.php', array(
+$PAGE->set_url(new moodle_url('/local/contactlist/studentview.php', array(
     'page' => $page,
     'perpage' => $perpage,
     'contextid' => $contextid,
-    'id' => $courseid));
+    'id' => $courseid)));
 
 if ($contextid) {
     $context = context::instance_by_id($contextid, MUST_EXIST);
@@ -59,16 +59,16 @@ if ($contextid) {
 
 require_login($course);
 
-if (!has_capability('local/contactlist:view', $context) ) {
-    $PAGE->set_url(new moodle_url("/local/contactlist/studentview.php", ['id' => $id]));
-    $node = $PAGE->settingsnav->find('contactlist', navigation_node::TYPE_CONTAINER);
-    if ($node) {
-        $node->make_active();
-    }
-    $pagetitle = get_string('pagetitle', 'local_contactlist');
-    $PAGE->set_title($pagetitle);
-    $PAGE->set_heading($course->fullname);
+$pagetitle = get_string('pagetitle', 'local_contactlist');
+$PAGE->set_title("$course->shortname: " . $pagetitle);
+$PAGE->set_heading($course->fullname);
+$node = $PAGE->settingsnav->find('contactlist', navigation_node::TYPE_CONTAINER);
 
+if ($node) {
+    $node->make_active();
+}
+
+if (!has_capability('local/contactlist:view', $context) ) {
     echo $OUTPUT->header();
     echo $OUTPUT->heading(get_string('errornotallowedonpage', 'local_contactlist'));
     echo $OUTPUT->footer();
@@ -88,27 +88,17 @@ if ($isfrontpage) {
     course_require_view_participants($context);
 }
 
-$PAGE->set_title("$course->shortname: ".get_string('pagetitle', 'local_contactlist'));
-$PAGE->set_heading($course->fullname);
 $PAGE->set_pagetype('course-view-' . $course->format);
-
-$node = $PAGE->settingsnav->find('contactlist', navigation_node::TYPE_CONTAINER);
 
 if ($node) {
     $node->force_open();
 }
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('pagetitle', 'local_contactlist'));
+echo $OUTPUT->heading($pagetitle);
 
-$mform = new \local_contactlist\form\contactlist_form(array('id' => $courseid));
-
-$mform->display();
-
-$formdata = $mform->get_data();
-
-if ($formdata) {
-    local_contactlist_save_update($USER->id, $courseid, $formdata->visib);
+if (!local_contactlist_courselevel_visibility($USER->id, $courseid)) {
+    $PAGE->requires->js_call_amd('local_contactlist/studentsettings','init', ['courseid' => $courseid]);
 }
 
 $hasgroupfilter = false;
@@ -172,9 +162,7 @@ ob_end_clean();
 $visibleno = local_contactlist_get_total_visible($courseid);
 $totalno = local_contactlist_get_total_course($courseid);
 $visbilityinfo = get_string('totalvsvisible', 'local_contactlist', ['visible' => $visibleno, 'total' => $totalno]);
+
 echo $visbilityinfo;
-
 echo $participanttablehtml;
-
 echo $OUTPUT->footer();
-die();
