@@ -314,26 +314,26 @@ function get_visibility_info_string ($userid, $courseid) {
     $globalvisib  = $DB->get_record('user_info_data', $params);
     $localvisib = local_contactlist_courselevel_visibility ($userid, $courseid);
 
-    $hereurl = (string)new moodle_url("/user/profile.php",['id' => $userid]);
+    $hereurl = (string)new moodle_url("/user/profile.php", ['id' => $userid]);
     if ($globalvisib) {
         if ($globalvisib->data == "Yes") {
-            if ($localvisib == 2) { // local no
+            if ($localvisib == 2) {
                 $infostring = get_string('gyln', 'local_contactlist', ['here' => $hereurl]);
             } else {
                 $infostring = get_string('gyly', 'local_contactlist', ['here' => $hereurl]);
             }
         }
-        else if ($globalvisib->data == "No") { // global = No
-            if ($localvisib == 1) { // local yes
-                $infostring =  get_string('gnly', 'local_contactlist', ['here' => $hereurl]);
-            } else if ($localvisib == 2){
+        else if ($globalvisib->data == "No") {
+            if ($localvisib == 1) {
+                $infostring = get_string('gnly', 'local_contactlist', ['here' => $hereurl]);
+            } else if ($localvisib == 2) {
                 $infostring = get_string('gyly', 'local_contactlist', ['here' => $hereurl]);
             }
         }
-    } else { // global not set
-        if ($localvisib == 1) { // local yes
+    } else {
+        if ($localvisib == 1) {
             $infostring = get_string('gnly', 'local_contactlist', ['here' => $hereurl]);
-        } else if ($localvisib == 2){
+        } else if ($localvisib == 2) {
             $infostring = get_string('gyly', 'local_contactlist', ['here' => $hereurl]);
         }
     }

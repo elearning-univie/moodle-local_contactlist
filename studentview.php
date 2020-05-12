@@ -101,8 +101,6 @@ if ($node) {
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pagetitle', 'local_contactlist'));
 
-//$localvsglobal = "";
-
 $mform = new \local_contactlist\form\contactlist_form(array('id' => $courseid));
 
 $mform->display();
