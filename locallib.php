@@ -322,8 +322,7 @@ function get_visibility_info_string ($userid, $courseid) {
             } else {
                 $infostring = get_string('gyly', 'local_contactlist', ['here' => $hereurl]);
             }
-        }
-        else if ($globalvisib->data == "No") {
+        } else if ($globalvisib->data == "No") {
             if ($localvisib == 1) {
                 $infostring = get_string('gnly', 'local_contactlist', ['here' => $hereurl]);
             } else if ($localvisib == 2) {
