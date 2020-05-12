@@ -137,6 +137,33 @@ class provider implements
         if (empty($contextlist->get_contextids())) {
             return;
         }
+
+        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
+        $user = $contextlist->get_user();
+
+        $contexts = $contextlist->get_contexts();
+
+        foreach ($contexts as $context) {
+            if ($context->contextlevel = CONTEXT_COURSE) {
+                $params = [
+                    'instanceid'    => $context->instanceid,
+                    'userid' => $user->id,
+                ];
+                $sql = "SELECT ctl
+                    FROM {local_contactlist_course_vis} ctl
+                    WHERE ctl.courseid = :instanceid
+                    AND ctl.userid = :userid";
+                $data = $DB->$params($sql, $params);
+                writer::with_context($context)->export_data($context, $data);
+            }
+            if ($context->contextlevel = CONTEXT_USER) {
+                $sql = "SELECT uid
+                    FROM FROM {user_info_data} uid
+                    WHERE uid.userid = :instanceid";
+                $data = $DB->$params($sql, ['instanceid' => $context->instanceid]);
+                writer::with_context($context)->export_data($context, $data);
+            }
+        }
     }
     /**
      * Delete all data for all users in the specified context.
