@@ -110,7 +110,7 @@ class provider implements
             'instanceid'    => $context->instanceid,
         ];
 
-        if ($context->contextlevel = CONTEXT_COURSE) {
+        if ($context->contextlevel == CONTEXT_COURSE) {
             // userlist for course context.
             $sql = "SELECT ctl.userid
                     FROM {local_contactlist_course_vis} ctl
@@ -119,7 +119,7 @@ class provider implements
             $userlist->add_from_sql('userid', $sql, $params);
         }
 
-        if ($context->contextlevel = CONTEXT_USER) {
+        if ($context->contextlevel == CONTEXT_USER) {
             $sql = "SELECT ctl.userid
                     FROM {user_info_data} uid
                     WHERE uid.userid = :instanceid";
@@ -144,7 +144,7 @@ class provider implements
         $contexts = $contextlist->get_contexts();
 
         foreach ($contexts as $context) {
-            if ($context->contextlevel = CONTEXT_COURSE) {
+            if ($context->contextlevel == CONTEXT_COURSE) {
                 $params = [
                     'instanceid'    => $context->instanceid,
                     'userid' => $user->id,
@@ -156,7 +156,7 @@ class provider implements
                 $data = $DB->$params($sql, $params);
                 writer::with_context($context)->export_data($context, $data);
             }
-            if ($context->contextlevel = CONTEXT_USER) {
+            if ($context->contextlevel == CONTEXT_USER) {
                 $sql = "SELECT uid
                     FROM FROM {user_info_data} uid
                     WHERE uid.userid = :instanceid";
@@ -175,10 +175,10 @@ class provider implements
         $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
         $userid = $contextlist->get_user()->id;
 
-        if ($context->contextlevel = CONTEXT_COURSE) {
-            $DB->delete_records('choice_answers', ['choiceid' => $instanceid, 'userid' => $userid]);
+        if ($context->contextlevel == CONTEXT_COURSE) {
+            $DB->delete_records('local_contactlist_course_vis', ['courseid' => $context->instanceid, 'userid' => $userid]);
         }
-        if ($context->contextlevel = CONTEXT_USER) {
+        if ($context->contextlevel == CONTEXT_USER) {
             $DB->delete_records('user_info_data', ['fieldid' => $globalinfofield->id, 'userid' => $userid]);
         }
     }
@@ -198,10 +198,10 @@ class provider implements
         $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
-            if ($context->contextlevel = CONTEXT_COURSE) {
-                $DB->delete_records('choice_answers', ['choiceid' => $instanceid, 'userid' => $userid]);
+            if ($context->contextlevel == CONTEXT_COURSE) {
+                $DB->delete_records('local_contactlist_course_vis', ['courseid' => $context->instanceid, 'userid' => $userid]);
             }
-            if ($context->contextlevel = CONTEXT_USER) {
+            if ($context->contextlevel == CONTEXT_USER) {
                 $DB->delete_records('user_info_data', ['fieldid' => $globalinfofield->id, 'userid' => $userid]);
             }
         }
