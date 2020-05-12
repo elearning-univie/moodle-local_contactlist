@@ -136,8 +136,14 @@ class provider implements
         if (empty($contextlist->get_contextids())) {
             return;
         }
-        
 
+        //        if (!empty($responsedata)) {
+        //            $context = \context_module::instance($lastcmid);
+        //            // Fetch the generic module data for the questionnaire.
+        //            $contextdata = \core_privacy\local\request\helper::get_context_data($context, $user);
+        //            // Merge with attempt data and write it.
+        //            $contextdata = (object)array_merge((array)$contextdata, $responsedata);
+        //            \core_privacy\local\request\writer::with_context($context)->export_data([], $contextdata);
     }
     /**
      * Delete all data for all users in the specified context.
@@ -146,10 +152,15 @@ class provider implements
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
-        if ($context->contextlevel != CONTEXT_COURSE) {
-            return;
-       }
+        $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
+        $userid = $contextlist->get_user()->id;
 
+        if($context->contextlevel = CONTEXT_COURSE) {
+            $DB->delete_records('choice_answers', ['choiceid' => $instanceid, 'userid' => $userid]);
+        }
+        if($context->contextlevel = CONTEXT_USER) {
+            $DB->delete_records('user_info_data', ['fieldid' => $globalinfofield->id, 'userid' => $userid]);
+        }
     }
     
     /**
@@ -160,6 +171,20 @@ class provider implements
     public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
 
+        if (empty($contextlist->count())) {
+            return;
+        }
+
+        $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
+        $userid = $contextlist->get_user()->id;
+        foreach ($contextlist->get_contexts() as $context) {
+            if($context->contextlevel = CONTEXT_COURSE) {
+                $DB->delete_records('choice_answers', ['choiceid' => $instanceid, 'userid' => $userid]);
+            }
+            if($context->contextlevel = CONTEXT_USER) {
+                $DB->delete_records('user_info_data', ['fieldid' => $globalinfofield->id, 'userid' => $userid]);
+            }
+        }
     }
 
 }
