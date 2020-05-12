@@ -97,6 +97,7 @@ class provider implements
         return $contextlist;
     }
     /**
+     * get_users_in_context.
      * 
      * @param userlist $userlist
      */
