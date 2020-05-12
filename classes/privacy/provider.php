@@ -111,7 +111,7 @@ class provider implements
         ];
 
         if ($context->contextlevel = CONTEXT_COURSE) {
-        // userlist for course context.
+            // userlist for course context.
             $sql = "SELECT ctl.userid
                     FROM {local_contactlist_course_vis} ctl
                     WHERE ctl.courseid = :instanceid";

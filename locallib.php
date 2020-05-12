@@ -90,6 +90,7 @@ function local_contactlist_get_total_visible (int $courseid) {
              WHERE asg.roleid = 5
              AND course.id = :cid) join1
           WHERE (join1.data IS NULL AND visib = 1)
+          OR (join1.data LIKE 'NO' AND visib = 1)
           OR (join1.data LIKE 'Yes' AND visib IS NULL)
           OR (join1.data LIKE 'Yes' AND visib = 1)";
 
@@ -206,6 +207,7 @@ function local_contactlist_get_participants_sql($courseid, $additionalwhere = ''
              AND course.id = :courseid) join1 ";
 
     $where1 = "WHERE ((join1.data IS NULL AND visib = 1)
+               OR (join1.data LIKE 'NO' AND visib = 1)
                OR (join1.data LIKE 'Yes' AND visib IS NULL)
                OR (join1.data LIKE 'Yes' AND visib = 1)) ";
 
@@ -312,26 +314,27 @@ function get_visibility_info_string ($userid, $courseid) {
     $globalvisib  = $DB->get_record('user_info_data', $params);
     $localvisib = local_contactlist_courselevel_visibility ($userid, $courseid);
 
+    $hereurl = (string)new moodle_url("/user/profile.php",['id' => $userid]);
     if ($globalvisib) {
-        if ($globalvisib->data = "Yes") {
-            if ($localvisib = 2) { // local no
-                return get_string('gyln', 'local_contactlist');
+        if ($globalvisib->data == "Yes") {
+            if ($localvisib == 2) { // local no
+                $infostring = get_string('gyln', 'local_contactlist', ['here' => $hereurl]);
             } else {
-                $infostring = "";
+                $infostring = get_string('gyly', 'local_contactlist', ['here' => $hereurl]);
             }
         }
-        if ($globalvisib->data = "No") { // global = No
-            if ($localvisib = 1) { // local yes
-                return get_string('gnly', 'local_contactlist');
-            } else {
-                $infostring = "";
+        else if ($globalvisib->data == "No") { // global = No
+            if ($localvisib == 1) { // local yes
+                $infostring =  get_string('gnly', 'local_contactlist', ['here' => $hereurl]);
+            } else if ($localvisib == 2){
+                $infostring = get_string('gyly', 'local_contactlist', ['here' => $hereurl]);
             }
         }
     } else { // global not set
-        if ($localvisib = 1) { // local yes
-            return get_string('gnly', 'local_contactlist');
-        } else {
-            $infostring = "";
+        if ($localvisib == 1) { // local yes
+            $infostring = get_string('gnly', 'local_contactlist', ['here' => $hereurl]);
+        } else if ($localvisib == 2){
+            $infostring = get_string('gyly', 'local_contactlist', ['here' => $hereurl]);
         }
     }
 

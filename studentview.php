@@ -101,6 +101,8 @@ if ($node) {
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pagetitle', 'local_contactlist'));
 
+//$localvsglobal = "";
+
 $mform = new \local_contactlist\form\contactlist_form(array('id' => $courseid));
 
 $mform->display();
@@ -110,6 +112,9 @@ $formdata = $mform->get_data();
 if ($formdata) {
     local_contactlist_save_update($USER->id, $courseid, $formdata->visib);
 }
+$localvsglobal = get_visibility_info_string($USER->id, $courseid);
+echo '<p>'. $localvsglobal.'</p>';
+
 
 $hasgroupfilter = false;
 $lastaccess = 0;
