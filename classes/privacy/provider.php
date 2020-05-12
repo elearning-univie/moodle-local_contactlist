@@ -34,7 +34,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright     2020 University of Vienna
  * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements 
+class provider implements
 // This plugin has data.
 \core_privacy\local\metadata\provider
 
@@ -98,7 +98,7 @@ class provider implements
     }
     /**
      * get_users_in_context.
-     * 
+     *
      * @param userlist $userlist
      */
     public static function get_users_in_context(userlist $userlist) {
@@ -112,19 +112,19 @@ class provider implements
 
         if ($context->contextlevel = CONTEXT_COURSE) {
         // userlist for course context.
-        $sql = "SELECT ctl.userid 
-                FROM {local_contactlist_course_vis} ctl
-                WHERE ctl.courseid = :instanceid";
+            $sql = "SELECT ctl.userid
+                    FROM {local_contactlist_course_vis} ctl
+                    WHERE ctl.courseid = :instanceid";
 
-        $userlist->add_from_sql('userid', $sql, $params);
+            $userlist->add_from_sql('userid', $sql, $params);
         }
 
         if ($context->contextlevel = CONTEXT_USER) {
-        $sql = "SELECT ctl.userid
-                FROM {user_info_data} uid
-                WHERE uid.userid = :instanceid";
+            $sql = "SELECT ctl.userid
+                    FROM {user_info_data} uid
+                    WHERE uid.userid = :instanceid";
 
-        $userlist->add_from_sql('userid', $sql, $params);
+            $userlist->add_from_sql('userid', $sql, $params);
         }
     }
     /**
@@ -137,14 +137,6 @@ class provider implements
         if (empty($contextlist->get_contextids())) {
             return;
         }
-
-        //        if (!empty($responsedata)) {
-        //            $context = \context_module::instance($lastcmid);
-        //            // Fetch the generic module data for the questionnaire.
-        //            $contextdata = \core_privacy\local\request\helper::get_context_data($context, $user);
-        //            // Merge with attempt data and write it.
-        //            $contextdata = (object)array_merge((array)$contextdata, $responsedata);
-        //            \core_privacy\local\request\writer::with_context($context)->export_data([], $contextdata);
     }
     /**
      * Delete all data for all users in the specified context.
@@ -156,14 +148,14 @@ class provider implements
         $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
         $userid = $contextlist->get_user()->id;
 
-        if($context->contextlevel = CONTEXT_COURSE) {
+        if ($context->contextlevel = CONTEXT_COURSE) {
             $DB->delete_records('choice_answers', ['choiceid' => $instanceid, 'userid' => $userid]);
         }
-        if($context->contextlevel = CONTEXT_USER) {
+        if ($context->contextlevel = CONTEXT_USER) {
             $DB->delete_records('user_info_data', ['fieldid' => $globalinfofield->id, 'userid' => $userid]);
         }
     }
-    
+
     /**
      * Delete all user data for the specified user, in the specified contexts.
      *
@@ -179,10 +171,10 @@ class provider implements
         $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
-            if($context->contextlevel = CONTEXT_COURSE) {
+            if ($context->contextlevel = CONTEXT_COURSE) {
                 $DB->delete_records('choice_answers', ['choiceid' => $instanceid, 'userid' => $userid]);
             }
-            if($context->contextlevel = CONTEXT_USER) {
+            if ($context->contextlevel = CONTEXT_USER) {
                 $DB->delete_records('user_info_data', ['fieldid' => $globalinfofield->id, 'userid' => $userid]);
             }
         }
