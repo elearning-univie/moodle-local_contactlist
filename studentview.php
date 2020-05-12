@@ -100,6 +100,9 @@ echo $OUTPUT->heading($pagetitle);
 if (!local_contactlist_courselevel_visibility($USER->id, $courseid)) {
     $PAGE->requires->js_call_amd('local_contactlist/studentsettings', 'init', ['courseid' => $courseid]);
 }
+$localvsglobal = get_visibility_info_string($USER->id, $courseid);
+echo '<p>'. $localvsglobal.'</p>';
+
 
 $hasgroupfilter = false;
 $lastaccess = 0;

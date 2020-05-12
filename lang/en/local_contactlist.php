@@ -27,8 +27,9 @@
 $string['email'] = 'Email address';
 $string['errornotallowedonpage'] = 'You are not registerd in this course!';
 $string['globaldefault'] = 'default (instance-wide)';
-$string['gnly'] = 'Your contactlist visibility settings in this course (visible) are different from your instance-wide settings (vot visible). You can change your Instance-wide settings here.';
-$string['gyln'] = 'Your contactlist visibility settings in this course (not visible) are different from your instance-wide settings (visible). You can change your Instance-wide settings here.';
+$string['gnly'] = 'Your contactlist visibility setting in this course (visible) is different from your instance-wide setting (not visible). You can change your instance-wide settings <a href="{$a->here}" > here </a>.';
+$string['gyln'] = 'Your contactlist visibility setting in this course (not visible) is different from your instance-wide setting (visible). You can change your instance-wide settings <a href="{$a->here}" > here </a>.';
+$string['gyly'] = 'You can change your instance-wide settings <a href="{$a->here}" > here </a>.';
 $string['invisible'] = 'invisible';
 $string['localvisibility'] = 'Course contact list visibility';
 $string['localvisibility_help'] = 'Info';
