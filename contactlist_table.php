@@ -90,7 +90,7 @@ class contactlist_table extends \table_sql {
         $headers[] = get_string('fullname');
         $columns[] = 'fullname';
 
-        $extrafields = get_extra_user_fields_contactlist($context);
+        $extrafields = local_contactlist_get_extra_user_fields_contactlist($context);
         foreach ($extrafields as $field) {
             $headers[] = get_user_field_name($field);
             $columns[] = $field;

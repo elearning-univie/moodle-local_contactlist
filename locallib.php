@@ -253,7 +253,7 @@ function local_contactlist_get_list ($courseid, $additionalwhere = '', $addition
  * @return array Array of field names from user table, not including anything
  *   listed in $already
  */
-function get_extra_user_fields_contactlist($context, $already = array()) {
+function local_contactlist_get_extra_user_fields_contactlist($context, $already = array()) {
     global $CFG;
 
     // Only users with permission get the extra fields.
@@ -301,7 +301,7 @@ function get_extra_user_fields_contactlist($context, $already = array()) {
  * @param int $courseid
  * @return string
  */
-function get_visibility_info_string ($userid, $courseid) {
+function local_contactlist_get_visibility_info_string($userid, $courseid) {
     global $DB;
 
     $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
