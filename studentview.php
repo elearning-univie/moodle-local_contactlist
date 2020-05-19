@@ -85,7 +85,12 @@ if ($isfrontpage) {
     course_require_view_participants($systemcontext);
 } else {
     $PAGE->set_pagelayout('incourse');
-    course_require_view_participants($context);
+    if (!has_capability('local/contactlist:view', $context) ) {
+        echo $OUTPUT->header();
+        echo $OUTPUT->heading(get_string('errornotallowedonpage', 'local_contactlist'));
+        echo $OUTPUT->footer();
+        die();
+    }
 }
 
 $PAGE->set_pagetype('course-view-' . $course->format);

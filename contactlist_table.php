@@ -91,9 +91,12 @@ class contactlist_table extends \table_sql {
         $columns[] = 'fullname';
 
         $extrafields = local_contactlist_get_extra_user_fields_contactlist($context);
+
         foreach ($extrafields as $field) {
-            $headers[] = get_user_field_name($field);
-            $columns[] = $field;
+            if ($field == 'email') {
+                $headers[] = get_user_field_name($field);
+                $columns[] = $field;
+            }
         }
 
         $this->define_columns($columns);

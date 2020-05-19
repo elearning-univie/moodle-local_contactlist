@@ -278,7 +278,6 @@ function local_contactlist_get_extra_user_fields_contactlist($context, $already 
         if ($context->get_course_context(false)) {
             // We are somewhere inside a course.
             $canviewhiddenuserfields = has_capability('local/contactlist:viewhiddenuserfields', $context);
-
         } else {
             // We are not inside a course.
             $canviewhiddenuserfields = has_capability('local/contactlist:viewhiddendetails', $context);
