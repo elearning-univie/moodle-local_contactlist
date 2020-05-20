@@ -311,26 +311,26 @@ function local_contactlist_get_visibility_info_string($userid, $courseid) {
     $localvisib = local_contactlist_courselevel_visibility ($userid, $courseid);
 
     $returnurl = (string)new moodle_url("/local/contactlist/studentview.php", ['id' => $courseid]);
-    $hereurl = (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url', 'returnurl' => $returnurl]);
+    $profileeditlink = (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url', 'returnurl' => $returnurl]);
     if ($globalvisib) {
         if ($globalvisib->data == "Yes") {
             if ($localvisib == 2) {
-                $infostring = get_string('gyln', 'local_contactlist', ['here' => $hereurl]);
+                $infostring = get_string('gyln', 'local_contactlist', ['here' => $profileeditlink]);
             } else {
-                $infostring = get_string('gyly', 'local_contactlist', ['here' => $hereurl]);
+                $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
             }
         } else if ($globalvisib->data == "No") {
             if ($localvisib == 1) {
-                $infostring = get_string('gnly', 'local_contactlist', ['here' => $hereurl]);
+                $infostring = get_string('gnly', 'local_contactlist', ['here' => $profileeditlink]);
             } else if ($localvisib == 2) {
-                $infostring = get_string('gyly', 'local_contactlist', ['here' => $hereurl]);
+                $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
             }
         }
     } else {
         if ($localvisib == 1) {
-            $infostring = get_string('gnly', 'local_contactlist', ['here' => $hereurl]);
+            $infostring = get_string('gnly', 'local_contactlist', ['here' => $profileeditlink]);
         } else if ($localvisib == 2) {
-            $infostring = get_string('gyly', 'local_contactlist', ['here' => $hereurl]);
+            $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
         }
     }
 
