@@ -170,10 +170,10 @@ function local_contactlist_courselevel_visibility ($userid, $courseid) {
 
     $visib  = $DB->get_record('local_contactlist_course_vis', $params);
 
-    if (!$visib) {
-        return 0;
-    }
-    return $visib->visib;
+//     if (!$visib) {
+//         return 0;
+//     }
+    return $visib;
 }
 
 /**
@@ -313,7 +313,9 @@ function local_contactlist_get_visibility_info_string($userid, $courseid) {
     $globalvisib  = $DB->get_record('user_info_data', $params);
     $localvisib = local_contactlist_courselevel_visibility ($userid, $courseid);
 
-    $hereurl = (string)new moodle_url("/user/profile.php", ['id' => $userid]);
+    $returnurl = (string)new moodle_url("/local/contactlist/studentview.php", ['id' => $courseid]);
+    print_object($returnurl);
+    $hereurl = (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url', 'returnurl' => $returnurl]);
     if ($globalvisib) {
         if ($globalvisib->data == "Yes") {
             if ($localvisib == 2) {

@@ -67,12 +67,12 @@ function local_contactlist_extend_navigation($navigation) {
     $url = new moodle_url('/local/contactlist/studentview.php', array('id' => $coursecontext->instanceid));
 
     $currentcoursenode = $navigation->find('currentcourse', $navigation::TYPE_ROOTNODE);
-    if (local_contactlist_is_node_not_empty($currentcoursenode)) {
+    if (isnodenotempty($currentcoursenode)) {
         $currentcoursenode->add($nodename, $url, navigation_node::NODETYPE_LEAF, $nodename, null, $icon);
     }
 
     $mycoursesnode = $navigation->find('mycourses', $navigation::TYPE_ROOTNODE);
-    if (local_contactlist_is_node_not_empty($mycoursesnode)) {
+    if (isnodenotempty($mycoursesnode)) {
         $currentcourseinmycourses = $mycoursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
         if ($currentcourseinmycourses) {
             $currentcourseinmycourses->add($nodename, $url, navigation_node::NODETYPE_LEAF, $nodename, null, $icon);
@@ -80,7 +80,7 @@ function local_contactlist_extend_navigation($navigation) {
     }
 
     $coursesnode = $navigation->find('courses', $navigation::TYPE_ROOTNODE);
-    if (local_contactlist_is_node_not_empty($coursesnode)) {
+    if (isnodenotempty($coursesnode)) {
         $currentcourseincourses = $coursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
         if ($currentcourseincourses) {
             $currentcourseincourses->add($nodename, $url, navigation_node::NODETYPE_LEAF, $nodename, null, $icon);
@@ -88,12 +88,12 @@ function local_contactlist_extend_navigation($navigation) {
     }
 }
 /**
- * local_contactlist_is_node_not_empty.
+ * isNodeNotEmpty.
  *
  * @param navigation_node $node
  * @return boolean
  */
-function local_contactlist_is_node_not_empty(navigation_node $node) {
+function isnodenotempty(navigation_node $node) {
     return $node !== false && $node->has_children();
 }
 

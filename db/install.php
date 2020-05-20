@@ -55,6 +55,7 @@ function xmldb_local_contactlist_install() {
             $record->sortorder    = 2;
             $record->required     = 1;
             $record->locked       = 0;
+            $record->visible       = 1;
             $record->defaultdata  = 'No';
             $record->param1       = 'Yes
 No';

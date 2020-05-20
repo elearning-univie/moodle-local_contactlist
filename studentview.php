@@ -113,7 +113,7 @@ if ($formdata) {
     local_contactlist_save_update($USER->id, $courseid, $formdata->visib);
 }
 $localvsglobal = local_contactlist_get_visibility_info_string($USER->id, $courseid);
-echo '<p>'. $localvsglobal.'</p>';
+echo '<p class="alert alert-warning" >'. $localvsglobal.'</p>';
 
 
 $hasgroupfilter = false;
