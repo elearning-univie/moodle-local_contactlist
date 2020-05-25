@@ -57,9 +57,12 @@ class contactlist_form extends \moodleform {
         );
 
         $visib = local_contactlist_courselevel_visibility($USER->id, $courseid);
+        if (!$visib) {
+            $visib->visib = 0;
+        }
         $mform->addElement('select', 'visib', get_string('localvisibility', 'local_contactlist'), $options);
         $mform->setType('visib', PARAM_INT);
-        $mform->setDefault('visib', $visib);
+        $mform->setDefault('visib', $visib->visib);
         $mform->addHelpButton('visib', 'visib', 'local_contactlist');
         $this->add_action_buttons();
     }

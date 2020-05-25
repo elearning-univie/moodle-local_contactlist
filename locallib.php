@@ -170,10 +170,7 @@ function local_contactlist_courselevel_visibility ($userid, $courseid) {
 
     $visib  = $DB->get_record('local_contactlist_course_vis', $params);
 
-    if (!$visib) {
-        return 0;
-    }
-    return $visib->visib;
+    return $visib;
 }
 
 /**
@@ -278,7 +275,6 @@ function local_contactlist_get_extra_user_fields_contactlist($context, $already 
         if ($context->get_course_context(false)) {
             // We are somewhere inside a course.
             $canviewhiddenuserfields = has_capability('local/contactlist:viewhiddenuserfields', $context);
-
         } else {
             // We are not inside a course.
             $canviewhiddenuserfields = has_capability('local/contactlist:viewhiddendetails', $context);
@@ -314,26 +310,27 @@ function local_contactlist_get_visibility_info_string($userid, $courseid) {
     $globalvisib  = $DB->get_record('user_info_data', $params);
     $localvisib = local_contactlist_courselevel_visibility ($userid, $courseid);
 
-    $hereurl = (string)new moodle_url("/user/profile.php", ['id' => $userid]);
+    $returnurl = (string)new moodle_url("/local/contactlist/studentview.php", ['id' => $courseid]);
+    $profileeditlink = (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url', 'returnurl' => $returnurl]);
     if ($globalvisib) {
         if ($globalvisib->data == "Yes") {
             if ($localvisib == 2) {
-                $infostring = get_string('gyln', 'local_contactlist', ['here' => $hereurl]);
+                $infostring = get_string('gyln', 'local_contactlist', ['here' => $profileeditlink]);
             } else {
-                $infostring = get_string('gyly', 'local_contactlist', ['here' => $hereurl]);
+                $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
             }
         } else if ($globalvisib->data == "No") {
             if ($localvisib == 1) {
-                $infostring = get_string('gnly', 'local_contactlist', ['here' => $hereurl]);
+                $infostring = get_string('gnly', 'local_contactlist', ['here' => $profileeditlink]);
             } else if ($localvisib == 2) {
-                $infostring = get_string('gyly', 'local_contactlist', ['here' => $hereurl]);
+                $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
             }
         }
     } else {
         if ($localvisib == 1) {
-            $infostring = get_string('gnly', 'local_contactlist', ['here' => $hereurl]);
+            $infostring = get_string('gnly', 'local_contactlist', ['here' => $profileeditlink]);
         } else if ($localvisib == 2) {
-            $infostring = get_string('gyly', 'local_contactlist', ['here' => $hereurl]);
+            $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
         }
     }
 

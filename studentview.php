@@ -85,7 +85,12 @@ if ($isfrontpage) {
     course_require_view_participants($systemcontext);
 } else {
     $PAGE->set_pagelayout('incourse');
-    course_require_view_participants($context);
+    if (!has_capability('local/contactlist:view', $context) ) {
+        echo $OUTPUT->header();
+        echo $OUTPUT->heading(get_string('errornotallowedonpage', 'local_contactlist'));
+        echo $OUTPUT->footer();
+        die();
+    }
 }
 
 $PAGE->set_pagetype('course-view-' . $course->format);
@@ -108,7 +113,7 @@ if ($formdata) {
     local_contactlist_save_update($USER->id, $courseid, $formdata->visib);
 }
 $localvsglobal = local_contactlist_get_visibility_info_string($USER->id, $courseid);
-echo '<p>'. $localvsglobal.'</p>';
+echo '<p class="alert alert-warning" >'. $localvsglobal.'</p>';
 
 
 $hasgroupfilter = false;
