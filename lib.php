@@ -62,28 +62,46 @@ function local_contactlist_extend_navigation($navigation) {
         return;
     }
 
-    $icon = new \pix_icon('t/addcontact', get_string('nodename', 'local_contactlist'));
-    $nodename = get_string('nodename', 'local_contactlist');
-    $url = new moodle_url('/local/contactlist/studentview.php', array('id' => $coursecontext->instanceid));
-
-    $currentcoursenode = $navigation->find('currentcourse', $navigation::TYPE_ROOTNODE);
-    if (local_contactlist_is_node_not_empty($currentcoursenode)) {
-        $currentcoursenode->add($nodename, $url, navigation_node::NODETYPE_LEAF, $nodename, null, $icon);
-    }
-
     $mycoursesnode = $navigation->find('mycourses', $navigation::TYPE_ROOTNODE);
-    if (local_contactlist_is_node_not_empty($mycoursesnode)) {
-        $currentcourseinmycourses = $mycoursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
-        if ($currentcourseinmycourses) {
-            $currentcourseinmycourses->add($nodename, $url, navigation_node::NODETYPE_LEAF, $nodename, null, $icon);
+
+    $beforekey = null;
+    $participantsnode = $mycoursesnode->find('participants', navigation_node::TYPE_CONTAINER);
+    if ($participantsnode) { // Add the navnode after participants
+        $keys = $participantsnode->parent->get_children_key_list();
+        $igrades = array_search('participants', $keys);
+        if ($igrades !== false) {
+            if (isset($keys[$igrades + 1])) {
+                $beforekey = $keys[$igrades + 1];
+            }
         }
     }
 
-    $coursesnode = $navigation->find('courses', $navigation::TYPE_ROOTNODE);
-    if (local_contactlist_is_node_not_empty($coursesnode)) {
-        $currentcourseincourses = $coursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
-        if ($currentcourseincourses) {
-            $currentcourseincourses->add($nodename, $url, navigation_node::NODETYPE_LEAF, $nodename, null, $icon);
+    if ($beforekey == null) { // No participants node found, fall back to other variants!
+        $activitiesnode = $mycoursesnode->find('activitiescategory', navigation_node::TYPE_CATEGORY);
+        if ($activitiesnode == false) {
+            $custom = $mycoursesnode->find_all_of_type(navigation_node::TYPE_CUSTOM);
+            $sections = $mycoursesnode->find_all_of_type(navigation_node::TYPE_SECTION);
+            if (!empty($custom)) {
+                $first = reset($custom);
+                $beforekey = $first->key;
+            } else if (!empty($sections)) {
+                $first = reset($sections);
+                $beforekey = $first->key;
+            }
+        } else {
+            $beforekey = 'activitiescategory';
+        }
+    }
+
+    $url = new moodle_url('/local/contactlist/studentview.php', array('id' => $coursecontext->instanceid));
+    $title = get_string('nodename', 'local_contactlist');
+    $pix = new pix_icon('t/addcontact', $title);
+    $childnode = navigation_node::create( $title, $url, navigation_node::TYPE_CUSTOM, 'contactlist', 'contactlist', $pix);
+
+    if (local_contactlist_is_node_not_empty($mycoursesnode)) {
+        $currentcourseinmycourses = $mycoursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
+        if ($currentcourseinmycourses) {
+            $currentcourseinmycourses->add_node($childnode, $beforekey);
         }
     }
 }

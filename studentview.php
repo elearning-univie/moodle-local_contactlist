@@ -174,6 +174,8 @@ $participanttable->out($perpage, true);
 $participanttablehtml = ob_get_contents();
 ob_end_clean();
 
+//\core_message\helper::messageuser_requirejs();
+
 $visibleno = local_contactlist_get_total_visible($courseid);
 $totalno = local_contactlist_get_total_course($courseid);
 $visbilityinfo = get_string('totalvsvisible', 'local_contactlist', ['visible' => $visibleno, 'total' => $totalno]);
