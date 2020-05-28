@@ -67,7 +67,7 @@ function local_contactlist_extend_navigation($navigation) {
     $customfielddata = $DB->get_record('customfield_data', array('fieldid' => $customdielffield->id, 'instanceid' => $coursecontext->instanceid));
 
     $showcontactlist = null;
-    if(!$customfielddata) {
+    if (!$customfielddata) {
         $showcontactlist = 1;
     } else {
         $showcontactlist = $customfielddata->intvalue;
@@ -109,14 +109,14 @@ function local_contactlist_extend_navigation($navigation) {
         $title = get_string('nodename', 'local_contactlist');
         $pix = new pix_icon('t/addcontact', $title);
         $childnode = navigation_node::create( $title, $url, navigation_node::TYPE_CUSTOM, 'contactlist', 'contactlist', $pix);
-    
+
         if (local_contactlist_is_node_not_empty($mycoursesnode)) {
             $currentcourseinmycourses = $mycoursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
             if ($currentcourseinmycourses) {
                 $currentcourseinmycourses->add_node($childnode, $beforekey);
             }
         }
-}
+    }
 }
 /**
  * local_contactlist_is_node_not_empty.

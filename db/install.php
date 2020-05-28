@@ -64,7 +64,6 @@ No';
     } catch (\Throwable $e) {
         echo "$e->getMessage()";
     }
-    
 
     $customfieldcategory = $DB->get_record('customfield_category', array('name' => 'Privacy Settings'));
     if (!$customfieldcategory) {
