@@ -93,6 +93,10 @@ class contactlist_table extends \table_sql {
         $extrafields = local_contactlist_get_extra_user_fields_contactlist($context);
 
         foreach ($extrafields as $field) {
+            if ($field == 'chat') {
+                $headers[] = get_string('chat', 'local_contactlist');
+                $columns[] = $field;
+            }
             if ($field == 'email') {
                 $headers[] = get_user_field_name($field);
                 $columns[] = $field;
@@ -105,6 +109,11 @@ class contactlist_table extends \table_sql {
         $this->set_attribute('id', 'contactlist');
 
         $this->extrafields = $extrafields;
+
+        $this->column_style('fullname', 'width', '20%');
+        $this->column_style('fullname', 'white-space', 'nowrap');
+        $this->column_style('chat', 'width', '10%');
+        $this->column_style('chat', 'white-space', 'nowrap');
     }
 
     /**
@@ -148,7 +157,13 @@ class contactlist_table extends \table_sql {
         if (!in_array($colname, $this->extrafields)) {
             return '';
         }
-        return s($data->{$colname});
+
+        if ($colname == 'chat') {
+            return local_contactlist_get_chat_html($data->{$colname});
+        }
+        if ($colname == 'email') {
+            return s($data->{$colname});
+        }
     }
 
       /**
@@ -195,7 +210,7 @@ class contactlist_table extends \table_sql {
      * @return string HTML fragment.
      */
     protected function show_hide_link($column, $index) {
-        if ($index > 1) {
+        if ($index > 2) {
             return parent::show_hide_link($column, $index);
         }
         return '';

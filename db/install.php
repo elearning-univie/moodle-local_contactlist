@@ -64,4 +64,35 @@ No';
     } catch (\Throwable $e) {
         echo "$e->getMessage()";
     }
+
+    $customfieldcategory = $DB->get_record('customfield_category', array('name' => 'Privacy Settings'));
+    if (!$customfieldcategory) {
+        $record = new stdClass();
+        $record->name         = 'Privacy Settings';
+        $record->component    = 'core_course';
+        $record->area         = 'course';
+        $record->itemid       = 0;
+        $record->contextid    = 1;
+        $record->timecreated  = time();
+        $record->timemodified = time();
+        $id = $DB->insert_record('customfield_category', $record);
+    } else {
+        $id = $customfieldcategory->id;
+    }
+
+    $customfieldfield = $DB->get_record('customfield_field', array('shortname' => 'conlistcoursevis'));
+
+    if (!$customfieldfield) {
+        $record = new stdClass();
+        $record->shortname    = 'conlistcoursevis';
+        $record->name         = 'Contactlist visibility';
+        $record->type         = 'select';
+        $record->categoryid   = $id;
+        $record->sortorder    = 0;
+        $record->configdata   = '{"required":"0","uniquevalues":"0","options":"Yes\r\nNo","defaultvalue":"Yes","locked":"0","visibility":"1"}';
+        $record->timecreated  = time();
+        $record->timemodified = time();
+        $DB->insert_record('customfield_field', $record);
+    }
+
 }

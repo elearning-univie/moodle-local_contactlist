@@ -191,7 +191,7 @@ function local_contactlist_get_participants_sql($courseid, $additionalwhere = ''
 
     $params['courseid'] = $courseid;
 
-    $select = "SELECT uid AS id, picture, firstname, lastname, email, join1.data, visib ";
+    $select = "SELECT uid AS id, picture, firstname, lastname, uid AS chat, email, join1.data, visib ";
     $from = "FROM
              (SELECT u.id as uid, u.picture, u.firstname, u.lastname, u.email, uinfo.data, clvis.visib
              FROM {role_assignments}  asg
@@ -251,45 +251,12 @@ function local_contactlist_get_list ($courseid, $additionalwhere = '', $addition
  *   listed in $already
  */
 function local_contactlist_get_extra_user_fields_contactlist($context, $already = array()) {
-    global $CFG;
 
     // Only users with permission get the extra fields.
     if (!has_capability('local/contactlist:viewuseridentity', $context)) {
         return array();
     }
-
-    // Split showuseridentity on comma (filter needed in case the showuseridentity is empty).
-    $extra = array_filter(explode(',', $CFG->showuseridentity));
-
-    foreach ($extra as $key => $field) {
-        if (in_array($field, $already)) {
-            unset($extra[$key]);
-        }
-    }
-
-    // If the identity fields are also among hidden fields, make sure the user can see them.
-    $hiddenfields = array_filter(explode(',', $CFG->hiddenuserfields));
-    $hiddenidentifiers = array_intersect($extra, $hiddenfields);
-
-    if ($hiddenidentifiers) {
-        if ($context->get_course_context(false)) {
-            // We are somewhere inside a course.
-            $canviewhiddenuserfields = has_capability('local/contactlist:viewhiddenuserfields', $context);
-        } else {
-            // We are not inside a course.
-            $canviewhiddenuserfields = has_capability('local/contactlist:viewhiddendetails', $context);
-        }
-
-        if (!$canviewhiddenuserfields) {
-            // Remove hidden identifiers from the list.
-            $extra = array_diff($extra, $hiddenidentifiers);
-        }
-    }
-
-    // Re-index the entries.
-    $extra = array_values($extra);
-
-    return $extra;
+    return array('chat', 'email');
 }
 /**
  * WIP: get comparison info global/local visibility
@@ -337,3 +304,17 @@ function local_contactlist_get_visibility_info_string($userid, $courseid) {
     return $infostring;
 }
 
+/**
+ * build html for moodle chat link.
+ *
+ * @param int $userid
+ * @return string
+ */
+function local_contactlist_get_chat_html($userid) {
+    global $PAGE;
+
+    $chaturl = (string)new moodle_url("/message/index.php", ['id' => $userid]);
+    $PAGE->requires->js_call_amd('core_message/message_user_button', 'send', array('#message-user-button' . $userid));
+    return html_writer::link($chaturl, '<span><i class="icon fa fa-comment fa-fw iconsmall"  title="Message" aria-label="Message"></i></span>',
+        ['id' => 'message-user-button'.$userid, 'role' => 'button', 'data-conversationid' => 0, 'data-userid' => $userid, 'class' => 'btn']);
+}

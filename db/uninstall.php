@@ -47,6 +47,18 @@ function xmldb_local_contactlist_uninstall() {
 
         $DB->delete_records('user_info_category', array('name' => 'Privacy Settings'));
 
+        $coursecategory = $DB->get_record('customfield_category', array('name' => 'Privacy Settings'));
+        $id = $coursecategory->id;
+
+        $coursefield = $DB->get_record('customfield_field',  array('categoryid' => $id));
+        $fieldid = $coursefield->id;
+
+        $DB->delete_records('customfield_data',  array('fieldid' => $fieldid));
+
+        $DB->delete_records('customfield_field',  array('categoryid' => $id));
+
+        $DB->delete_records('customfield_category', array('name' => 'Privacy Settings'));
+
     } catch (\Throwable $e) {
         echo "$e->getMessage()";
     }
