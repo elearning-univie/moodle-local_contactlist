@@ -306,11 +306,11 @@ function local_contactlist_get_visibility_info_string($userid, $courseid) {
 
 /**
  * build html for moodle chat link.
- * 
+ *
  * @param int $userid
  * @return string
  */
-function local_contactlist_get_chat_html($userid){
+function local_contactlist_get_chat_html($userid) {
     global $PAGE;
 
     $chaturl = (string)new moodle_url("/message/index.php", ['id' => $userid]);

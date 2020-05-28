@@ -109,7 +109,7 @@ class contactlist_table extends \table_sql {
         $this->set_attribute('id', 'contactlist');
 
         $this->extrafields = $extrafields;
-        
+
         $this->column_style('fullname', 'width', '20%');
         $this->column_style('fullname', 'white-space', 'nowrap');
         $this->column_style('chat', 'width', '10%');
@@ -159,12 +159,11 @@ class contactlist_table extends \table_sql {
         }
 
         if ($colname == 'chat') {
-           return local_contactlist_get_chat_html($data->{$colname});
+            return local_contactlist_get_chat_html($data->{$colname});
         }
         if ($colname == 'email') {
             return s($data->{$colname});
         }
-        //return s($data->{$colname});
     }
 
       /**
