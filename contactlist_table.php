@@ -94,7 +94,7 @@ class contactlist_table extends \table_sql {
 
         foreach ($extrafields as $field) {
             if ($field == 'chat') {
-                $headers[] = "Chat";
+                $headers[] = get_string('chat', 'local_contactlist');
                 $columns[] = $field;
             }
             if ($field == 'email') {
