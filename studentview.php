@@ -68,7 +68,20 @@ if ($node) {
     $node->make_active();
 }
 
-if (!has_capability('local/contactlist:view', $context) ) {
+$customfieldcategory = $DB->get_record('customfield_category', array('name' => 'Privacy Settings'));
+$customdielffield = $DB->get_record('customfield_field', array('categoryid' => $customfieldcategory->id, 'shortname' => 'conlistcoursevis'));
+$customfielddata = $DB->get_record('customfield_data', array('fieldid' => $customdielffield->id, 'instanceid' => $context->instanceid));
+
+if ($customfielddata) {
+    if ($customfielddata->intvalue == 2){
+        echo $OUTPUT->header();
+        echo $OUTPUT->heading(get_string('errorlistnotshown', 'local_contactlist'));
+        echo $OUTPUT->footer();
+        die();
+    }
+}
+
+if (!has_capability('local/contactlist:view', $context)) {
     echo $OUTPUT->header();
     echo $OUTPUT->heading(get_string('errornotallowedonpage', 'local_contactlist'));
     echo $OUTPUT->footer();

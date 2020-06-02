@@ -26,12 +26,13 @@
 
 $string['email'] = 'Email address';
 $string['errornotallowedonpage'] = 'You are not registerd in this course!';
+$string['errorlistnotshown'] = 'This course does not offer a contactlist.';
 $string['chat'] = 'Chat';
-$string['globaldefault'] = 'default (instance-wide)';
+$string['globaldefault'] = 'Default (moodle-wide)';
 $string['gnly'] = 'Your contactlist visibility setting in this course (visible) is different from your instance-wide setting (not visible). You can change your instance-wide settings <a href="{$a->here}" > here </a>.';
 $string['gyln'] = 'Your contactlist visibility setting in this course (not visible) is different from your instance-wide setting (visible). You can change your instance-wide settings <a href="{$a->here}" > here </a>.';
 $string['gyly'] = 'You can change your instance-wide settings <a href="{$a->here}" > here </a>.';
-$string['invisible'] = 'invisible';
+$string['invisible'] = 'Invisible';
 $string['localvisibility'] = 'Course contact list visibility';
 $string['localvisibility_help'] = 'Info';
 $string['localvisibilitydefault'] = 'Default: Global Visibility';
@@ -51,4 +52,5 @@ $string['privacy:metadata:user_info_data:userid'] = 'The ID of the user.';
 $string['role'] = 'Role';
 $string['surname'] = 'Surname';
 $string['totalvsvisible'] = '<p><b>{$a->visible} participants out of {$a->total} registered in this course are sharing their contact information.</b></p>';
-$string['visible'] = 'visible';
+$string['visible'] = 'Visible';
+$string['visib_help'] = 'Set your contactlist visibility in this course. If you don\'t chose, the moodle-wide value will be taken from your User Profile setting.';
