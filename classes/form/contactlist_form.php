@@ -64,7 +64,7 @@ class contactlist_form extends \moodleform {
         $mform->setType('visib', PARAM_INT);
         $mform->setDefault('visib', $visib->visib);
         $mform->addHelpButton('visib', 'visib', 'local_contactlist');
-        $this->add_action_buttons();
+        $this->add_action_buttons(false);
     }
 
 }
