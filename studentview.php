@@ -73,7 +73,7 @@ $customdielffield = $DB->get_record('customfield_field', array('categoryid' => $
 $customfielddata = $DB->get_record('customfield_data', array('fieldid' => $customdielffield->id, 'instanceid' => $context->instanceid));
 
 if ($customfielddata) {
-    if ($customfielddata->intvalue == 2){
+    if ($customfielddata->intvalue == 2) {
         echo $OUTPUT->header();
         echo $OUTPUT->heading(get_string('errorlistnotshown', 'local_contactlist'));
         echo $OUTPUT->footer();
