@@ -273,8 +273,9 @@ function local_contactlist_get_visibility_info_string($userid, $courseid) {
     $globalvisib  = $DB->get_record('user_info_data', $params);
     $localvisib = local_contactlist_courselevel_visibility ($userid, $courseid);
 
+    $anchor = 'id_category_'.$globalinfofield->categoryid;
     $returnurl = (string)new moodle_url("/local/contactlist/studentview.php", ['id' => $courseid]);
-    $profileeditlink = (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url', 'returnurl' => $returnurl]);
+    $profileeditlink = (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url', 'returnurl' => $returnurl], $anchor);
 
     $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
     if ($globalvisib) {
