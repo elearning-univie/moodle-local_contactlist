@@ -275,6 +275,8 @@ function local_contactlist_get_visibility_info_string($userid, $courseid) {
 
     $returnurl = (string)new moodle_url("/local/contactlist/studentview.php", ['id' => $courseid]);
     $profileeditlink = (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url', 'returnurl' => $returnurl]);
+
+    $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
     if ($globalvisib) {
         if ($globalvisib->data == "Yes") {
             if ($localvisib->visib == 2) {
