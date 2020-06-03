@@ -56,8 +56,7 @@ function local_contactlist_get_participants (int $courseid, $userid, $additional
              JOIN {course} course ON context.instanceid = course.id
              LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
              LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
-             WHERE asg.roleid = 5
-             AND course.id = :cid) join1
+             WHERE course.id = :cid) join1
           WHERE (join1.data IS NULL AND visib = 1)
           OR (join1.data LIKE 'Yes' AND visib IS NULL)
           OR (join1.data LIKE 'Yes' AND visib = 1)
@@ -87,8 +86,7 @@ function local_contactlist_get_total_visible (int $courseid) {
              JOIN {course} course ON context.instanceid = course.id
              LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
              LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
-             WHERE asg.roleid = 5
-             AND course.id = :cid) join1
+             WHERE course.id = :cid) join1
           WHERE (join1.data IS NULL AND visib = 1)
           OR (join1.data LIKE 'NO' AND visib = 1)
           OR (join1.data LIKE 'Yes' AND visib IS NULL)
@@ -115,8 +113,7 @@ function local_contactlist_get_total_course (int $courseid) {
           JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
           JOIN {user} u ON u.id = asg.userid
           JOIN {course} course ON context.instanceid = course.id
-          WHERE asg.roleid = 5
-          AND course.id =:cid";
+          WHERE course.id =:cid";
 
     $participants = $DB->count_records_sql($sql, $params);
 
@@ -159,7 +156,7 @@ function local_contactlist_save_update ($userid, $courseid, $show) {
  *
  * @param int $userid
  * @param int $courseid
- * @return int
+ * @return array
  */
 function local_contactlist_courselevel_visibility ($userid, $courseid) {
     global $DB;
@@ -200,8 +197,7 @@ function local_contactlist_get_participants_sql($courseid, $additionalwhere = ''
              JOIN {course} course ON context.instanceid = course.id
              LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
              LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
-             WHERE asg.roleid = 5
-             AND course.id = :courseid) join1 ";
+             WHERE course.id = :courseid) join1 ";
 
     $where1 = "WHERE ((join1.data IS NULL AND visib = 1)
                OR (join1.data LIKE 'NO' AND visib = 1)
@@ -281,22 +277,22 @@ function local_contactlist_get_visibility_info_string($userid, $courseid) {
     $profileeditlink = (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url', 'returnurl' => $returnurl]);
     if ($globalvisib) {
         if ($globalvisib->data == "Yes") {
-            if ($localvisib == 2) {
+            if ($localvisib->visib == 2) {
                 $infostring = get_string('gyln', 'local_contactlist', ['here' => $profileeditlink]);
             } else {
                 $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
             }
         } else if ($globalvisib->data == "No") {
-            if ($localvisib == 1) {
+            if ($localvisib->visib == 1) {
                 $infostring = get_string('gnly', 'local_contactlist', ['here' => $profileeditlink]);
-            } else if ($localvisib == 2) {
+            } else if ($localvisib->visib == 2) {
                 $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
             }
         }
     } else {
-        if ($localvisib == 1) {
+        if ($localvisib->visib == 1) {
             $infostring = get_string('gnly', 'local_contactlist', ['here' => $profileeditlink]);
-        } else if ($localvisib == 2) {
+        } else if ($localvisib->visib == 2) {
             $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
         }
     }
