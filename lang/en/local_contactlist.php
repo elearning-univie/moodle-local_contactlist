@@ -27,7 +27,7 @@
 $string['email'] = 'Email address';
 $string['errornotallowedonpage'] = 'You are not registerd in this course!';
 $string['errorlistnotshown'] = 'This course does not offer a contactlist.';
-$string['chat'] = 'Chat';
+$string['chat'] = 'Messages';
 $string['globaldefault'] = 'Default (moodle-wide)';
 $string['gnly'] = 'Your contactlist visibility setting in this course (visible) is different from your instance-wide setting (not visible). You can change your instance-wide settings <a href="{$a->here}" > here </a>.';
 $string['gyln'] = 'Your contactlist visibility setting in this course (not visible) is different from your instance-wide setting (visible). You can change your instance-wide settings <a href="{$a->here}" > here </a>.';
