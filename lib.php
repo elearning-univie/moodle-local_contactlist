@@ -67,9 +67,9 @@ function local_contactlist_extend_navigation($navigation) {
     $params['shortname'] = 'conlistcoursevis';
     $params['instanceid'] = $coursecontext->instanceid;
 
-    $sql = "SELECT cfd.intvalue FROM stable38.mdl_customfield_data cfd
-            JOIN stable38.mdl_customfield_field cff ON cfd.fieldid = cff.id
-            JOIN stable38.mdl_customfield_category cfc ON cff.categoryid = cfc.id
+    $sql = "SELECT cfd.intvalue FROM {customfield_data} cfd
+            JOIN {customfield_field} cff ON cfd.fieldid = cff.id
+            JOIN {customfield_category} cfc ON cff.categoryid = cfc.id
             WHERE cfc.name = :name
             AND cff.shortname = :shortname
             AND cfd.instanceid = :instanceid";
