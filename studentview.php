@@ -91,8 +91,6 @@ if (!has_capability('local/contactlist:view', $context)) {
 $systemcontext = context_system::instance();
 $isfrontpage = ($course->id == SITEID);
 
-//$frontpagectx = context_course::instance(SITEID);
-
 if ($isfrontpage) {
     $PAGE->set_pagelayout('admin');
     course_require_view_participants($systemcontext);

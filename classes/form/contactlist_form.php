@@ -51,7 +51,7 @@ class contactlist_form extends \moodleform {
         $mform = $this->_form;
 
         $globalsetting = get_string('invisible', 'local_contactlist');
-        if(local_contactlist_get_global_setting($USER->id, $courseid)) {
+        if (local_contactlist_get_global_setting($USER->id, $courseid)) {
             $globalsetting = get_string('visible', 'local_contactlist');
         }
         $defaultsstring = get_string('globaldefault', 'local_contactlist', ['globalsetting' => $globalsetting]);

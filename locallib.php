@@ -315,7 +315,7 @@ function local_contactlist_get_chat_html($userid) {
 }
 /**
  * control if modal is shown
- * 
+ *
  * @param int $userid
  * @param int $courseid
  * @return boolean
@@ -330,11 +330,11 @@ function local_contactlist_show_modal($userid, $courseid) {
     $params['userid'] = $userid;
     $params['fieldid'] = $globalinfofield->id;
 
-    if(!$DB->record_exists('user_info_data', $params)) {
+    if (!$DB->record_exists('user_info_data', $params)) {
         $params = array();
         $params['courseid'] = $courseid;
         $params['userid'] = $userid;
-        if(!$DB->record_exists('local_contactlist_course_vis', $params)) {
+        if (!$DB->record_exists('local_contactlist_course_vis', $params)) {
             $showmodal = true;
         }
     }
@@ -343,7 +343,7 @@ function local_contactlist_show_modal($userid, $courseid) {
 }
 /**
  * get global rofile contactlist visibility setting
- * 
+ *
  * @param int $userid
  * @param int $courseid
  * @return boolean
@@ -359,8 +359,8 @@ function local_contactlist_get_global_setting($userid, $courseid) {
     $params['fieldid'] = $globalinfofield->id;
 
     $globalvisibility = $DB->get_record('user_info_data', $params);
-    if($globalvisibility) {
-        if($globalvisibility->data == "Yes") {
+    if ($globalvisibility) {
+        if ($globalvisibility->data == "Yes") {
             $globalsetting = true;
         }
     }
