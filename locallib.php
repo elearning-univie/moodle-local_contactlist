@@ -323,23 +323,15 @@ function local_contactlist_get_chat_html($userid) {
 function local_contactlist_show_modal($userid, $courseid) {
     global $DB;
 
-    $showmodal = false;
     $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
 
-    $params = array();
-    $params['userid'] = $userid;
-    $params['fieldid'] = $globalinfofield->id;
-
-    if (!$DB->record_exists('user_info_data', $params)) {
-        $params = array();
-        $params['courseid'] = $courseid;
-        $params['userid'] = $userid;
-        if (!$DB->record_exists('local_contactlist_course_vis', $params)) {
-            $showmodal = true;
+    if (!$DB->record_exists('user_info_data', ['userid' => $userid, 'fieldid' => $globalinfofield->id])) {
+        if (!$DB->record_exists('local_contactlist_course_vis', ['courseid' => $courseid, 'userid' => $userid])) {
+            return true;
         }
     }
 
-    return $showmodal;
+    return false;
 }
 /**
  * get global rofile contactlist visibility setting
@@ -353,12 +345,7 @@ function local_contactlist_get_global_setting($userid, $courseid) {
 
     $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
 
-    $globalsetting = false;
-    $params = array();
-    $params['userid'] = $userid;
-    $params['fieldid'] = $globalinfofield->id;
-
-    $globalvisibility = $DB->get_record('user_info_data', $params);
+    $globalvisibility = $DB->get_record('user_info_data', ['userid' => $userid, 'fieldid' => $globalinfofield->id]);
     if ($globalvisibility) {
         if ($globalvisibility->data == "Yes") {
             $globalsetting = true;

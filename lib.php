@@ -62,18 +62,21 @@ function local_contactlist_extend_navigation($navigation) {
         return;
     }
 
-    $customfieldcategory = $DB->get_record('customfield_category', array('name' => 'Privacy Settings'));
-    $customdielffield = $DB->get_record('customfield_field', array('categoryid' => $customfieldcategory->id, 'shortname' => 'conlistcoursevis'));
-    $customfielddata = $DB->get_record('customfield_data', array('fieldid' => $customdielffield->id, 'instanceid' => $coursecontext->instanceid));
+    $params = array();
+    $params['name'] = 'Privacy Settings';
+    $params['shortname'] = 'conlistcoursevis';
+    $params['instanceid'] = $coursecontext->instanceid;
 
-    $showcontactlist = null;
-    if (!$customfielddata) {
-        $showcontactlist = 1;
-    } else {
-        $showcontactlist = $customfielddata->intvalue;
-    }
+    $sql = "SELECT cfd.intvalue FROM stable38.mdl_customfield_data cfd
+            JOIN stable38.mdl_customfield_field cff ON cfd.fieldid = cff.id
+            JOIN stable38.mdl_customfield_category cfc ON cff.categoryid = cfc.id
+            WHERE cfc.name = :name
+            AND cff.shortname = :shortname
+            AND cfd.instanceid = :instanceid";
 
-    if ($showcontactlist == 1) {
+    $customfielddatavalue = $DB->get_field_sql($sql, $params);
+
+    if (!$customfielddatavalue || $customfielddatavalue == 1) {
         $rootnodes = array($navigation->find('mycourses', navigation_node::TYPE_ROOTNODE),
             $navigation->find('courses', navigation_node::TYPE_ROOTNODE));
 
@@ -113,9 +116,9 @@ function local_contactlist_extend_navigation($navigation) {
             $url = new moodle_url('/local/contactlist/studentview.php', array('id' => $coursecontext->instanceid));
             $title = get_string('nodename', 'local_contactlist');
             $pix = new pix_icon('t/addcontact', $title);
-            $childnode = navigation_node::create( $title, $url, navigation_node::TYPE_CUSTOM, 'contactlist', 'contactlist', $pix);
+            $childnode = navigation_node::create($title, $url, navigation_node::TYPE_CUSTOM, 'contactlist', 'contactlist', $pix);
 
-            if (local_contactlist_is_node_not_empty($mycoursesnode)) {
+            if (($mycoursesnode !== false && $mycoursesnode->has_children())) {
                 $currentcourseinmycourses = $mycoursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
                 if ($currentcourseinmycourses) {
                     $currentcourseinmycourses->add_node($childnode, $beforekey);
@@ -125,14 +128,4 @@ function local_contactlist_extend_navigation($navigation) {
         }
     }
 }
-/**
- * local_contactlist_is_node_not_empty.
- *
- * @param navigation_node $node
- * @return boolean
- */
-function local_contactlist_is_node_not_empty(navigation_node $node) {
-    return $node !== false && $node->has_children();
-}
-
 

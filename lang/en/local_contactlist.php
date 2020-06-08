@@ -34,10 +34,10 @@ $string['gnly'] = 'Your contactlist visibility setting in this course (visible) 
 $string['gyln'] = 'Your contactlist visibility setting in this course (not visible) is different from your moodle-wide setting (visible). You can change the visibility for all courses in the <a href="{$a->here}" style=" color: #fc0f03;"> privacy settings of your user profile</a>.';
 $string['gyly'] = 'You can change the visibility for all courses in the <a href="{$a->here}" style=" color: #fc0f03;"> privacy settings of your user profile</a>.';
 $string['invisible'] = 'Invisible';
-$string['localvisibility'] = 'Contact information visibility for this course';
+$string['localvisibility'] = 'Contact information visibility in this course';
 $string['localvisibility_help'] = 'Info';
 $string['localvisibilitydefault'] = 'Default: Global Visibility';
-$string['modalwarning'] = 'You are currently not visible in the contactlist of this course. Do you want to share your contact information (Your Name, Profile Picture and email address) with your fellow students of this course?';
+$string['modalwarning'] = 'You are currently not visible in the contactlist of this course. Do you want to share your contact information (name, profile picture and email address) with your fellow students in this course?';
 $string['name'] = 'First name';
 $string['nodename'] = 'Contactlist';
 $string['pagetitle'] = 'Contactlist';
@@ -55,4 +55,4 @@ $string['surname'] = 'Surname';
 $string['totalvsvisible'] = '<p><b>{$a->visible} participants out of {$a->total} registered in this course are sharing their contact information.</b></p>';
 $string['userprofilelabel'] = 'Contactlist visibility for all courses';
 $string['visible'] = 'Visible';
-$string['visib_help'] = 'Set your contactlist visibility in this course. If you don\'t chose, the moodle-wide value will be taken from your user profile privacy setting. If you chose to share your contact information, your name, profile picture and email address will be visible for your fellow students in this course.';
+$string['visib_help'] = 'Set your contactlist visibility in this course. If you don\'t select a value, the moodle-wide value will be taken from your user profile privacy setting. If you choose to share your contact information, your name, profile picture and email address will be visible for your fellow students in this course.';
