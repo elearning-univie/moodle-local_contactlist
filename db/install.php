@@ -49,7 +49,7 @@ function xmldb_local_contactlist_install() {
         if (!$userinfofield) {
             $record = new stdClass();
             $record->shortname    = 'contactlistdd';
-            $record->name         = 'Global contact list visibility';
+            $record->name         = get_string('userprofilelabel', 'local_contactlist');
             $record->datatype     = 'menu';
             $record->categoryid   = $id;
             $record->sortorder    = 2;
@@ -85,7 +85,7 @@ No';
     if (!$customfieldfield) {
         $record = new stdClass();
         $record->shortname    = 'conlistcoursevis';
-        $record->name         = 'Contactlist visibility';
+        $record->name         = get_string('customcoursefieldlabel', 'local_contactlist');
         $record->type         = 'select';
         $record->categoryid   = $id;
         $record->sortorder    = 0;
