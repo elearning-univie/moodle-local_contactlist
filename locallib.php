@@ -248,10 +248,6 @@ function local_contactlist_get_list ($courseid, $additionalwhere = '', $addition
  */
 function local_contactlist_get_extra_user_fields_contactlist($context, $already = array()) {
 
-    // Only users with permission get the extra fields.
-    if (!has_capability('local/contactlist:viewuseridentity', $context)) {
-        return array();
-    }
     return array('chat', 'email');
 }
 /**
@@ -275,7 +271,7 @@ function local_contactlist_get_visibility_info_string($userid, $courseid) {
 
     $anchor = 'id_category_'.$globalinfofield->categoryid;
     $returnurl = (string)new moodle_url("/local/contactlist/studentview.php", ['id' => $courseid]);
-    $profileeditlink = (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url', 'returnurl' => $returnurl], $anchor);
+    $profileeditlink = (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url', 'aria-expanded' => 'true', 'returnurl' => $returnurl], $anchor);
 
     $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
     if ($globalvisib) {
@@ -316,4 +312,44 @@ function local_contactlist_get_chat_html($userid) {
     $PAGE->requires->js_call_amd('core_message/message_user_button', 'send', array('#message-user-button' . $userid));
     return html_writer::link($chaturl, '<span><i class="icon fa fa-comment fa-fw iconsmall"  title="Message" aria-label="Message"></i></span>',
         ['id' => 'message-user-button'.$userid, 'role' => 'button', 'data-conversationid' => 0, 'data-userid' => $userid, 'class' => 'btn']);
+}
+/**
+ * control if modal is shown
+ *
+ * @param int $userid
+ * @param int $courseid
+ * @return boolean
+ */
+function local_contactlist_show_modal($userid, $courseid) {
+    global $DB;
+
+    $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
+
+    if (!$DB->record_exists('user_info_data', ['userid' => $userid, 'fieldid' => $globalinfofield->id])) {
+        if (!$DB->record_exists('local_contactlist_course_vis', ['courseid' => $courseid, 'userid' => $userid])) {
+            return true;
+        }
+    }
+
+    return false;
+}
+/**
+ * get global rofile contactlist visibility setting
+ *
+ * @param int $userid
+ * @param int $courseid
+ * @return boolean
+ */
+function local_contactlist_get_global_setting($userid, $courseid) {
+    global $DB;
+
+    $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
+
+    $globalvisibility = $DB->get_record('user_info_data', ['userid' => $userid, 'fieldid' => $globalinfofield->id]);
+    if ($globalvisibility) {
+        if ($globalvisibility->data == "Yes") {
+            $globalsetting = true;
+        }
+    }
+    return $globalsetting;
 }

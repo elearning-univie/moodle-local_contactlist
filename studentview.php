@@ -91,8 +91,6 @@ if (!has_capability('local/contactlist:view', $context)) {
 $systemcontext = context_system::instance();
 $isfrontpage = ($course->id == SITEID);
 
-$frontpagectx = context_course::instance(SITEID);
-
 if ($isfrontpage) {
     $PAGE->set_pagelayout('admin');
     course_require_view_participants($systemcontext);
@@ -115,7 +113,7 @@ if ($node) {
 echo $OUTPUT->header();
 echo $OUTPUT->heading($pagetitle);
 
-if (!local_contactlist_courselevel_visibility($USER->id, $courseid)) {
+if (local_contactlist_show_modal($USER->id, $courseid)) {
     $PAGE->requires->js_call_amd('local_contactlist/studentsettings', 'init', ['courseid' => $courseid]);
 }
 $mform = new \local_contactlist\form\contactlist_form(array('id' => $courseid));
