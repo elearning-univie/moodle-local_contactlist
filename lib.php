@@ -122,9 +122,9 @@ function local_contactlist_extend_navigation($navigation) {
                 $currentcourseinmycourses = $mycoursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
                 if ($currentcourseinmycourses) {
                     $currentcourseinmycourses->add_node($childnode, $beforekey);
+                    break;
                 }
             }
-            break;
         }
     }
 }
