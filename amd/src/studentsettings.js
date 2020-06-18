@@ -21,6 +21,14 @@ define(['jquery', 'core/modal_factory', 'core/templates', 'core/modal_events', '
                         }]);
                     });
                     modal.show();
+              $('#local-contactlist-toggle')[0].addEventListener("click", function(){
+                  var checkbox = $('#localcontactlist-visible')[0];
+                  if (checkbox.checked) {
+                      checkbox.checked = false;
+                  } else {
+                      checkbox.checked = true;
+                  }
+              });
                 });
             }
         };
