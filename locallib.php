@@ -125,7 +125,7 @@ function local_contactlist_get_total_course (int $courseid) {
  * @param int $userid
  * @param int $courseid
  * @param int $show
- * @return number
+ * @param int $showdefault
  */
 function local_contactlist_save_update ($userid, $courseid, $show, $showdefault) {
     global $DB;
