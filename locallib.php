@@ -319,6 +319,7 @@ function local_contactlist_get_chat_html($userid) {
  * build html for moodle chat link.
  *
  * @param int $userid
+ * @param int $courseid
  * @return string
  */
 function local_contactlist_get_profile_link($userid, $courseid) {
