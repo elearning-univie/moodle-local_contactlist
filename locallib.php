@@ -267,7 +267,6 @@ function local_contactlist_get_course_visibility_info_string($userid, $courseid)
 
     $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
 
-    $infostring = "";
     $params = array();
     $params['userid'] = $userid;
     $params['fieldid'] = $globalinfofield->id;
@@ -276,35 +275,16 @@ function local_contactlist_get_course_visibility_info_string($userid, $courseid)
     $localvisib = local_contactlist_courselevel_visibility ($userid, $courseid);
 
     $isvisible = false;
-    $infostring = '';
-    if ($globalvisib) {
-        if ($globalvisib->data == "Yes") {
-            if ($localvisib->visib == 2) {
-                $isvisible = false;
-            } else {
-                $isvisible = true;
-            }
-        } else if ($globalvisib->data == "No") {
-            if ($localvisib->visib == 1) {
-                $isvisible = true;
-            } else if ($localvisib->visib == 2) {
-                $isvisible = false;
-            }
-        }
-    } else {
-        if ($localvisib->visib == 1) {
-            $isvisible = true;
-        } else if ($localvisib->visib == 2) {
-            $isvisible = false;
-        }
-    }
+    $globalvisib = ($globalvisib && $globalvisib->data == 'Yes');
+    if ($localvisib->visib == 1 || ($globalvisib && $localvisib->visib != 2)) {
+          $isvisible = true;
+    } 
 
     if ($isvisible) {
-        $infostring = '<p id="local-contactlist-info-box" class="alert alert-success">'. get_string('localvisible', 'local_contactlist').'</p>';
+        return '<p id="local-contactlist-info-box" class="alert alert-success">'. get_string('localvisible', 'local_contactlist').'</p>';
     } else {
-        $infostring = '<p id="local-contactlist-info-box" class="alert alert-danger">'. get_string('localinvisible', 'local_contactlist').'</p>';
+        return '<p id="local-contactlist-info-box" class="alert alert-danger">'. get_string('localinvisible', 'local_contactlist').'</p>';
     }
-    return $infostring;
 }
 /**
  * build html for moodle chat link.
