@@ -50,24 +50,35 @@ class contactlist_form extends \moodleform {
         $PAGE->set_url(new \moodle_url('/local/contactlist/studentview.php', ['id' => $courseid]));
         $mform = $this->_form;
 
-        $globalsetting = get_string('invisible', 'local_contactlist');
-        if (local_contactlist_get_global_setting($USER->id, $courseid)) {
-            $globalsetting = get_string('visible', 'local_contactlist');
-        }
-        $defaultsstring = get_string('globaldefault', 'local_contactlist', ['globalsetting' => $globalsetting]);
         $options = array(
-            0 => $defaultsstring,
             1 => CONTACTLIST_VISIBLE,
             2 => CONTACTLIST_INVISIBLE
         );
 
         $visib = local_contactlist_courselevel_visibility($USER->id, $courseid);
+        $globalsetting = local_contactlist_get_global_setting($USER->id, $courseid);
+
+        $showdefault = 0;
+        $localsetting = 2;
         if (!$visib) {
-            $visib->visib = 0;
+            $showdefault = 1;
+            if ($globalsetting) {
+                if ($globalsetting->data == "Yes") {
+                    $localsetting = 1;
+                }
+            }
+        } else {
+            $localsetting = $visib->visib;
         }
+
+        $mform->addElement('checkbox', 'usedefault', get_string('globaldefaultsetting', 'local_contactlist'),
+            get_string('changegloballink', 'local_contactlist',['here' => local_contactlist_get_profile_link($USER->id, $courseid)]));
+        $mform->setDefault('usedefault', $showdefault);
+
         $mform->addElement('select', 'visib', get_string('localvisibility', 'local_contactlist'), $options);
         $mform->setType('visib', PARAM_INT);
-        $mform->setDefault('visib', $visib->visib);
+        $mform->setDefault('visib', $localsetting);
+        $mform->disabledIf('visib', 'usedefault', 'eq', 1);
         $mform->addHelpButton('visib', 'visib', 'local_contactlist');
         $this->add_action_buttons(false);
     }
