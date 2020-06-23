@@ -142,7 +142,7 @@ function local_contactlist_save_update ($userid, $courseid, $show, $showdefault)
 
     if ($showdefault == 1) {
         if ($record) {
-            $DB->delete_records('local_contactlist_course_vis',$params);
+            $DB->delete_records('local_contactlist_course_vis', $params);
             return;
         }
     }
