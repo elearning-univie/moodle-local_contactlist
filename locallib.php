@@ -299,7 +299,7 @@ function local_contactlist_get_course_visibility_info_string($userid, $courseid)
         }
     }
 
-    if($isvisible) {
+    if ($isvisible) {
         $infostring = '<p id="local-contactlist-info-box" class="alert alert-success">'. get_string('localvisible', 'local_contactlist').'</p>';
     } else {
         $infostring = '<p id="local-contactlist-info-box" class="alert alert-danger">'. get_string('localinvisible', 'local_contactlist').'</p>';
