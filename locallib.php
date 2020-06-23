@@ -278,7 +278,7 @@ function local_contactlist_get_course_visibility_info_string($userid, $courseid)
     $globalvisib = ($globalvisib && $globalvisib->data == 'Yes');
     if ($localvisib->visib == 1 || ($globalvisib && $localvisib->visib != 2)) {
           $isvisible = true;
-    } 
+    }
 
     if ($isvisible) {
         return '<p id="local-contactlist-info-box" class="alert alert-success">'. get_string('localvisible', 'local_contactlist').'</p>';
