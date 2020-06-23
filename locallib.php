@@ -125,9 +125,9 @@ function local_contactlist_get_total_course (int $courseid) {
  * @param int $userid
  * @param int $courseid
  * @param int $show
- * @return number
+ * @param int $showdefault
  */
-function local_contactlist_save_update ($userid, $courseid, $show) {
+function local_contactlist_save_update ($userid, $courseid, $show, $showdefault) {
     global $DB;
 
     $params = array();
@@ -139,6 +139,11 @@ function local_contactlist_save_update ($userid, $courseid, $show) {
             AND cv.userid =:userid";
 
     $record = $DB->get_record_sql($sql, $params);
+
+    if ($showdefault == 1 && $record) {
+            $DB->delete_records('local_contactlist_course_vis', $params);
+            return;
+    }
 
     if ($record) {
         $record->visib = $show;
@@ -250,18 +255,18 @@ function local_contactlist_get_extra_user_fields_contactlist($context, $already 
 
     return array('chat', 'email');
 }
+
 /**
- * WIP: get comparison info global/local visibility
+ * get comparison info global/local visibility
  * @param int $userid
  * @param int $courseid
  * @return string
  */
-function local_contactlist_get_visibility_info_string($userid, $courseid) {
+function local_contactlist_get_course_visibility_info_string($userid, $courseid) {
     global $DB;
 
     $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
 
-    $infostring = "";
     $params = array();
     $params['userid'] = $userid;
     $params['fieldid'] = $globalinfofield->id;
@@ -269,36 +274,18 @@ function local_contactlist_get_visibility_info_string($userid, $courseid) {
     $globalvisib  = $DB->get_record('user_info_data', $params);
     $localvisib = local_contactlist_courselevel_visibility ($userid, $courseid);
 
-    $anchor = 'id_category_'.$globalinfofield->categoryid;
-    $returnurl = (string)new moodle_url("/local/contactlist/studentview.php", ['id' => $courseid]);
-    $profileeditlink = (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url', 'aria-expanded' => 'true', 'returnurl' => $returnurl], $anchor);
-
-    $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
-    if ($globalvisib) {
-        if ($globalvisib->data == "Yes") {
-            if ($localvisib->visib == 2) {
-                $infostring = get_string('gyln', 'local_contactlist', ['here' => $profileeditlink]);
-            } else {
-                $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
-            }
-        } else if ($globalvisib->data == "No") {
-            if ($localvisib->visib == 1) {
-                $infostring = get_string('gnly', 'local_contactlist', ['here' => $profileeditlink]);
-            } else if ($localvisib->visib == 2) {
-                $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
-            }
-        }
-    } else {
-        if ($localvisib->visib == 1) {
-            $infostring = get_string('gnly', 'local_contactlist', ['here' => $profileeditlink]);
-        } else if ($localvisib->visib == 2) {
-            $infostring = get_string('gyly', 'local_contactlist', ['here' => $profileeditlink]);
-        }
+    $isvisible = false;
+    $globalvisib = ($globalvisib && $globalvisib->data == 'Yes');
+    if ($localvisib->visib == 1 || ($globalvisib && $localvisib->visib != 2)) {
+          $isvisible = true;
     }
 
-    return $infostring;
+    if ($isvisible) {
+        return '<p id="local-contactlist-info-box" class="alert alert-success">'. get_string('localvisible', 'local_contactlist').'</p>';
+    } else {
+        return '<p id="local-contactlist-info-box" class="alert alert-danger">'. get_string('localinvisible', 'local_contactlist').'</p>';
+    }
 }
-
 /**
  * build html for moodle chat link.
  *
@@ -314,42 +301,34 @@ function local_contactlist_get_chat_html($userid) {
         ['id' => 'message-user-button'.$userid, 'role' => 'button', 'data-conversationid' => 0, 'data-userid' => $userid, 'class' => 'btn']);
 }
 /**
- * control if modal is shown
+ * build html for moodle chat link.
  *
  * @param int $userid
  * @param int $courseid
- * @return boolean
+ * @return string
  */
-function local_contactlist_show_modal($userid, $courseid) {
+function local_contactlist_get_profile_link($userid, $courseid) {
     global $DB;
 
     $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
 
-    if (!$DB->record_exists('user_info_data', ['userid' => $userid, 'fieldid' => $globalinfofield->id])) {
-        if (!$DB->record_exists('local_contactlist_course_vis', ['courseid' => $courseid, 'userid' => $userid])) {
-            return true;
-        }
-    }
+    $anchor = 'id_category_'.$globalinfofield->categoryid;
+    $returnurl = (string)new moodle_url("/local/contactlist/studentview.php", ['id' => $courseid]);
+    return (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url', 'aria-expanded' => 'true', 'returnurl' => $returnurl], $anchor);
 
-    return false;
 }
 /**
  * get global rofile contactlist visibility setting
  *
  * @param int $userid
  * @param int $courseid
- * @return boolean
+ * @return mixed
  */
 function local_contactlist_get_global_setting($userid, $courseid) {
     global $DB;
 
     $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
-
     $globalvisibility = $DB->get_record('user_info_data', ['userid' => $userid, 'fieldid' => $globalinfofield->id]);
-    if ($globalvisibility) {
-        if ($globalvisibility->data == "Yes") {
-            $globalsetting = true;
-        }
-    }
-    return $globalsetting;
+
+    return $globalvisibility;
 }

@@ -30,7 +30,6 @@ require_once($CFG->dirroot . '/local/contactlist/contactlist_table.php');
 
 require_once($CFG->libdir.'/tablelib.php');
 
-
 global $PAGE, $OUTPUT, $USER, $DB, $COURSE;
 
 $page         = optional_param('page', 0, PARAM_INT);
@@ -113,19 +112,19 @@ if ($node) {
 echo $OUTPUT->header();
 echo $OUTPUT->heading($pagetitle);
 
-if (local_contactlist_show_modal($USER->id, $courseid)) {
-    $PAGE->requires->js_call_amd('local_contactlist/studentsettings', 'init', ['courseid' => $courseid]);
-}
+echo html_writer::tag('br', null);
 $mform = new \local_contactlist\form\contactlist_form(array('id' => $courseid));
-$mform->display();
 $formdata = $mform->get_data();
 
 if ($formdata) {
-    local_contactlist_save_update($USER->id, $courseid, $formdata->visib);
+    local_contactlist_save_update($USER->id, $courseid, $formdata->visib, $formdata->usedefault);
+    $mform = new \local_contactlist\form\contactlist_form(array('id' => $courseid));
 }
-$localvsglobal = local_contactlist_get_visibility_info_string($USER->id, $courseid);
-echo '<p class="alert alert-warning" >'. $localvsglobal.'</p>';
 
+$localvsglobal = local_contactlist_get_course_visibility_info_string($USER->id, $courseid);
+echo $localvsglobal;
+
+$mform->display();
 
 $hasgroupfilter = false;
 $lastaccess = 0;
@@ -189,6 +188,7 @@ $visibleno = local_contactlist_get_total_visible($courseid);
 $totalno = local_contactlist_get_total_course($courseid);
 $visbilityinfo = get_string('totalvsvisible', 'local_contactlist', ['visible' => $visibleno, 'total' => $totalno]);
 
+echo html_writer::tag('br', null);
 echo $visbilityinfo;
 echo $participanttablehtml;
 echo $OUTPUT->footer();
