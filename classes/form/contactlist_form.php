@@ -56,13 +56,13 @@ class contactlist_form extends \moodleform {
         );
 
         $visib = local_contactlist_courselevel_visibility($USER->id, $courseid);
-        $globalsetting = local_contactlist_get_global_setting($USER->id, $courseid);
+        //$globalsetting = local_contactlist_get_global_setting($USER->id, $courseid);
 
         $showdefault = 0;
         $localsetting = 2;
         if (!$visib) {
             $showdefault = 1;
-            if ($globalsetting) {
+            if ($globalsetting = local_contactlist_get_global_setting($USER->id, $courseid)) {
                 if ($globalsetting->data == "Yes") {
                     $localsetting = 1;
                 }

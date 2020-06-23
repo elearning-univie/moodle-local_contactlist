@@ -140,11 +140,9 @@ function local_contactlist_save_update ($userid, $courseid, $show, $showdefault)
 
     $record = $DB->get_record_sql($sql, $params);
 
-    if ($showdefault == 1) {
-        if ($record) {
+    if ($showdefault == 1 && $record) {
             $DB->delete_records('local_contactlist_course_vis', $params);
             return;
-        }
     }
 
     if ($record) {
@@ -259,7 +257,7 @@ function local_contactlist_get_extra_user_fields_contactlist($context, $already 
 }
 
 /**
- * WIP: get comparison info global/local visibility
+ * get comparison info global/local visibility
  * @param int $userid
  * @param int $courseid
  * @return string
@@ -277,27 +275,34 @@ function local_contactlist_get_course_visibility_info_string($userid, $courseid)
     $globalvisib  = $DB->get_record('user_info_data', $params);
     $localvisib = local_contactlist_courselevel_visibility ($userid, $courseid);
 
-    $infostring = '<p id="local-contactlist-info-box" class="alert alert-danger">'. get_string('localinvisible', 'local_contactlist').'</p>';
+    $isvisible = false;
+    $infostring = '';
     if ($globalvisib) {
         if ($globalvisib->data == "Yes") {
             if ($localvisib->visib == 2) {
-                $infostring = '<p id="local-contactlist-info-box" class="alert alert-danger">'. get_string('localinvisible', 'local_contactlist').'</p>';
+                $isvisible = false;
             } else {
-                $infostring = '<p id="local-contactlist-info-box" class="alert alert-success">'. get_string('localvisible', 'local_contactlist').'</p>';
+                $isvisible = true;
             }
         } else if ($globalvisib->data == "No") {
             if ($localvisib->visib == 1) {
-                $infostring = '<p id="local-contactlist-info-box" class="alert alert-success">'. get_string('localvisible', 'local_contactlist').'</p>';
+                $isvisible = true;
             } else if ($localvisib->visib == 2) {
-                $infostring = '<p id="local-contactlist-info-box" class="alert alert-danger">'. get_string('localinvisible', 'local_contactlist').'</p>';
+                $isvisible = false;
             }
         }
     } else {
         if ($localvisib->visib == 1) {
-            $infostring = '<p id="local-contactlist-info-box" class="alert alert-success">'. get_string('localvisible', 'local_contactlist').'</p>';
+            $isvisible = true;
         } else if ($localvisib->visib == 2) {
-            $infostring = '<p id="local-contactlist-info-box" class="alert alert-danger">'. get_string('localinvisible', 'local_contactlist').'</p>';
+            $isvisible = false;
         }
+    }
+
+    if($isvisible) {
+        $infostring = '<p id="local-contactlist-info-box" class="alert alert-success">'. get_string('localvisible', 'local_contactlist').'</p>';
+    } else {
+        $infostring = '<p id="local-contactlist-info-box" class="alert alert-danger">'. get_string('localinvisible', 'local_contactlist').'</p>';
     }
     return $infostring;
 }
