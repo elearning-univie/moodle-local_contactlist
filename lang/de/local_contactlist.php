@@ -51,6 +51,6 @@ $string['privacy:metadata:user_info_data:userid'] = 'Die UserID.';
 $string['role'] = 'Rolle';
 $string['surname'] = 'Familienname';
 $string['totalvsvisible'] = '<p><b>{$a->visible} von {$a->total} in diesem Kurs angemeldeten Teilnehmer teilen Ihre Kontaktiformation.</b></p>';
-$string['userprofilelabel'] = 'Kontaktlistensichtbarkeit für alle Kurse.<br>Teilen der Kontaktiformation (Name, Profilbild, Email-Adresse, Chat) in allen angemeldeten Kursen.';
+$string['userprofilelabel'] = 'Kontaktlistensichtbarkeit (Name, Profilbild, Email) für alle Kurse.';
 $string['visible'] = 'Sichtbar';
 $string['visib_help'] = 'Kontaktlistensichtbarkeit für diesen Kurs. Sollten sie keinen Wert auswählen, wird die moodleweite Einstellung aus den Privatsphäreeinstellungen des Profils verwendet. Wenn sie ihre Kontaktiformationen teilen, ist ihr Name, Profilbild, E-mail Adresse und Chat für alle Kursteilnehmer sichtbar.';

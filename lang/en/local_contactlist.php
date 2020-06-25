@@ -51,6 +51,6 @@ $string['privacy:metadata:user_info_data:userid'] = 'The ID of the user.';
 $string['role'] = 'Role';
 $string['surname'] = 'Surname';
 $string['totalvsvisible'] = '<p><b>{$a->visible} participants out of {$a->total} registered in this course are sharing their contact information.</b></p>';
-$string['userprofilelabel'] = 'Contactlist visibility for all courses.<br>Share your contact information (name, profile picture and email address) in the contactlist of your courses.';
+$string['userprofilelabel'] = 'Contactlist visibility (name, profile picture, email) for all courses.';
 $string['visible'] = 'Visible';
 $string['visib_help'] = 'Set your contactlist visibility in this course. If you don\'t select a value, the moodle-wide value will be taken from your user profile privacy setting. If you choose to share your contact information, your name, profile picture and email address will be visible for your fellow students in this course.';
