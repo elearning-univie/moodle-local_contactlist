@@ -24,7 +24,7 @@
  * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['email'] = 'Email address';
+$string['email'] = 'E-Mail-Ad­res­se';
 $string['errornotallowedonpage'] = 'Sie sind nicht in diesem Kurs angemeldet!';
 $string['errorlistnotshown'] = 'Dieser Kurs bietet keine Kontaktliste an.';
 $string['chat'] = 'Nachrichten';
@@ -45,12 +45,12 @@ $string['privacy:metadata:local_contactlist_course_vis'] = 'Information über Ko
 $string['privacy:metadata:local_contactlist_course_vis:courseid'] = 'Die ID des Kurses in welchem der User (un)sichtbar ist.';
 $string['privacy:metadata:local_contactlist_course_vis:userid'] = 'Die ID des Users, welcher (un)sichtbar ist in einem bestimmten Kurs.';
 $string['privacy:metadata:local_contactlist_course_vis:visib'] = 'Die Sichtbarkeitseinstellung für einen bestimmten Kurs.';
-$string['privacy:metadata:user_info_data'] = 'Informationen über Die Kontaktlistensichtbarkeit für die ganze moodle Instanz. Default ist unsichtbar.';
-$string['privacy:metadata:user_info_data:data'] = 'Sichtbarkeit für die ganze moodle Instanz.';
+$string['privacy:metadata:user_info_data'] = 'Informationen über Die Kontaktlistensichtbarkeit für die ganze Moodle Instanz. Default ist unsichtbar.';
+$string['privacy:metadata:user_info_data:data'] = 'Sichtbarkeit für die ganze Moodle Instanz.';
 $string['privacy:metadata:user_info_data:userid'] = 'Die UserID.';
 $string['role'] = 'Rolle';
 $string['surname'] = 'Familienname';
-$string['totalvsvisible'] = '<p><b>{$a->visible} von {$a->total} in diesem Kurs angemeldeten Teilnehmer teilen Ihre Kontaktiformation.</b></p>';
+$string['totalvsvisible'] = '<p><b>{$a->visible} von {$a->total} in diesem Kurs angemeldeten Teilnehmer teilen ihre Kontaktiformation.</b></p>';
 $string['userprofilelabel'] = 'Kontaktlistensichtbarkeit (Name, Profilbild, Email) für alle Kurse.';
 $string['visible'] = 'Sichtbar';
 $string['visib_help'] = 'Kontaktlistensichtbarkeit für diesen Kurs. Sollten sie keinen Wert auswählen, wird die moodleweite Einstellung aus den Privatsphäreeinstellungen des Profils verwendet. Wenn sie ihre Kontaktiformationen teilen, ist ihr Name, Profilbild, E-mail Adresse und Chat für alle Kursteilnehmer sichtbar.';
