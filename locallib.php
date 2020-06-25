@@ -25,7 +25,6 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-define('CONTACTLIST_DEFAULT', get_string('globaldefault', 'local_contactlist'));
 define('CONTACTLIST_VISIBLE', get_string('visible', 'local_contactlist'));
 define('CONTACTLIST_INVISIBLE', get_string('invisible', 'local_contactlist'));
 /**
