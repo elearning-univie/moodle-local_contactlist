@@ -53,4 +53,5 @@ $string['surname'] = 'Nachname';
 $string['totalvsvisible'] = '<p><b>{$a->visible} von {$a->total} in diesem Kurs registrierten Teilnehmer/innen teilen ihre Kontaktinformationen.</b></p>';
 $string['userprofilelabel'] = 'Kontaktlisten-Sichtbarkeit für alle Kurse (Name, Nutzerbild, E-Mail-Adresse).';
 $string['visible'] = 'Sichtbar';
+$string['visib'] = 'Kontaktlistensichtbarkeit';
 $string['visib_help'] = 'Kontaktlisten-Sichtbarkeit für diesen Kurs. Sollten Sie keine Option auswählen, wird die Moodle-weite Einstellung aus den Privatsphäreeinstellungen Ihres Profils verwendet. Wenn Sie Ihre Kontaktiformationen teilen, werden Name, Nutzerbild, E-Mail-Adresse und gemeinsame Mitteilungen für alle Teilnehmer/innen des Kurses sichtbar.';
