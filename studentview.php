@@ -33,7 +33,7 @@ require_once($CFG->libdir.'/tablelib.php');
 global $PAGE, $OUTPUT, $USER, $DB, $COURSE;
 
 $page         = optional_param('page', 0, PARAM_INT);
-$perpage      = optional_param('perpage', DEFAULT_PAGE_SIZE, PARAM_INT);
+$perpage      = optional_param('perpage', 20, PARAM_INT);
 $contextid    = optional_param('contextid', 0, PARAM_INT);
 $courseid     = optional_param('id', 0, PARAM_INT);
 $filtersapplied = optional_param_array('unified-filters', [], PARAM_NOTAGS);
@@ -113,12 +113,12 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($pagetitle);
 
 echo html_writer::tag('br', null);
-$mform = new \local_contactlist\form\contactlist_form(array('id' => $courseid));
+$mform = new \local_contactlist\form\contactlist_form();
 $formdata = $mform->get_data();
 
 if ($formdata) {
     local_contactlist_save_update($USER->id, $courseid, $formdata->visib, $formdata->usedefault);
-    $mform = new \local_contactlist\form\contactlist_form(array('id' => $courseid));
+    $mform = new \local_contactlist\form\contactlist_form();
 }
 
 $localvsglobal = local_contactlist_get_course_visibility_info_string($USER->id, $courseid);

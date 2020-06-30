@@ -192,9 +192,11 @@ function local_contactlist_get_participants_sql($courseid, $additionalwhere = ''
 
     $params['courseid'] = $courseid;
 
-    $select = "SELECT uid AS id, picture, firstname, lastname, uid AS chat, email, join1.data, visib ";
+    $select = "SELECT uid AS id, picture, firstname, lastname, firstnamephonetic, lastnamephonetic, middlename,
+               alternatename, imagealt, uid AS chat, email, join1.data, visib ";
     $from = "FROM
-             (SELECT u.id as uid, u.picture, u.firstname, u.lastname, u.email, uinfo.data, clvis.visib
+             (SELECT u.id as uid, u.picture, u.firstname, u.lastname, u.email, u.firstnamephonetic, u.lastnamephonetic,
+             u.middlename, u.alternatename, u.imagealt, uinfo.data, clvis.visib
              FROM {role_assignments}  asg
              JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
              JOIN {user} u ON u.id = asg.userid
