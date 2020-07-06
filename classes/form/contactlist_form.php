@@ -44,7 +44,7 @@ class contactlist_form extends \moodleform {
      * Form definition method.
      */
     public function definition() {
-        global $PAGE, $USER;
+        global $PAGE, $USER, $COURSE;
 
         $courseid = required_param('id', PARAM_INT); // This are required.
 
@@ -58,10 +58,10 @@ class contactlist_form extends \moodleform {
 
         $visib = local_contactlist_courselevel_visibility($USER->id, $courseid);
 
-        $showdefault = 0;
+        $usedefault = 0;
         $localsetting = 2;
         if (!$visib) {
-            $showdefault = 1;
+            $usedefault = 1;
             if ($globalsetting = local_contactlist_get_global_setting($USER->id, $courseid)) {
                 if ($globalsetting->data == "Yes") {
                     $localsetting = 1;
@@ -70,10 +70,12 @@ class contactlist_form extends \moodleform {
         } else {
             $localsetting = $visib->visib;
         }
-        $mform->addElement('checkbox', 'usedefault', get_string('globaldefaultsetting', 'local_contactlist',
+        $mform->addElement('advcheckbox', 'usedefault', get_string('globaldefaultsetting', 'local_contactlist',
             ['here' => local_contactlist_get_profile_link($USER->id, $courseid)]), ' ');
-        $mform->setDefault('usedefault', $showdefault);
+        $mform->setDefault('usedefault', $usedefault);
 
+        $mform->addElement('hidden', 'id', $courseid);
+        $mform->setType('id', PARAM_INT);
         $mform->addElement('select', 'visib', get_string('localvisibility', 'local_contactlist'), $options);
         $mform->setType('visib', PARAM_INT);
         $mform->setDefault('visib', $localsetting);
