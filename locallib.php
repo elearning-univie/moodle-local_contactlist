@@ -273,12 +273,15 @@ function local_contactlist_get_course_visibility_info_string($userid, $courseid)
     $params['fieldid'] = $globalinfofield->id;
 
     $globalvisib  = $DB->get_record('user_info_data', $params);
-    $localvisib = local_contactlist_courselevel_visibility ($userid, $courseid);
+    $localvisib = local_contactlist_courselevel_visibility($userid, $courseid);
 
     $isvisible = false;
     $globalvisib = ($globalvisib && $globalvisib->data == 'Yes');
+
     if ($localvisib && ($localvisib->visib == 1 || ($globalvisib && $localvisib->visib != 2))) {
           $isvisible = true;
+    } else if (!$localvisib && ($globalvisib == 1)) {
+        $isvisible = true;
     }
 
     if ($isvisible) {
