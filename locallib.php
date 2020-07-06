@@ -277,7 +277,7 @@ function local_contactlist_get_course_visibility_info_string($userid, $courseid)
 
     $isvisible = false;
     $globalvisib = ($globalvisib && $globalvisib->data == 'Yes');
-    if ($localvisib->visib == 1 || ($globalvisib && $localvisib->visib != 2)) {
+    if ($localvisib && ($localvisib->visib == 1 || ($globalvisib && $localvisib->visib != 2))) {
           $isvisible = true;
     }
 

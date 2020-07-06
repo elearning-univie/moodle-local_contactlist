@@ -25,7 +25,7 @@
 
 use context;
 use core_user\output\status_field;
-use DateTime;
+//use DateTime;
 
 defined('MOODLE_INTERNAL') || die;
 
