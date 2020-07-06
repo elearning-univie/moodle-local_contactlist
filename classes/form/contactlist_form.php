@@ -70,7 +70,7 @@ class contactlist_form extends \moodleform {
         } else {
             $localsetting = $visib->visib;
         }
-       $mform->addElement('advcheckbox', 'usedefault', get_string('globaldefaultsetting', 'local_contactlist',
+        $mform->addElement('advcheckbox', 'usedefault', get_string('globaldefaultsetting', 'local_contactlist',
             ['here' => local_contactlist_get_profile_link($USER->id, $courseid)]), ' ');
         $mform->setDefault('usedefault', $usedefault);
 
