@@ -30,5 +30,6 @@ Feature: Global visibility in contactlist
     And I am on "Course 1" course homepage
     And I follow "Contactlist"
     Then I should see "You are currently INVISIBLE in this course!"
-    And I should not see "user1@example.com" 
+    And I should not see "user1@example.com"
+    And I should not see "user2@example.com" 
 
