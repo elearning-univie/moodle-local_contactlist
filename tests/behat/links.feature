@@ -17,7 +17,7 @@ Feature: Possibility to disable visibility in contact list
       | user1 | C1 | student |
       | user2 | C1 | student |
 
-@javascript
+@javascript @_switch_window
   Scenario: As a user I want to change my visibility in a contact list, overriding my default settings. Then I want to switch it back.  
     Given I log in as "user1"
     And I open my profile in edit mode
@@ -42,6 +42,6 @@ Feature: Possibility to disable visibility in contact list
     And I am on "Course 1" course homepage
     And I follow "Contactlist"
     And I follow "Change your moodle-wide contactlist visibility setting HERE."
-#    Wenn ein neues Browser-Fenster geöffnet wird, kennt er sich nicht mehr aus
-#    And I expand all fieldsets
-#    Then the field "id_profile_field_contactlistdd" matches value "No"
+    And I switch to the browser tab opened by the app
+    And I expand all fieldsets
+    Then the field "id_profile_field_contactlistdd" matches value "No"
