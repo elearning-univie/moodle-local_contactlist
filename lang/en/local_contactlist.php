@@ -24,10 +24,10 @@
  * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['contactlist:view'] = 'Kontaktliste ansehen';
+$string['contactlist:view'] = 'See contactlist';
 $string['email'] = 'Email address';
 $string['errornotallowedonpage'] = 'You are not registerd in this course!';
-$string['errorlistnotshown'] = 'This course does not offer a contactlist.';
+$string['errorlistnotshown'] = 'This course does not offer a contact list.';
 $string['chat'] = 'Messages';
 $string['changegloballink'] = '<a href="{$a->here}" target="_blank"> Change your moodle-wide contactlist visibility setting HERE.</a>';
 $string['customcoursefieldlabel'] = 'Course navigation contactlist visibility';
