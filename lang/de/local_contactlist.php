@@ -23,7 +23,7 @@
  * @since         Moodle 3.8+
  * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+$string['contactlist:view'] = 'Kontaktliste ansehen';
 $string['email'] = 'E-Mail-Adresse';
 $string['errornotallowedonpage'] = 'Sie sind nicht in diesem Kurs eingeschrieben!';
 $string['errorlistnotshown'] = 'Dieser Kurs bietet keine Kontaktliste an.';
