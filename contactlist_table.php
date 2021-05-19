@@ -98,7 +98,6 @@ class contactlist_table extends \table_sql {
             }
             if ($field == 'email') {
                 $headers[] = \core_user\fields::get_display_name($field);
-               // $headers[] = get_user_field_name($field);
                 $columns[] = $field;
             }
         }
@@ -110,23 +109,10 @@ class contactlist_table extends \table_sql {
 
         $this->extrafields = $extrafields;
 
-        $this->column_style('fullname', 'width', '20%');
+        $this->column_style('fullname', 'width', '20%') ;
         $this->column_style('fullname', 'white-space', 'nowrap');
         $this->column_style('chat', 'width', '10%');
         $this->column_style('chat', 'white-space', 'nowrap');
-    }
-
-    /**
-     * Render the participants table.
-     *
-     * @param int $pagesize Size of page for paginated displayed table.
-     * @param bool $useinitialsbar Whether to use the initials bar which will only be used if there is a fullname column defined.
-     * @param string $downloadhelpbutton
-     */
-    public function out($pagesize, $useinitialsbar, $downloadhelpbutton = '') {
-
-        parent::out($pagesize, $useinitialsbar, $downloadhelpbutton);
-
     }
 
     /**

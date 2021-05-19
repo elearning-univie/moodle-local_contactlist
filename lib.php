@@ -86,7 +86,7 @@ function local_contactlist_extend_navigation($navigation) {
             }
             $beforekey = null;
             $participantsnode = $mycoursesnode->find('participants', navigation_node::TYPE_CONTAINER);
-            if ($participantsnode) { // Add the navnode after participants
+            if ($participantsnode) { // Add the navnode after participants.
                 $keys = $participantsnode->parent->get_children_key_list();
                 $igrades = array_search('participants', $keys);
                 if ($igrades !== false) {

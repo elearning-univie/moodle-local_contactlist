@@ -76,7 +76,7 @@ class provider implements
     public static function get_contexts_for_userid(int $userid) : contextlist {
         $contextlist = new contextlist();
 
-        // local plugin visibility settings
+        // Local plugin visibility settings.
         $params = ['userid' => $userid, 'contextlevel' => CONTEXT_COURSE];
         $sql = "SELECT ctx.id
                 FROM {context} ctx
@@ -86,7 +86,7 @@ class provider implements
 
         $contextlist->add_from_sql($sql, $params);
 
-        // global visibility settings controlled by plugin
+        // Global visibility settings controlled by plugin.
         $params = ['userid' => $userid, 'contextlevel' => CONTEXT_USER];
         $sql = "SELECT ctx.id
                 FROM {context} ctx
@@ -110,7 +110,7 @@ class provider implements
         ];
 
         if ($context->contextlevel == CONTEXT_COURSE) {
-            // userlist for course context.
+            // Userlist for course context.
             $sql = "SELECT ctl.userid
                     FROM {local_contactlist_course_vis} ctl
                     WHERE ctl.courseid = :instanceid";
