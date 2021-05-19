@@ -102,7 +102,6 @@ class provider implements
      * @param userlist $userlist
      */
     public static function get_users_in_context(userlist $userlist) {
-        global $DB;
 
         $context = $userlist->get_context();
 

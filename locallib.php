@@ -43,7 +43,6 @@ function local_contactlist_get_participants (int $courseid, $userid, $additional
     $params['cid'] = $courseid;
 
     if (!empty($additionalwhere)) {
-        $wheres[] = $additionalwhere;
         $params = array_merge($params, $additionalparams);
     }
 
@@ -183,7 +182,7 @@ function local_contactlist_courselevel_visibility ($userid, $courseid) {
  * @return array
  */
 function local_contactlist_get_participants_sql($courseid, $additionalwhere = '', $additionalparams = array()) {
-    global $DB, $USER, $CFG;
+
     $wheres = array();
 
     $context = \context_course::instance($courseid, MUST_EXIST);
@@ -247,12 +246,10 @@ function local_contactlist_get_list ($courseid, $additionalwhere = '', $addition
  * extra user field function with alternative capabilities for contactlist.
  *
  * @param object $context Context
- * @param array $already Array of fields that we're going to show anyway
- *   so don't bother listing them
  * @return array Array of field names from user table, not including anything
  *   listed in $already
  */
-function local_contactlist_get_extra_user_fields_contactlist($context, $already = array()) {
+function local_contactlist_get_extra_user_fields_contactlist($context) {
 
     return array('chat', 'email');
 }
@@ -325,10 +322,9 @@ function local_contactlist_get_profile_link($userid, $courseid) {
  * get global rofile contactlist visibility setting
  *
  * @param int $userid
- * @param int $courseid
  * @return mixed
  */
-function local_contactlist_get_global_setting($userid, $courseid) {
+function local_contactlist_get_global_setting($userid) {
     global $DB;
 
     $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);

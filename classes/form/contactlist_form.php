@@ -44,7 +44,7 @@ class contactlist_form extends \moodleform {
      * Form definition method.
      */
     public function definition() {
-        global $PAGE, $USER, $COURSE;
+        global $PAGE, $USER;
 
         $courseid = required_param('id', PARAM_INT); // This are required.
 
@@ -62,7 +62,7 @@ class contactlist_form extends \moodleform {
         $localsetting = 2;
         if (!$visib) {
             $usedefault = 1;
-            if ($globalsetting = local_contactlist_get_global_setting($USER->id, $courseid)) {
+            if ($globalsetting = local_contactlist_get_global_setting($USER->id)) {
                 if ($globalsetting->data == "Yes") {
                     $localsetting = 1;
                 }
