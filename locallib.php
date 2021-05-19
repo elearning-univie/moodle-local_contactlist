@@ -282,9 +282,11 @@ function local_contactlist_get_course_visibility_info_string($userid, $courseid)
     }
 
     if ($isvisible) {
-        return '<p id="local-contactlist-info-box" class="alert alert-success">'. get_string('localvisible', 'local_contactlist').'</p>';
+        return '<p id="local-contactlist-info-box" class="alert alert-success">'.
+        get_string('localvisible', 'local_contactlist').'</p>';
     } else {
-        return '<p id="local-contactlist-info-box" class="alert alert-danger">'. get_string('localinvisible', 'local_contactlist').'</p>';
+        return '<p id="local-contactlist-info-box" class="alert alert-danger">'.
+        get_string('localinvisible', 'local_contactlist').'</p>';
     }
 }
 /**
@@ -298,8 +300,10 @@ function local_contactlist_get_chat_html($userid) {
 
     $chaturl = (string)new moodle_url("/message/index.php", ['id' => $userid]);
     $PAGE->requires->js_call_amd('core_message/message_user_button', 'send', array('#message-user-button' . $userid));
-    return html_writer::link($chaturl, '<span><i class="icon fa fa-comment fa-fw iconsmall"  title="Message" aria-label="Message"></i></span>',
-        ['id' => 'message-user-button'.$userid, 'role' => 'button', 'data-conversationid' => 0, 'data-userid' => $userid, 'class' => 'btn']);
+    return html_writer::link($chaturl,
+        '<span><i class="icon fa fa-comment fa-fw iconsmall"  title="Message" aria-label="Message"></i></span>',
+        ['id' => 'message-user-button'.$userid, 'role' => 'button',
+            'data-conversationid' => 0, 'data-userid' => $userid, 'class' => 'btn']);
 }
 /**
  * build html for moodle chat link.
@@ -315,7 +319,8 @@ function local_contactlist_get_profile_link($userid, $courseid) {
 
     $anchor = 'id_category_'.$globalinfofield->categoryid;
     $returnurl = (string)new moodle_url("/local/contactlist/studentview.php", ['id' => $courseid]);
-    return (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url', 'aria-expanded' => 'true', 'returnurl' => $returnurl], $anchor);
+    return (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url',
+        'aria-expanded' => 'true', 'returnurl' => $returnurl], $anchor);
 
 }
 /**
