@@ -109,7 +109,7 @@ class contactlist_table extends \table_sql {
 
         $this->extrafields = $extrafields;
 
-        $this->column_style('fullname', 'width', '20%') ;
+        $this->column_style('fullname', 'width', '20%');
         $this->column_style('fullname', 'white-space', 'nowrap');
         $this->column_style('chat', 'width', '10%');
         $this->column_style('chat', 'white-space', 'nowrap');
