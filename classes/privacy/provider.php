@@ -27,7 +27,7 @@ use core_privacy\local\metadata\collection;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The local_contactlist module does store data. WIP.
+ * The local_contactlist module does store data.
  *
  * @package       local_contactlist
  * @author        Angela Baier
@@ -167,7 +167,7 @@ class provider implements
     /**
      * Delete all data for all users in the specified context.
      *
-     * @param   context $context The specific context to delete data for.
+     * @param \context $context The specific context to delete data for.
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;

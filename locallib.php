@@ -46,19 +46,21 @@ function local_contactlist_get_participants (int $courseid, $userid, $additional
         $params = array_merge($params, $additionalparams);
     }
 
-    $sql = "SELECT uid, firstname, lastname, email FROM
-          (SELECT u.id as uid, u.firstname, u.lastname, u.email, uinfo.data, clvis.visib
-             FROM {role_assignments}  asg
-             JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
-             JOIN {user} u ON u.id = asg.userid
-             JOIN {course} course ON context.instanceid = course.id
-             LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
-             LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
-             WHERE course.id = :cid) join1
-          WHERE (join1.data IS NULL AND visib = 1)
-          OR (join1.data LIKE 'Yes' AND visib IS NULL)
-          OR (join1.data LIKE 'Yes' AND visib = 1)
-          ORDER BY join1.lastname ASC";
+    $sql = "SELECT uid, firstname, lastname, email
+              FROM (
+                    SELECT u.id as uid, u.firstname, u.lastname, u.email, uinfo.data, clvis.visib
+                      FROM {role_assignments}  asg
+                      JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
+                      JOIN {user} u ON u.id = asg.userid
+                      JOIN {course} course ON context.instanceid = course.id
+                 LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
+                 LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
+                     WHERE course.id = :cid
+                    ) join1
+              WHERE (join1.data IS NULL AND visib = 1)
+                 OR (join1.data LIKE 'Yes' AND visib IS NULL)
+                 OR (join1.data LIKE 'Yes' AND visib = 1)
+           ORDER BY join1.lastname ASC";
 
     $participants = $DB->get_records_sql($sql, $params);
 
@@ -76,19 +78,21 @@ function local_contactlist_get_total_visible (int $courseid) {
     $params = array();
     $params['cid'] = $courseid;
 
-    $sql = "SELECT COUNT(uid) FROM
-          (SELECT u.id as uid, uinfo.data, clvis.visib
-             FROM {role_assignments}  asg
-             JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
-             JOIN {user} u ON u.id = asg.userid
-             JOIN {course} course ON context.instanceid = course.id
-             LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
-             LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
-             WHERE course.id = :cid) join1
-          WHERE (join1.data IS NULL AND visib = 1)
-          OR (join1.data LIKE 'NO' AND visib = 1)
-          OR (join1.data LIKE 'Yes' AND visib IS NULL)
-          OR (join1.data LIKE 'Yes' AND visib = 1)";
+    $sql = "SELECT COUNT(uid)
+              FROM (
+                    SELECT u.id as uid, uinfo.data, clvis.visib
+                      FROM {role_assignments}  asg
+                      JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
+                      JOIN {user} u ON u.id = asg.userid
+                      JOIN {course} course ON context.instanceid = course.id
+                 LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
+                 LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
+                     WHERE course.id = :cid
+                    ) join1
+              WHERE (join1.data IS NULL AND visib = 1)
+                 OR (join1.data LIKE 'NO' AND visib = 1)
+                 OR (join1.data LIKE 'Yes' AND visib IS NULL)
+                 OR (join1.data LIKE 'Yes' AND visib = 1)";
 
     $participants = $DB->count_records_sql($sql, $params);
 
@@ -107,11 +111,11 @@ function local_contactlist_get_total_course (int $courseid) {
     $params['cid'] = $courseid;
 
     $sql = "SELECT COUNT(u.id)
-          FROM {role_assignments} asg
-          JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
-          JOIN {user} u ON u.id = asg.userid
-          JOIN {course} course ON context.instanceid = course.id
-          WHERE course.id =:cid";
+              FROM {role_assignments} asg
+              JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
+              JOIN {user} u ON u.id = asg.userid
+              JOIN {course} course ON context.instanceid = course.id
+             WHERE course.id =:cid";
 
     $participants = $DB->count_records_sql($sql, $params);
 
@@ -133,8 +137,8 @@ function local_contactlist_save_update ($userid, $courseid, $show, $showdefault)
     $params['userid'] = $userid;
 
     $sql = "SELECT * FROM {local_contactlist_course_vis} cv
-            WHERE cv.courseid =:courseid
-            AND cv.userid =:userid";
+             WHERE cv.courseid =:courseid
+               AND cv.userid =:userid";
 
     $record = $DB->get_record_sql($sql, $params);
 
@@ -193,21 +197,22 @@ function local_contactlist_get_participants_sql($courseid, $additionalwhere = ''
 
     $select = "SELECT uid AS id, picture, firstname, lastname, firstnamephonetic, lastnamephonetic, middlename,
                alternatename, imagealt, uid AS chat, email, join1.data, visib ";
-    $from = "FROM
-             (SELECT u.id as uid, u.picture, u.firstname, u.lastname, u.email, u.firstnamephonetic, u.lastnamephonetic,
-             u.middlename, u.alternatename, u.imagealt, uinfo.data, clvis.visib
-             FROM {role_assignments}  asg
-             JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
-             JOIN {user} u ON u.id = asg.userid
-             JOIN {course} course ON context.instanceid = course.id
-             LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
-             LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
-             WHERE course.id = :courseid) join1 ";
+    $from = "FROM (
+                   SELECT u.id as uid, u.picture, u.firstname, u.lastname, u.email, u.firstnamephonetic, u.lastnamephonetic,
+                          u.middlename, u.alternatename, u.imagealt, uinfo.data, clvis.visib
+                     FROM {role_assignments}  asg
+                     JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
+                     JOIN {user} u ON u.id = asg.userid
+                     JOIN {course} course ON context.instanceid = course.id
+                LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
+                LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
+                    WHERE course.id = :courseid
+                  ) join1 ";
 
     $where1 = "WHERE ((join1.data IS NULL AND visib = 1)
-               OR (join1.data LIKE 'NO' AND visib = 1)
-               OR (join1.data LIKE 'Yes' AND visib IS NULL)
-               OR (join1.data LIKE 'Yes' AND visib = 1)) ";
+                  OR (join1.data LIKE 'NO' AND visib = 1)
+                  OR (join1.data LIKE 'Yes' AND visib IS NULL)
+                  OR (join1.data LIKE 'Yes' AND visib = 1)) ";
 
     if (!empty($additionalwhere)) {
         $wheres[] = $additionalwhere;
