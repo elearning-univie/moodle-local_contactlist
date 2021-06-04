@@ -43,10 +43,10 @@ test:
         POSTGRES_USER: moodleci
         POSTGRES_PASSWORD: $DB_PASSWORD
 
-      - DB: mysqli
+      - DB: mariadb
         DB_USER: root
-        DB_HOST: mysql
-        DB_PASSWORD: moodle_mysql
+        DB_HOST: mariadb
+        DB_PASSWORD: moodle_mariadb
         MYSQL_ROOT_PASSWORD: $DB_PASSWORD
         MYSQL_USER: moodleci
         MYSQL_PASSWORD: $DB_PASSWORD
