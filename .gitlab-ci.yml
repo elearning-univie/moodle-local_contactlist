@@ -11,7 +11,7 @@ variables:
 
 services:
   - postgres:11
-  - name: mysql:10.2.29
+  - name: mysql:8.0.23
     command: ["mysqld", "--default-authentication-plugin=mysql_native_password"]
   - mariadb:10.4-bionic
   - docker:dind
