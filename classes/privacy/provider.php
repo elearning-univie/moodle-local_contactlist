@@ -27,7 +27,7 @@ use core_privacy\local\metadata\collection;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * The local_contactlist module does store data. WIP.
+ * The local_contactlist module does store data.
  *
  * @package       local_contactlist
  * @author        Angela Baier
@@ -76,7 +76,7 @@ class provider implements
     public static function get_contexts_for_userid(int $userid) : contextlist {
         $contextlist = new contextlist();
 
-        // local plugin visibility settings
+        // Local plugin visibility settings.
         $params = ['userid' => $userid, 'contextlevel' => CONTEXT_COURSE];
         $sql = "SELECT ctx.id
                 FROM {context} ctx
@@ -86,7 +86,7 @@ class provider implements
 
         $contextlist->add_from_sql($sql, $params);
 
-        // global visibility settings controlled by plugin
+        // Global visibility settings controlled by plugin.
         $params = ['userid' => $userid, 'contextlevel' => CONTEXT_USER];
         $sql = "SELECT ctx.id
                 FROM {context} ctx
@@ -102,7 +102,6 @@ class provider implements
      * @param userlist $userlist
      */
     public static function get_users_in_context(userlist $userlist) {
-        global $DB;
 
         $context = $userlist->get_context();
 
@@ -111,7 +110,7 @@ class provider implements
         ];
 
         if ($context->contextlevel == CONTEXT_COURSE) {
-            // userlist for course context.
+            // Userlist for course context.
             $sql = "SELECT ctl.userid
                     FROM {local_contactlist_course_vis} ctl
                     WHERE ctl.courseid = :instanceid";
@@ -168,7 +167,7 @@ class provider implements
     /**
      * Delete all data for all users in the specified context.
      *
-     * @param   context $context The specific context to delete data for.
+     * @param \context $context The specific context to delete data for.
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;

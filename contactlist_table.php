@@ -116,19 +116,6 @@ class contactlist_table extends \table_sql {
     }
 
     /**
-     * Render the participants table.
-     *
-     * @param int $pagesize Size of page for paginated displayed table.
-     * @param bool $useinitialsbar Whether to use the initials bar which will only be used if there is a fullname column defined.
-     * @param string $downloadhelpbutton
-     */
-    public function out($pagesize, $useinitialsbar, $downloadhelpbutton = '') {
-
-        parent::out($pagesize, $useinitialsbar, $downloadhelpbutton);
-
-    }
-
-    /**
      * Generate the fullname column.
      *
      * @param \stdClass $data

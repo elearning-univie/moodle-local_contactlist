@@ -1,62 +1,72 @@
 #local-contactlist-toggle {
-  display: inline-block;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
 }
 
 #local-contactlist-toggle i {
-  position: relative;
-  display: inline-block;
-  margin-right: .5rem;
-  width: 46px;
-  height: 26px;
-  background-color: #e6e6e6;
-  border-radius: 23px;
-  vertical-align: text-bottom;
-  transition: all 0.3s linear;
+    position: relative;
+    display: inline-block;
+    margin-right: .5rem;
+    width: 46px;
+    height: 26px;
+    background-color: #e6e6e6;
+    border-radius: 23px;
+    vertical-align: text-bottom;
+    transition: all 0.3s linear;
 }
 
 #local-contactlist-toggle i::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  width: 42px;
-  height: 22px;
-  background-color: #fff;
-  border-radius: 11px;
-  transform: translate3d(2px, 2px, 0) scale3d(1, 1, 1);
-  transition: all 0.25s linear;
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 42px;
+    height: 22px;
+    background-color: #fff;
+    border-radius: 11px;
+    transform: translate3d(2px, 2px, 0) scale3d(1, 1, 1);
+    transition: all 0.25s linear;
 }
 
 #local-contactlist-toggle i::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  width: 22px;
-  height: 22px;
-  background-color: #fff;
-  border-radius: 11px;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.24);
-  transform: translate3d(2px, 2px, 0);
-  transition: all 0.2s ease-in-out;
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    background-color: #fff;
+    border-radius: 11px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.24);
+    transform: translate3d(2px, 2px, 0);
+    transition: all 0.2s ease-in-out;
 }
 
 #local-contactlist-toggle:active i::after {
-  width: 28px;
-  transform: translate3d(2px, 2px, 0);
+    width: 28px;
+    transform: translate3d(2px, 2px, 0);
 }
 
-#local-contactlist-toggle:active input:checked + i::after { transform: translate3d(16px, 2px, 0); }
+#local-contactlist-toggle:active input:checked + i::after {
+    transform: translate3d(16px, 2px, 0);
+}
 
-#local-contactlist-toggle input { display: none; }
+#local-contactlist-toggle input {
+    display: none;
+}
 
-#local-contactlist-toggle input:checked + i { background-color: #4BD763; }
+#local-contactlist-toggle input:checked + i {
+    background-color: #4bd763;
+}
 
-#local-contactlist-toggle input:checked + i::before { transform: translate3d(18px, 2px, 0) scale3d(0, 0, 0); }
+#local-contactlist-toggle input:checked + i::before {
+    transform: translate3d(18px, 2px, 0) scale3d(0, 0, 0);
+}
 
-#local-contactlist-toggle input:checked + i::after { transform: translate3d(22px, 2px, 0); }
+#local-contactlist-toggle input:checked + i::after {
+    transform: translate3d(22px, 2px, 0);
+}
 
 #local-contactlist-info-box {
-	max-width: max-content;
-	margin-left: 15px;
+    max-width: max-content;
+    margin-left: 15px;
 }

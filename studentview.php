@@ -68,8 +68,10 @@ if ($node) {
 }
 
 $customfieldcategory = $DB->get_record('customfield_category', array('name' => 'Privacy Settings'));
-$customfieldfield = $DB->get_record('customfield_field', array('categoryid' => $customfieldcategory->id, 'shortname' => 'conlistcoursevis'));
-$customfielddata = $DB->get_record('customfield_data', array('fieldid' => $customfieldfield->id, 'instanceid' => $context->instanceid));
+$customfieldfield = $DB->get_record('customfield_field',
+                    array('categoryid' => $customfieldcategory->id, 'shortname' => 'conlistcoursevis'));
+$customfielddata = $DB->get_record('customfield_data',
+                   array('fieldid' => $customfieldfield->id, 'instanceid' => $context->instanceid));
 
 if ($customfielddata) {
     if ($customfielddata->intvalue == 2) {

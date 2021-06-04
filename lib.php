@@ -68,11 +68,11 @@ function local_contactlist_extend_navigation($navigation) {
     $params['instanceid'] = $coursecontext->instanceid;
 
     $sql = "SELECT cfd.intvalue FROM {customfield_data} cfd
-            JOIN {customfield_field} cff ON cfd.fieldid = cff.id
-            JOIN {customfield_category} cfc ON cff.categoryid = cfc.id
-            WHERE cfc.name = :name
-            AND cff.shortname = :shortname
-            AND cfd.instanceid = :instanceid";
+              JOIN {customfield_field} cff ON cfd.fieldid = cff.id
+              JOIN {customfield_category} cfc ON cff.categoryid = cfc.id
+             WHERE cfc.name = :name
+               AND cff.shortname = :shortname
+               AND cfd.instanceid = :instanceid";
 
     $customfielddatavalue = $DB->get_field_sql($sql, $params);
 
@@ -86,7 +86,7 @@ function local_contactlist_extend_navigation($navigation) {
             }
             $beforekey = null;
             $participantsnode = $mycoursesnode->find('participants', navigation_node::TYPE_CONTAINER);
-            if ($participantsnode) { // Add the navnode after participants
+            if ($participantsnode) { // Add the navnode after participants.
                 $keys = $participantsnode->parent->get_children_key_list();
                 $igrades = array_search('participants', $keys);
                 if ($igrades !== false) {
