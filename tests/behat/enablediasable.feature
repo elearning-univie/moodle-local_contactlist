@@ -18,7 +18,7 @@ Feature: Global and local visibility in contactlist
       | user1 | C1 | student |
       | user2 | C1 | student |
 
- @javascript
+  @javascript
   Scenario: A user enables global visibility in the profile settings to be visible and back again.
     Given I log in as "user1"
     And I open my profile in edit mode
