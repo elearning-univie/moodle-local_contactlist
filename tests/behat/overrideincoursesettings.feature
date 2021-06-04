@@ -1,9 +1,8 @@
 @local @local_contactlist
 
-Feature: Possibility to disable visibility in contact list
+Feature: Possibility to disable visibility in contactlist
   As a user
   I want to override my default visibility setting in contactlists of single courses.
-
 
   Background:
     Given the following "users" exist:
@@ -18,8 +17,8 @@ Feature: Possibility to disable visibility in contact list
       | user1 | C1 | student |
       | user2 | C1 | student |
 
-@javascript
-  Scenario: As a user I want to change my visibility in a contact list, overriding my default settings. Then I want to switch it back.  
+  @javascript
+  Scenario: As a user I want to change my visibility in a contact list, overriding my default settings. Then I want to switch it back.
     Given I log in as "user1"
     And I open my profile in edit mode
     Then the field "id_profile_field_contactlistdd" matches value "No"
@@ -30,7 +29,7 @@ Feature: Possibility to disable visibility in contact list
     And I set the field "id_visib" to "Visible"
     And I click on "id_submitbutton" "button"
     And I log out
-    
+
     And I log in as "user2"
     And I am on "Course 1" course homepage
     And I follow "Contactlist"
@@ -51,4 +50,3 @@ Feature: Possibility to disable visibility in contact list
     And I follow "Contactlist"
     Then I should see "Use moodle-wide contactlist visibility setting"
     And I should not see "user1@example.com"
-

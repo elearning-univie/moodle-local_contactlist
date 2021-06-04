@@ -17,8 +17,8 @@ Feature: Possibility to disable visibility in contact list
       | user1 | C1 | student |
       | user2 | C1 | student |
 
-@javascript @_switch_window
-  Scenario: As a user I want to change my visibility in a contact list, overriding my default settings. Then I want to switch it back.  
+  @javascript @_switch_window
+  Scenario: As a user I want to change my visibility in a contact list, overriding my default settings. Then I want to switch it back.
     Given I log in as "user1"
     And I open my profile in edit mode
     Then the field "id_profile_field_contactlistdd" matches value "No"
