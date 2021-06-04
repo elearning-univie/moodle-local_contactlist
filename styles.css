@@ -47,7 +47,7 @@
 }
 
 #local-contactlist-toggle:active input:checked + i::after {
-    transform: translate3d(16px, 2px, 0); 
+    transform: translate3d(16px, 2px, 0);
 }
 
 #local-contactlist-toggle input {
