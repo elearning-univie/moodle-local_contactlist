@@ -52,11 +52,3 @@ test:
         MYSQL_ROOT_PASSWORD: $DB_PASSWORD
         MYSQL_USER: moodleci
         MYSQL_PASSWORD: $DB_PASSWORD
-
-      - DB: mariadb
-        DB_USER: root
-        DB_HOST: mariadb
-        DB_PASSWORD: moodle_mariadb
-        MYSQL_ROOT_PASSWORD: $DB_PASSWORD
-        MYSQL_USER: moodleci
-        MYSQL_PASSWORD: $DB_PASSWORD
