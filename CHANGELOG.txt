@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+3.11.0
+------------------
+* Moodle 3.11.0 compatible version
+
 3.10.0
 ------------------
 * Moodle 3.10.0 compatible version

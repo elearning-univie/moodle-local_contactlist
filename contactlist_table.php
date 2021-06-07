@@ -97,7 +97,7 @@ class contactlist_table extends \table_sql {
                 $columns[] = $field;
             }
             if ($field == 'email') {
-                $headers[] = get_user_field_name($field);
+                $headers[] = \core_user\fields::get_display_name($field);
                 $columns[] = $field;
             }
         }
