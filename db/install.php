@@ -27,7 +27,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-
 /**
  * Code run after the contactlist module database tables have been created.
  */
@@ -38,7 +37,7 @@ function xmldb_local_contactlist_install() {
         $userinfocategory = $DB->get_record('user_info_category', array('name' => 'Privacy Settings'));
         if (!$userinfocategory) {
             $record = new stdClass();
-            $record->name         = 'Privacy Settings';
+            $record->name = 'Privacy Settings';
             $id = $DB->insert_record('user_info_category', $record);
         } else {
             $id = $userinfocategory->id;
@@ -48,16 +47,16 @@ function xmldb_local_contactlist_install() {
 
         if (!$userinfofield) {
             $record = new stdClass();
-            $record->shortname    = 'contactlistdd';
-            $record->name         = get_string('userprofilelabel', 'local_contactlist');
-            $record->datatype     = 'menu';
-            $record->categoryid   = $id;
-            $record->sortorder    = 2;
-            $record->required     = 0;
-            $record->locked       = 0;
-            $record->visible       = 1;
-            $record->defaultdata  = 'No';
-            $record->param1       = 'Yes
+            $record->shortname = 'contactlistdd';
+            $record->name = get_string('userprofilelabel', 'local_contactlist');
+            $record->datatype = 'menu';
+            $record->categoryid = $id;
+            $record->sortorder = 2;
+            $record->required = 0;
+            $record->locked = 0;
+            $record->visible = 1;
+            $record->defaultdata = 'No';
+            $record->param1 = 'Yes
 No';
             $DB->insert_record('user_info_field', $record);
         }
@@ -68,12 +67,12 @@ No';
     $customfieldcategory = $DB->get_record('customfield_category', array('name' => 'Privacy Settings'));
     if (!$customfieldcategory) {
         $record = new stdClass();
-        $record->name         = 'Privacy Settings';
-        $record->component    = 'core_course';
-        $record->area         = 'course';
-        $record->itemid       = 0;
-        $record->contextid    = 1;
-        $record->timecreated  = time();
+        $record->name = 'Privacy Settings';
+        $record->component = 'core_course';
+        $record->area = 'course';
+        $record->itemid = 0;
+        $record->contextid = 1;
+        $record->timecreated = time();
         $record->timemodified = time();
         $id = $DB->insert_record('customfield_category', $record);
     } else {
@@ -84,15 +83,15 @@ No';
 
     if (!$customfieldfield) {
         $record = new stdClass();
-        $record->shortname    = 'conlistcoursevis';
-        $record->name         = get_string('customcoursefieldlabel', 'local_contactlist');
-        $record->type         = 'select';
-        $record->categoryid   = $id;
-        $record->sortorder    = 0;
-        $record->configdata   = '{"required":"0","uniquevalues":"0","options":"Yes\r\nNo","defaultvalue":"Yes","locked":"0","visibility":"1"}';
-        $record->timecreated  = time();
+        $record->shortname = 'conlistcoursevis';
+        $record->name = get_string('customcoursefieldlabel', 'local_contactlist');
+        $record->type = 'select';
+        $record->categoryid = $id;
+        $record->sortorder = 0;
+        $record->configdata =
+                '{"required":"0","uniquevalues":"0","options":"Yes\r\nNo","defaultvalue":"Yes","locked":"0","visibility":"1"}';
+        $record->timecreated = time();
         $record->timemodified = time();
         $DB->insert_record('customfield_field', $record);
     }
-
 }
