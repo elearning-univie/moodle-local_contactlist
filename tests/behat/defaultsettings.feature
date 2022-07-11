@@ -21,7 +21,6 @@ Feature: Global visibility in contactlist
   Scenario: A user is invisible to other users in the contact list by default.
     Given I log in as "user1"
     And I open my profile in edit mode
-    And I click on "Privacy Settings" "text"
     Then the field "id_profile_field_contactlistdd" matches value "No"
     And I click on "Update profile" "button"
     And I log out

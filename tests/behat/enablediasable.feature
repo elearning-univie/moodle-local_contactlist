@@ -22,7 +22,7 @@ Feature: Global and local visibility in contactlist
   Scenario: A user enables global visibility in the profile settings to be visible and back again.
     Given I log in as "user1"
     And I open my profile in edit mode
-    And I click on "Privacy Settings" "text"
+    And I expand all fieldsets
     And I set the field "id_profile_field_contactlistdd" to "Yes"
     And I click on "Update profile" "button"
     And I log out
@@ -36,7 +36,7 @@ Feature: Global and local visibility in contactlist
 
     Then I log in as "user1"
     And I open my profile in edit mode
-    And I click on "Privacy Settings" "text"
+    And I expand all fieldsets
     And I set the field "id_profile_field_contactlistdd" to "No"
     And I click on "Update profile" "button"
     And I log out

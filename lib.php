@@ -26,46 +26,63 @@
 defined('MOODLE_INTERNAL') || die;
 
 /**
+ * Adds the contactlist to the course navigation
+ *
+ * @param navigation_node $parentnode
+ * @param stdClass $course
+ * @param context_course $context
+ * @return void
+ * @throws coding_exception
+ * @throws moodle_exception
+ */
+function local_contactlist_extend_navigation_course(navigation_node $parentnode, stdClass $course, context_course $context) {
+    if (!has_capability('local/contactlist:view', $context)) {
+        return;
+    }
+
+    $url = new moodle_url('/local/contactlist/studentview.php', array('id' => $course->id));
+    $title = get_string('nodename', 'local_contactlist');
+    $pix = new pix_icon('t/addcontact', $title);
+    $childnode = navigation_node::create($title, $url, navigation_node::TYPE_SETTING, 'contactlist',
+        'contactlist', $pix);
+
+    $node = $parentnode->add_node($childnode);
+    $node->nodetype = navigation_node::TYPE_SETTING;
+}
+
+/**
  * This function extends the navigation with the contactlist item
  *
  * @param navigation_node $navigation
  */
 function local_contactlist_extend_navigation($navigation) {
-    global $USER, $PAGE, $DB;
+    global $USER, $PAGE, $DB, $CFG;
 
-    if (empty($USER->id)) {
+    if (empty($USER->id) || $CFG->version >= 2022041900) {
         return;
     }
 
     if ('admin-index' === $PAGE->pagetype) {
-        $exists = $DB->record_exists('capabilities', array('name' => 'local/contactlist:view'));
-
-        if (!$exists) {
+        if (!($DB->record_exists('capabilities', array('name' => 'local/contactlist:view')))) {
             return;
         }
     }
 
     $context = context::instance_by_id($PAGE->context->id);
-    $isvalidcontext = ($context instanceof context_course || $context instanceof context_module);
-    if (!$isvalidcontext) {
+    if (!($context instanceof context_course || $context instanceof context_module)) {
         return;
     }
 
-    $coursecontext = null;
-    if ($context instanceof context_module) {
-        $coursecontext = $context->get_course_context();
-    } else {
-        $coursecontext = $context;
-    }
-
+    $coursecontext = $context instanceof context_module ? $context->get_course_context() : $context;
     if (!has_capability('local/contactlist:view', $coursecontext, $USER)) {
         return;
     }
 
-    $params = array();
-    $params['name'] = 'Privacy Settings';
-    $params['shortname'] = 'conlistcoursevis';
-    $params['instanceid'] = $coursecontext->instanceid;
+    $params = [
+        'name' => 'Privacy Settings',
+        'shortname' => 'conlistcoursevis',
+        'instanceid' => $coursecontext->instanceid
+    ];
 
     $sql = "SELECT cfd.intvalue FROM {customfield_data} cfd
               JOIN {customfield_field} cff ON cfd.fieldid = cff.id
@@ -84,6 +101,7 @@ function local_contactlist_extend_navigation($navigation) {
             if (empty($mycoursesnode)) {
                 continue;
             }
+
             $beforekey = null;
             $participantsnode = $mycoursesnode->find('participants', navigation_node::TYPE_CONTAINER);
             if ($participantsnode) { // Add the navnode after participants.
