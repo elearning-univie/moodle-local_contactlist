@@ -23,7 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use context;
 use core_user\output\status_field;
 
 defined('MOODLE_INTERNAL') || die;
