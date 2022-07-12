@@ -36,7 +36,28 @@ defined('MOODLE_INTERNAL') || die;
  * @throws moodle_exception
  */
 function local_contactlist_extend_navigation_course(navigation_node $parentnode, stdClass $course, context_course $context) {
+    global $DB;
+
     if (!has_capability('local/contactlist:view', $context)) {
+        return;
+    }
+
+    $params = [
+        'name' => 'Privacy Settings',
+        'shortname' => 'conlistcoursevis',
+        'instanceid' => $context->instanceid
+    ];
+
+    $sql = "SELECT cfd.intvalue FROM {customfield_data} cfd
+              JOIN {customfield_field} cff ON cfd.fieldid = cff.id
+              JOIN {customfield_category} cfc ON cff.categoryid = cfc.id
+             WHERE cfc.name = :name
+               AND cff.shortname = :shortname
+               AND cfd.instanceid = :instanceid";
+
+    $customfielddatavalue = $DB->get_field_sql($sql, $params);
+
+    if ($customfielddatavalue == 2) {
         return;
     }
 

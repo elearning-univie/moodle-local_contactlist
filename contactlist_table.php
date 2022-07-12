@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die;
 global $CFG;
 
 require_once($CFG->libdir . '/tablelib.php');
-require_once($CFG->dirroot . '/local/contactlist/locallib.php');
+require_once(__DIR__ . '/locallib.php');
 
 /**
  * Class for the displaying the participants table.
@@ -73,7 +73,6 @@ class contactlist_table extends \table_sql {
      * @param int $courseid
      */
     public function __construct($courseid) {
-
         parent::__construct('user-index-participants-' . $courseid);
 
         // Get the context.
@@ -82,31 +81,21 @@ class contactlist_table extends \table_sql {
         $this->context = $context;
 
         // Define the headers and columns.
-        $headers = [];
-        $columns = [];
-
-        $headers[] = get_string('fullname');
-        $columns[] = 'fullname';
-
-        $extrafields = local_contactlist_get_extra_user_fields_contactlist($context);
-
-        foreach ($extrafields as $field) {
-            if ($field == 'chat') {
-                $headers[] = get_string('chat', 'local_contactlist');
-                $columns[] = $field;
-            }
-            if ($field == 'email') {
-                $headers[] = \core_user\fields::get_display_name($field);
-                $columns[] = $field;
-            }
-        }
+        $headers = [
+            get_string('fullname'),
+            get_string('chat', 'local_contactlist'),
+            \core_user\fields::get_display_name('email')
+        ];
+        $columns = [
+            'fullname',
+            'chat',
+            'email'
+        ];
 
         $this->define_columns($columns);
         $this->define_headers($headers);
-
         $this->set_attribute('id', 'contactlist');
-
-        $this->extrafields = $extrafields;
+        $this->extrafields = ['chat', 'email'];
 
         $this->column_style('fullname', 'width', '20%');
         $this->column_style('fullname', 'white-space', 'nowrap');
@@ -158,7 +147,6 @@ class contactlist_table extends \table_sql {
        * @param bool $useinitialsbar do you want to use the initials bar.
        */
     public function query_db($pagesize, $useinitialsbar = true) {
-
         list($twhere, $tparams) = $this->get_sql_where();
 
         $sort = $this->get_sql_sort();

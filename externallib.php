@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/externallib.php');
-require_once($CFG->dirroot . '/local/contactlist/locallib.php');
+require_once(__DIR__ . '/locallib.php');
 
 /**
  * Class local_contactlist_external
