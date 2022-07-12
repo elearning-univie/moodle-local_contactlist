@@ -27,8 +27,8 @@ namespace local_contactlist\form;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->libdir.'/formslib.php');
-require_once($CFG->dirroot.'/local/contactlist/locallib.php');
+require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->dirroot . '/local/contactlist/locallib.php');
 
 /**
  * Form to update local course contactlist visibility
@@ -52,8 +52,8 @@ class contactlist_form extends \moodleform {
         $mform = $this->_form;
 
         $options = array(
-            1 => CONTACTLIST_VISIBLE,
-            2 => CONTACTLIST_INVISIBLE
+            1 => get_string('visible', 'local_contactlist'),
+            2 => get_string('invisible', 'local_contactlist')
         );
 
         $visib = local_contactlist_courselevel_visibility($USER->id, $courseid);
