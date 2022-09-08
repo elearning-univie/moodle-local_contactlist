@@ -46,7 +46,7 @@ function local_contactlist_get_total_visible(int $courseid) {
                      WHERE course.id = :cid
                     ) join1
               WHERE (join1.data IS NULL AND visib = 1)
-                 OR (join1.data LIKE 'NO' AND visib = 1)
+                 OR (join1.data LIKE 'No' AND visib = 1)
                  OR (join1.data LIKE 'Yes' AND visib IS NULL)
                  OR (join1.data LIKE 'Yes' AND visib = 1)";
 
@@ -153,7 +153,7 @@ function local_contactlist_get_list($courseid, $additionalwhere = '', $additiona
                   ) join1 ";
 
     $where1 = "WHERE ((join1.data IS NULL AND visib = 1)
-                  OR (join1.data LIKE 'NO' AND visib = 1)
+                  OR (join1.data LIKE 'No' AND visib = 1)
                   OR (join1.data LIKE 'Yes' AND visib IS NULL)
                   OR (join1.data LIKE 'Yes' AND visib = 1)) ";
 
