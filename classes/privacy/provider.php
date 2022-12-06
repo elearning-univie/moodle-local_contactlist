@@ -22,7 +22,13 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace local_contactlist\privacy;
+
 use core_privacy\local\metadata\collection;
+use core_privacy\local\request\contextlist;
+use core_privacy\local\request\helper;
+use core_privacy\local\request\userlist;
+use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\writer;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -30,14 +36,10 @@ defined('MOODLE_INTERNAL') || die();
  * The local_contactlist module does store data.
  *
  * @package       local_contactlist
- * @author        Angela Baier
  * @copyright     2020 University of Vienna
  * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements
-// This plugin has data.
-\core_privacy\local\metadata\provider
-
+class provider implements \core_privacy\local\metadata\provider
 {
     /**
      * Database info.
@@ -102,7 +104,6 @@ class provider implements
      * @param userlist $userlist
      */
     public static function get_users_in_context(userlist $userlist) {
-
         $context = $userlist->get_context();
 
         $params = [
@@ -119,7 +120,7 @@ class provider implements
         }
 
         if ($context->contextlevel == CONTEXT_USER) {
-            $sql = "SELECT ctl.userid
+            $sql = "SELECT uid.userid
                     FROM {user_info_data} uid
                     WHERE uid.userid = :instanceid";
 
@@ -137,9 +138,7 @@ class provider implements
             return;
         }
 
-        list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
         $user = $contextlist->get_user();
-
         $contexts = $contextlist->get_contexts();
 
         foreach ($contexts as $context) {
@@ -148,19 +147,19 @@ class provider implements
                     'instanceid'    => $context->instanceid,
                     'userid' => $user->id,
                 ];
-                $sql = "SELECT ctl
+                $sql = "SELECT courseid, userid, visib
                     FROM {local_contactlist_course_vis} ctl
                     WHERE ctl.courseid = :instanceid
                     AND ctl.userid = :userid";
-                $data = $DB->$params($sql, $params);
-                writer::with_context($context)->export_data($context, $data);
+                $data = $DB->get_records_sql($sql, $params);
+                writer::with_context($context)->export_data([], (object) $data);
             }
             if ($context->contextlevel == CONTEXT_USER) {
-                $sql = "SELECT uid
-                    FROM FROM {user_info_data} uid
+                $sql = "SELECT userid, fieldid, data, dataformat
+                    FROM {user_info_data} uid
                     WHERE uid.userid = :instanceid";
-                $data = $DB->$params($sql, ['instanceid' => $context->instanceid]);
-                writer::with_context($context)->export_data($context, $data);
+                $data = $DB->get_records_sql($sql, ['instanceid' => $context->instanceid]);
+                writer::with_context($context)->export_data([], (object) $data);
             }
         }
     }
@@ -171,14 +170,9 @@ class provider implements
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
-        $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
-        $userid = $contextlist->get_user()->id;
 
         if ($context->contextlevel == CONTEXT_COURSE) {
-            $DB->delete_records('local_contactlist_course_vis', ['courseid' => $context->instanceid, 'userid' => $userid]);
-        }
-        if ($context->contextlevel == CONTEXT_USER) {
-            $DB->delete_records('user_info_data', ['fieldid' => $globalinfofield->id, 'userid' => $userid]);
+            $DB->delete_records('local_contactlist_course_vis', ['courseid' => $context->instanceid]);
         }
     }
 
@@ -205,5 +199,4 @@ class provider implements
             }
         }
     }
-
 }

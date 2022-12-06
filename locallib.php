@@ -18,7 +18,6 @@
  * This file contains functions used by the local contactlist plugin.
  *
  * @package    local_contactlist
- * @author     Angela Baier
  * @copyright  2020 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -126,9 +125,12 @@ function local_contactlist_courselevel_visibility($userid, $courseid) {
  * @param int $courseid The course id
  * @param string $additionalwhere Any additional SQL to add to where
  * @param array $additionalparams The additional params
+ * @param string $sort Optional SQL sort.
+ * @param int $limitfrom Return a subset of records, starting at this point (optional).
+ * @param int $limitnum Return a subset comprising this many records (optional, required if $limitfrom is set).
  * @return moodle_recordset
  */
-function local_contactlist_get_list($courseid, $additionalwhere = '', $additionalparams = array()) {
+function local_contactlist_get_list($courseid, $additionalwhere = '', $additionalparams = array(), $sort = '', $limitfrom = 0, $limitnum = 0) {
     global $DB;
 
     $wheres = array();
@@ -168,9 +170,8 @@ function local_contactlist_get_list($courseid, $additionalwhere = '', $additiona
     }
 
     $where = $where1 . $where2;
-    $sort = "ORDER BY join1.lastname ASC";
 
-    return $DB->get_recordset_sql("$select $from $where $sort", $params);
+    return $DB->get_recordset_sql("$select $from $where $sort", $params, $limitfrom, $limitnum);
 }
 
 /**

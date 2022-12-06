@@ -18,12 +18,9 @@
  * Contains the class used for the displaying the participants table.
  *
  * @package    local_contactlist
- * @author     Angela Baier
  * @copyright  2020 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use core_user\output\status_field;
 
 defined('MOODLE_INTERNAL') || die;
 
@@ -36,7 +33,6 @@ require_once(__DIR__ . '/locallib.php');
  * Class for the displaying the participants table.
  *
  * @package    local_contactlist
- * @author     Angela Baier
  * @copyright  2020 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -48,19 +44,9 @@ class contactlist_table extends \table_sql {
     protected $courseid;
 
     /**
-     * @var string $search The string being searched.
-     */
-    protected $search;
-
-    /**
      * @var string[] Extra fields to display.
      */
     protected $extrafields;
-
-    /**
-     * @var \stdClass $course The course details.
-     */
-    protected $course;
 
     /**
      * @var  context $context The course context.
@@ -74,33 +60,42 @@ class contactlist_table extends \table_sql {
      */
     public function __construct($courseid) {
         parent::__construct('user-index-participants-' . $courseid);
+        global $CFG;
+
+        // Define the headers and columns.
+        $headers = [];
+        $columns = [];
+        $extrafields = [];
 
         // Get the context.
-        $this->course = get_course($courseid);
+        $this->courseid = $courseid;
         $context = \context_course::instance($courseid, MUST_EXIST);
         $this->context = $context;
 
-        // Define the headers and columns.
-        $headers = [
-            get_string('fullname'),
-            get_string('chat', 'local_contactlist'),
-            \core_user\fields::get_display_name('email')
-        ];
-        $columns = [
-            'fullname',
-            'chat',
-            'email'
-        ];
+        $headers[] = get_string('fullname');
+        $columns[] = 'fullname';
+
+        if (!empty($CFG->messaging)) {
+            $headers[] = get_string('chat', 'local_contactlist');
+            $columns[] = 'chat';
+            $extrafields[] = 'chat';
+
+            $this->column_class('chat', 'contactlist_studentview_cc');
+            $this->no_sorting('chat');
+        }
+
+        $headers[] = \core_user\fields::get_display_name('email');
+        $columns[] = 'email';
+        $extrafields[] = 'email';
 
         $this->define_columns($columns);
         $this->define_headers($headers);
         $this->set_attribute('id', 'contactlist');
-        $this->extrafields = ['chat', 'email'];
+        $this->extrafields = $extrafields;
 
-        $this->column_style('fullname', 'width', '20%');
-        $this->column_style('fullname', 'white-space', 'nowrap');
-        $this->column_style('chat', 'width', '10%');
-        $this->column_style('chat', 'white-space', 'nowrap');
+        $this->column_class('fullname', 'contactlist_studentview_fnc');
+
+        $this->sortable(true, 'lastname');
     }
 
     /**
@@ -112,7 +107,7 @@ class contactlist_table extends \table_sql {
     public function col_fullname($data) {
         global $OUTPUT;
 
-        return $OUTPUT->user_picture($data, array('size' => 35, 'courseid' => $this->course->id, 'includefullname' => true));
+        return $OUTPUT->user_picture($data, array('size' => 35, 'courseid' => $this->courseid, 'includefullname' => true));
     }
 
     /**
@@ -149,25 +144,22 @@ class contactlist_table extends \table_sql {
     public function query_db($pagesize, $useinitialsbar = true) {
         list($twhere, $tparams) = $this->get_sql_where();
 
+        $total = local_contactlist_get_total_visible($this->courseid);
+
+        $this->pagesize($pagesize, $total);
+
         $sort = $this->get_sql_sort();
         if ($sort) {
             $sort = 'ORDER BY ' . $sort;
         }
 
-        $rawdata = local_contactlist_get_list($this->course->id, $twhere, $tparams);
+        $rawdata = local_contactlist_get_list($this->courseid, $twhere, $tparams, $sort, $this->get_page_start(), $this->get_page_size());
         $this->rawdata = [];
 
         foreach ($rawdata as $user) {
             $this->rawdata[$user->id] = $user;
         }
         $rawdata->close();
-
-        if ($this->rawdata) {
-            $this->allroleassignments = get_users_roles($this->context, array_keys($this->rawdata),
-                    true, 'c.contextlevel DESC, r.sortorder ASC');
-        } else {
-            $this->allroleassignments = [];
-        }
 
         // Set initial bars.
         if ($useinitialsbar) {

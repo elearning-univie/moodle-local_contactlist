@@ -1,4 +1,4 @@
-@local @local_contactlist @current
+@local @local_contactlist
 
 Feature: Possibility to disable visibility in contact list
   As a user
@@ -42,6 +42,6 @@ Feature: Possibility to disable visibility in contact list
     And I am on "Course 1" course homepage
     And I follow "Contactlist"
     And I follow "Change your moodle-wide contactlist visibility setting HERE."
-    And I switch to the browser tab opened by the app
+    And I switch to a second window
     And I expand all fieldsets
     Then the field "id_profile_field_contactlistdd" matches value "No"
