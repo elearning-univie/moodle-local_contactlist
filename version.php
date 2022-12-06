@@ -19,15 +19,17 @@
  *
  * @package       local_contactlist
  * @author        Angela Baier
+ * @author        Adrian Czermak
+ * @author        Thomas Wedekind
  * @copyright     2020 University of Vienna
- * @since         Moodle 3.8+
+ * @since         Moodle 3.10+
  * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2022070401;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2022120100;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2021051700;        // Requires this Moodle version.
 $plugin->component = 'local_contactlist'; // Full name of the plugin (used for diagnostics).
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release   = "v4.0.1";
+$plugin->release   = "v4.1.0";

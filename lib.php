@@ -17,9 +17,8 @@
 /**
  * This file contains functions used by the local contactlist plugin.
  *
- * @package       local_contactlist
- * @author        Angela Baier
- * @copyright     2020 University of Vienna
+ * @package    local_contactlist
+ * @copyright  2020 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,17 +27,17 @@ defined('MOODLE_INTERNAL') || die;
 /**
  * Adds the contactlist to the course navigation
  *
- * @param navigation_node $parentnode
+ * @param navigation_node $navigation
  * @param stdClass $course
  * @param context_course $context
  * @return void
  * @throws coding_exception
  * @throws moodle_exception
  */
-function local_contactlist_extend_navigation_course(navigation_node $parentnode, stdClass $course, context_course $context) {
-    global $DB;
+function local_contactlist_extend_navigation_course(navigation_node $navigation, stdClass $course, context_course $context) {
+    global $DB, $CFG;
 
-    if (!has_capability('local/contactlist:view', $context)) {
+    if (!has_capability('local/contactlist:view', $context) || $CFG->version < 2022041900) {
         return;
     }
 
@@ -64,11 +63,10 @@ function local_contactlist_extend_navigation_course(navigation_node $parentnode,
     $url = new moodle_url('/local/contactlist/studentview.php', array('id' => $course->id));
     $title = get_string('nodename', 'local_contactlist');
     $pix = new pix_icon('t/addcontact', $title);
-    $childnode = navigation_node::create($title, $url, navigation_node::TYPE_SETTING, 'contactlist',
+    $newnode = navigation_node::create($title, $url, navigation_node::TYPE_SETTING, 'contactlist',
         'contactlist', $pix);
 
-    $node = $parentnode->add_node($childnode);
-    $node->nodetype = navigation_node::TYPE_SETTING;
+    $navigation->add_node($newnode);
 }
 
 /**
@@ -158,13 +156,12 @@ function local_contactlist_extend_navigation($navigation) {
             $childnode = navigation_node::create($title, $url, navigation_node::TYPE_CUSTOM, 'contactlist', 'contactlist', $pix);
 
             if (($mycoursesnode !== false && $mycoursesnode->has_children())) {
-                $currentcourseinmycourses = $mycoursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
-                if ($currentcourseinmycourses) {
-                    $currentcourseinmycourses->add_node($childnode, $beforekey);
+                $currentcoursenode = $mycoursesnode->find($coursecontext->instanceid, navigation_node::TYPE_COURSE);
+                if ($currentcoursenode) {
+                    $currentcoursenode->add_node($childnode, $beforekey);
                     break;
                 }
             }
         }
     }
 }
-

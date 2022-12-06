@@ -10,14 +10,14 @@ variables:
   DOCKER_TLS_CERTDIR: ""
 
 services:
-  - postgres:11
+  - postgres:12
   - mariadb:10.4-bionic
   - docker:dind
 
-test:
+code_checker:
   image: amcdev/moodle-plugin-ci:7.4-n.16
   variables:
-    MOODLE_BRANCH: "MOODLE_400_STABLE"
+    MOODLE_BRANCH: "MOODLE_401_STABLE"
   before_script:
     - cd ../..
     - echo $DB_HOST $DB_PASSWORD

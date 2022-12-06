@@ -18,7 +18,6 @@
  * Contactlist Student view
  *
  * @package    local_contactlist
- * @author     Angela Baier
  * @copyright  2020 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -36,8 +35,6 @@ $page         = optional_param('page', 0, PARAM_INT);
 $perpage      = optional_param('perpage', 20, PARAM_INT);
 $contextid    = optional_param('contextid', 0, PARAM_INT);
 $courseid     = optional_param('id', 0, PARAM_INT);
-$filtersapplied = optional_param_array('unified-filters', [], PARAM_NOTAGS);
-$filterwassubmitted = optional_param('unified-filter-submitted', 0, PARAM_BOOL);
 
 $PAGE->set_url(new moodle_url('/local/contactlist/studentview.php', array(
     'page' => $page,
@@ -73,18 +70,9 @@ $customfieldfield = $DB->get_record('customfield_field',
 $customfielddata = $DB->get_record('customfield_data',
                    array('fieldid' => $customfieldfield->id, 'instanceid' => $context->instanceid));
 
-if ($customfielddata) {
-    if ($customfielddata->intvalue == 2) {
-        echo $OUTPUT->header();
-        echo $OUTPUT->heading(get_string('errorlistnotshown', 'local_contactlist'));
-        echo $OUTPUT->footer();
-        die();
-    }
-}
-
-if (!has_capability('local/contactlist:view', $context)) {
+if (($customfielddata && $customfielddata->intvalue == 2) || !has_capability('local/contactlist:view', $context)) {
     echo $OUTPUT->header();
-    echo $OUTPUT->heading(get_string('errornotallowedonpage', 'local_contactlist'));
+    echo $OUTPUT->heading(get_string('errorlistnotshown', 'local_contactlist'));
     echo $OUTPUT->footer();
     die();
 }
@@ -97,23 +85,15 @@ if ($isfrontpage) {
     course_require_view_participants($systemcontext);
 } else {
     $PAGE->set_pagelayout('incourse');
-    if (!has_capability('local/contactlist:view', $context) ) {
-        echo $OUTPUT->header();
-        echo $OUTPUT->heading(get_string('errornotallowedonpage', 'local_contactlist'));
-        echo $OUTPUT->footer();
-        die();
-    }
 }
 
 $PAGE->set_pagetype('course-view-' . $course->format);
-
 if ($node) {
     $node->force_open();
 }
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading($pagetitle);
-
 echo html_writer::tag('br', null);
 $mform = new \local_contactlist\form\contactlist_form();
 $formdata = $mform->get_data();
@@ -128,63 +108,13 @@ echo $localvsglobal;
 
 $mform->display();
 
-$hasgroupfilter = false;
-$lastaccess = 0;
-$searchkeywords = [];
-$enrolid = 0;
-$status = -1;
-foreach ($filtersapplied as $filter) {
-    $filtervalue = explode(':', $filter, 2);
-    $value = null;
-    if (count($filtervalue) == 2) {
-        $key = clean_param($filtervalue[0], PARAM_INT);
-        $value = clean_param($filtervalue[1], PARAM_INT);
-    } else {
-        // Search string.
-        $key = USER_FILTER_STRING;
-        $value = clean_param($filtervalue[0], PARAM_TEXT);
-    }
-
-    switch ($key) {
-        case USER_FILTER_ENROLMENT:
-            $enrolid = $value;
-            break;
-        case USER_FILTER_GROUP:
-            $groupid = $value;
-            $hasgroupfilter = true;
-            break;
-        case USER_FILTER_LAST_ACCESS:
-            $lastaccess = $value;
-            break;
-        case USER_FILTER_ROLE:
-            $roleid = $value;
-            break;
-        case USER_FILTER_STATUS:
-            // We only accept active/suspended statuses.
-            if ($value == ENROL_USER_ACTIVE || $value == ENROL_USER_SUSPENDED) {
-                $status = $value;
-            }
-            break;
-        default:
-            // Search string.
-            $searchkeywords[] = $value;
-            break;
-    }
-}
-
 $perpage = 20;
 $baseurl = new moodle_url('/local/contactlist/studentview.php', array(
     'contextid' => $context->id,
     'id' => $courseid,
     'perpage' => $perpage));
-$participanttable = new contactlist_table($courseid, $searchkeywords);
+$participanttable = new contactlist_table($courseid);
 $participanttable->define_baseurl($baseurl);
-
-// Do this so we can get the total number of rows.
-ob_start();
-$participanttable->out($perpage, true);
-$participanttablehtml = ob_get_contents();
-ob_end_clean();
 
 $visibleno = local_contactlist_get_total_visible($courseid);
 $totalno = local_contactlist_get_total_course($courseid);
@@ -192,5 +122,5 @@ $visbilityinfo = get_string('totalvsvisible', 'local_contactlist', ['visible' =>
 
 echo html_writer::tag('br', null);
 echo $visbilityinfo;
-echo $participanttablehtml;
+$participanttable->out($perpage, true);
 echo $OUTPUT->footer();
