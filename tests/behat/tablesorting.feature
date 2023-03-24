@@ -24,13 +24,13 @@ Feature: Contactlist can be sorted
     Given I log in as "teacher1"
     And I am on the "local_contactlist > C1" page
     Then the following should exist in the "contactlist" table:
-      | First name / Surname | Email address |
+      | First name / Last name | Email address |
       | Annie Edison | student1@example.com |
       | George Bradley | student2@example.com |
       | Travis Sutcliff | student3@example.com |
     And "George Bradley" "table_row" should appear before "Annie Edison" "table_row"
     And "Annie Edison" "table_row" should appear before "Travis Sutcliff" "table_row"
-    And I follow "Surname"
+    And I follow "Last name"
     And "Annie Edison" "table_row" should appear before "George Bradley" "table_row"
     And "Travis Sutcliff" "table_row" should appear before "Annie Edison" "table_row"
     And I follow "First name"
