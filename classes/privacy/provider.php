@@ -24,8 +24,8 @@
 namespace local_contactlist\privacy;
 
 use core_privacy\local\metadata\collection;
+use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
-use core_privacy\local\request\helper;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\writer;
@@ -39,7 +39,16 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright     2020 University of Vienna
  * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements \core_privacy\local\metadata\provider
+class provider implements
+// This plugin has data.
+\core_privacy\local\metadata\provider,
+
+// This plugin currently implements the original plugin\provider interface.
+\core_privacy\local\request\plugin\provider,
+
+// This plugin is capable of determining which users have data within it.
+\core_privacy\local\request\core_userlist_provider
+
 {
     /**
      * Database info.
@@ -199,4 +208,25 @@ class provider implements \core_privacy\local\metadata\provider
             }
         }
     }
+    /**
+     * Delete multiple users within a single context.
+     *
+     * @param   approved_userlist       $userlist The approved context and user information to delete information for.
+     */
+    public static function delete_data_for_users(approved_userlist $userlist) {
+        global $DB;
+
+        $context = $userlist->get_context();
+        $globalinfofield  = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
+
+        foreach ($userlist->get_userids() as $userid) {
+            if ($context->contextlevel == CONTEXT_COURSE) {
+                $DB->delete_records('local_contactlist_course_vis', ['courseid' => $context->instanceid, 'userid' => $userid]);
+            }
+            if ($context->contextlevel == CONTEXT_USER) {
+                $DB->delete_records('user_info_data', ['fieldid' => $globalinfofield->id, 'userid' => $userid]);
+            }
+        }
+    }
+
 }
