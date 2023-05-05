@@ -1,5 +1,8 @@
 # Change Log
 
+## 4.2.0
+* Moodle 4.2 compatible version
+
 ## 4.1.0
 * Fixed sorting
 * Message column will not be rendered when messaging is disabled
