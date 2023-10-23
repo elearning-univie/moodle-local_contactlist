@@ -86,6 +86,7 @@ No';
         $record->shortname = 'conlistcoursevis';
         $record->name = get_string('customcoursefieldlabel', 'local_contactlist');
         $record->type = 'select';
+        $record->description = get_string('customcoursefieldlabel', 'local_contactlist');
         $record->categoryid = $id;
         $record->sortorder = 0;
         $record->configdata =

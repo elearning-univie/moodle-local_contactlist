@@ -46,5 +46,18 @@ function xmldb_local_contactlist_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2022120100, 'local', 'contactlist');
     }
 
+    if ($oldversion < 2023101900) {
+        $table = new xmldb_table('customfield_field');
+        $field = new xmldb_field('description');
+
+        if ($dbman->field_exists($table, $field)) {
+            $customfieldfield = $DB->get_record('customfield_field', array('shortname' => 'conlistcoursevis'));
+            $customfieldfield->description = get_string('customcoursefieldlabel', 'local_contactlist');
+            $DB->update_record('customfield_field', $customfieldfield);
+        }
+
+        upgrade_plugin_savepoint(true, 2023101900, 'local', 'contactlist');
+    }
+
     return true;
 }
