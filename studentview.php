@@ -23,7 +23,6 @@
  */
 require_once(__DIR__ . '/../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->libdir.'/dataformatlib.php');
 require_once($CFG->dirroot . '/local/contactlist/locallib.php');
 require_once($CFG->dirroot . '/local/contactlist/contactlist_table.php');
 
