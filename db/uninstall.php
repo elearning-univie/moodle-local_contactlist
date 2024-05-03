@@ -25,9 +25,6 @@
  *
  **/
 
-defined('MOODLE_INTERNAL') || die();
-
-
 /**
  * Uninstall script for local contactlist plugin
  */
@@ -35,32 +32,31 @@ function xmldb_local_contactlist_uninstall() {
     global $DB;
 
     try {
-        $userinfocategory = $DB->get_record('user_info_category', array('name' => 'Privacy Settings'));
+        $userinfocategory = $DB->get_record('user_info_category', ['name' => 'Privacy Settings']);
         $id = $userinfocategory->id;
 
-        $userinfofield = $DB->get_record('user_info_field',  array('categoryid' => $id));
+        $userinfofield = $DB->get_record('user_info_field',  ['categoryid' => $id]);
         $fieldid = $userinfofield->id;
 
-        $DB->delete_records('user_info_data',  array('fieldid' => $fieldid));
+        $DB->delete_records('user_info_data',  ['fieldid' => $fieldid]);
 
-        $DB->delete_records('user_info_field',  array('categoryid' => $id));
+        $DB->delete_records('user_info_field',  ['categoryid' => $id]);
 
-        $DB->delete_records('user_info_category', array('name' => 'Privacy Settings'));
+        $DB->delete_records('user_info_category', ['name' => 'Privacy Settings']);
 
-        $coursecategory = $DB->get_record('customfield_category', array('name' => 'Privacy Settings'));
+        $coursecategory = $DB->get_record('customfield_category', ['name' => 'Privacy Settings']);
         $id = $coursecategory->id;
 
-        $coursefield = $DB->get_record('customfield_field',  array('categoryid' => $id));
+        $coursefield = $DB->get_record('customfield_field',  ['categoryid' => $id]);
         $fieldid = $coursefield->id;
 
-        $DB->delete_records('customfield_data',  array('fieldid' => $fieldid));
+        $DB->delete_records('customfield_data',  ['fieldid' => $fieldid]);
 
-        $DB->delete_records('customfield_field',  array('categoryid' => $id));
+        $DB->delete_records('customfield_field',  ['categoryid' => $id]);
 
-        $DB->delete_records('customfield_category', array('name' => 'Privacy Settings'));
+        $DB->delete_records('customfield_category', ['name' => 'Privacy Settings']);
 
     } catch (\Throwable $e) {
         echo "$e->getMessage()";
     }
-
 }

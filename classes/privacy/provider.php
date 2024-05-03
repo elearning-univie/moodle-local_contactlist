@@ -30,8 +30,6 @@ use core_privacy\local\request\userlist;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\writer;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The local_contactlist module does store data.
  *
@@ -47,16 +45,14 @@ class provider implements
 \core_privacy\local\request\plugin\provider,
 
 // This plugin is capable of determining which users have data within it.
-\core_privacy\local\request\core_userlist_provider
-
-{
+\core_privacy\local\request\core_userlist_provider {
     /**
      * Database info.
      *
      * @param collection $collection
      * @return collection
      */
-    public static function get_metadata(collection $collection) : collection {
+    public static function get_metadata(collection $collection): collection {
 
         $collection->add_database_table(
             'user_info_data',
@@ -84,7 +80,7 @@ class provider implements
      * @param int $userid the userid.
      * @return contextlist the list of contexts containing user info for the user.
      */
-    public static function get_contexts_for_userid(int $userid) : contextlist {
+    public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
 
         // Local plugin visibility settings.
@@ -228,5 +224,4 @@ class provider implements
             }
         }
     }
-
 }

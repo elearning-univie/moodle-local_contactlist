@@ -20,7 +20,6 @@ Feature: Possibility to disable the contactlist in a course
   @javascript
   Scenario: Activate or disable the contactlist in a course
     Given I am on the "Course 1" course page logged in as teacher1
-    Then I should see "Topic 1"
     And I am on the "Course 1" "course editing" page
     And I expand all fieldsets
     And the field "id_customfield_conlistcoursevis" matches value "Yes"

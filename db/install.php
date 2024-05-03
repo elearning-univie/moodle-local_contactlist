@@ -25,8 +25,6 @@
  *
  **/
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Code run after the contactlist module database tables have been created.
  */
@@ -34,7 +32,7 @@ function xmldb_local_contactlist_install() {
     global $DB;
 
     try {
-        $userinfocategory = $DB->get_record('user_info_category', array('name' => 'Privacy Settings'));
+        $userinfocategory = $DB->get_record('user_info_category', ['name' => 'Privacy Settings']);
         if (!$userinfocategory) {
             $record = new stdClass();
             $record->name = 'Privacy Settings';
@@ -43,7 +41,7 @@ function xmldb_local_contactlist_install() {
             $id = $userinfocategory->id;
         }
 
-        $userinfofield = $DB->get_record('user_info_field', array('categoryid' => $id, 'shortname' => 'contactlistdd'));
+        $userinfofield = $DB->get_record('user_info_field', ['categoryid' => $id, 'shortname' => 'contactlistdd']);
 
         if (!$userinfofield) {
             $record = new stdClass();
@@ -64,7 +62,7 @@ No';
         echo "$e->getMessage()";
     }
 
-    $customfieldcategory = $DB->get_record('customfield_category', array('name' => 'Privacy Settings'));
+    $customfieldcategory = $DB->get_record('customfield_category', ['name' => 'Privacy Settings']);
     if (!$customfieldcategory) {
         $record = new stdClass();
         $record->name = 'Privacy Settings';
@@ -79,7 +77,7 @@ No';
         $id = $customfieldcategory->id;
     }
 
-    $customfieldfield = $DB->get_record('customfield_field', array('shortname' => 'conlistcoursevis'));
+    $customfieldfield = $DB->get_record('customfield_field', ['shortname' => 'conlistcoursevis']);
 
     if (!$customfieldfield) {
         $record = new stdClass();

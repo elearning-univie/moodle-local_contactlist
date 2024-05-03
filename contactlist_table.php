@@ -107,7 +107,7 @@ class contactlist_table extends \table_sql {
     public function col_fullname($data) {
         global $OUTPUT;
 
-        return $OUTPUT->user_picture($data, array('size' => 35, 'courseid' => $this->courseid, 'includefullname' => true));
+        return $OUTPUT->user_picture($data, ['size' => 35, 'courseid' => $this->courseid, 'includefullname' => true]);
     }
 
     /**
@@ -153,7 +153,8 @@ class contactlist_table extends \table_sql {
             $sort = 'ORDER BY ' . $sort;
         }
 
-        $rawdata = local_contactlist_get_list($this->courseid, $twhere, $tparams, $sort, $this->get_page_start(), $this->get_page_size());
+        $rawdata = local_contactlist_get_list(
+            $this->courseid, $twhere, $tparams, $sort, $this->get_page_start(), $this->get_page_size());
         $this->rawdata = [];
 
         foreach ($rawdata as $user) {

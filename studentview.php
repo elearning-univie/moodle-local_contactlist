@@ -35,20 +35,21 @@ $perpage      = optional_param('perpage', 20, PARAM_INT);
 $contextid    = optional_param('contextid', 0, PARAM_INT);
 $courseid     = optional_param('id', 0, PARAM_INT);
 
-$PAGE->set_url(new moodle_url('/local/contactlist/studentview.php', array(
+$PAGE->set_url(new moodle_url('/local/contactlist/studentview.php', [
     'page' => $page,
     'perpage' => $perpage,
     'contextid' => $contextid,
-    'id' => $courseid)));
+    'id' => $courseid,
+]));
 
 if ($contextid) {
     $context = context::instance_by_id($contextid, MUST_EXIST);
     if ($context->contextlevel != CONTEXT_COURSE) {
         throw new moodle_exception('invalidcontext');
     }
-    $course = $DB->get_record('course', array('id' => $context->instanceid), '*', MUST_EXIST);
+    $course = $DB->get_record('course', ['id' => $context->instanceid], '*', MUST_EXIST);
 } else {
-    $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+    $course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
     $context = context_course::instance($course->id, MUST_EXIST);
 }
 
@@ -63,11 +64,11 @@ if ($node) {
     $node->make_active();
 }
 
-$customfieldcategory = $DB->get_record('customfield_category', array('name' => 'Privacy Settings'));
+$customfieldcategory = $DB->get_record('customfield_category', ['name' => 'Privacy Settings']);
 $customfieldfield = $DB->get_record('customfield_field',
-                    array('categoryid' => $customfieldcategory->id, 'shortname' => 'conlistcoursevis'));
+                    ['categoryid' => $customfieldcategory->id, 'shortname' => 'conlistcoursevis']);
 $customfielddata = $DB->get_record('customfield_data',
-                   array('fieldid' => $customfieldfield->id, 'instanceid' => $context->instanceid));
+                   ['fieldid' => $customfieldfield->id, 'instanceid' => $context->instanceid]);
 
 if (($customfielddata && $customfielddata->intvalue == 2) || !has_capability('local/contactlist:view', $context)) {
     echo $OUTPUT->header();
@@ -107,10 +108,11 @@ echo $localvsglobal;
 $mform->display();
 
 $perpage = 20;
-$baseurl = new moodle_url('/local/contactlist/studentview.php', array(
+$baseurl = new moodle_url('/local/contactlist/studentview.php', [
     'contextid' => $context->id,
     'id' => $courseid,
-    'perpage' => $perpage));
+    'perpage' => $perpage,
+]);
 $participanttable = new contactlist_table($courseid);
 $participanttable->define_baseurl($baseurl);
 
