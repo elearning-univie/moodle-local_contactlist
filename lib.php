@@ -22,8 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Adds the contactlist to the course navigation
  *
@@ -44,7 +42,7 @@ function local_contactlist_extend_navigation_course(navigation_node $navigation,
     $params = [
         'name' => 'Privacy Settings',
         'shortname' => 'conlistcoursevis',
-        'instanceid' => $context->instanceid
+        'instanceid' => $context->instanceid,
     ];
 
     $sql = "SELECT cfd.intvalue FROM {customfield_data} cfd
@@ -60,7 +58,7 @@ function local_contactlist_extend_navigation_course(navigation_node $navigation,
         return;
     }
 
-    $url = new moodle_url('/local/contactlist/studentview.php', array('id' => $course->id));
+    $url = new moodle_url('/local/contactlist/studentview.php', ['id' => $course->id]);
     $title = get_string('nodename', 'local_contactlist');
     $pix = new pix_icon('t/addcontact', $title);
     $newnode = navigation_node::create($title, $url, navigation_node::TYPE_SETTING, 'contactlist',
@@ -82,7 +80,7 @@ function local_contactlist_extend_navigation($navigation) {
     }
 
     if ('admin-index' === $PAGE->pagetype) {
-        if (!($DB->record_exists('capabilities', array('name' => 'local/contactlist:view')))) {
+        if (!($DB->record_exists('capabilities', ['name' => 'local/contactlist:view']))) {
             return;
         }
     }
@@ -100,7 +98,7 @@ function local_contactlist_extend_navigation($navigation) {
     $params = [
         'name' => 'Privacy Settings',
         'shortname' => 'conlistcoursevis',
-        'instanceid' => $coursecontext->instanceid
+        'instanceid' => $coursecontext->instanceid,
     ];
 
     $sql = "SELECT cfd.intvalue FROM {customfield_data} cfd
@@ -113,8 +111,10 @@ function local_contactlist_extend_navigation($navigation) {
     $customfielddatavalue = $DB->get_field_sql($sql, $params);
 
     if (!$customfielddatavalue || $customfielddatavalue == 1) {
-        $rootnodes = array($navigation->find('mycourses', navigation_node::TYPE_ROOTNODE),
-            $navigation->find('courses', navigation_node::TYPE_ROOTNODE));
+        $rootnodes = [
+            $navigation->find('mycourses', navigation_node::TYPE_ROOTNODE),
+            $navigation->find('courses', navigation_node::TYPE_ROOTNODE),
+        ];
 
         foreach ($rootnodes as $mycoursesnode) {
             if (empty($mycoursesnode)) {
@@ -150,7 +150,7 @@ function local_contactlist_extend_navigation($navigation) {
                 }
             }
 
-            $url = new moodle_url('/local/contactlist/studentview.php', array('id' => $coursecontext->instanceid));
+            $url = new moodle_url('/local/contactlist/studentview.php', ['id' => $coursecontext->instanceid]);
             $title = get_string('nodename', 'local_contactlist');
             $pix = new pix_icon('t/addcontact', $title);
             $childnode = navigation_node::create($title, $url, navigation_node::TYPE_CUSTOM, 'contactlist', 'contactlist', $pix);

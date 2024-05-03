@@ -40,7 +40,7 @@ class behat_local_contactlist extends behat_base {
      * @param string $name Course name.
      * @return moodle_url the corresponding URL.
      */
-    protected function resolve_page_url(string $name) : moodle_url {
+    protected function resolve_page_url(string $name): moodle_url {
         $courseid = $this->get_course_id($name);
         return new moodle_url('/local/contactlist/studentview.php', ['id' => $courseid]);
     }

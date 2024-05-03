@@ -22,8 +22,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Upgrade the contactlist plugin.
  *
@@ -51,13 +49,12 @@ function xmldb_local_contactlist_upgrade($oldversion) {
         $field = new xmldb_field('description');
 
         if ($dbman->field_exists($table, $field)) {
-            $customfieldfield = $DB->get_record('customfield_field', array('shortname' => 'conlistcoursevis'));
+            $customfieldfield = $DB->get_record('customfield_field', ['shortname' => 'conlistcoursevis']);
             $customfieldfield->description = get_string('customcoursefieldlabel', 'local_contactlist');
             $DB->update_record('customfield_field', $customfieldfield);
         }
 
         upgrade_plugin_savepoint(true, 2023101900, 'local', 'contactlist');
     }
-
     return true;
 }

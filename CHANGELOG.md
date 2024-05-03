@@ -1,5 +1,8 @@
 # Change Log
 
+## 4.4.0
+* Moodle 4.4 compatible Version
+
 ## 4.3.0
 * Moodle 4.3 compatible version
 

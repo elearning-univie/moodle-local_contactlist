@@ -22,8 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * get number of visible course participants from DB.
  *
@@ -113,7 +111,7 @@ function local_contactlist_courselevel_visibility($userid, $courseid) {
 
     $params = [
         'courseid' => $courseid,
-        'userid' => $userid
+        'userid' => $userid,
     ];
 
     return $DB->get_record('local_contactlist_course_vis', $params);
@@ -130,14 +128,15 @@ function local_contactlist_courselevel_visibility($userid, $courseid) {
  * @param int $limitnum Return a subset comprising this many records (optional, required if $limitfrom is set).
  * @return moodle_recordset
  */
-function local_contactlist_get_list($courseid, $additionalwhere = '', $additionalparams = array(), $sort = '', $limitfrom = 0, $limitnum = 0) {
+function local_contactlist_get_list($courseid, $additionalwhere = '', $additionalparams = [],
+                                    $sort = '', $limitfrom = 0, $limitnum = 0) {
     global $DB;
 
-    $wheres = array();
+    $wheres = [];
 
     $params = [
         'contextlevel' => CONTEXT_USER,
-        'courseid' => $courseid
+        'courseid' => $courseid,
     ];
 
     $select = "SELECT uid AS id, picture, firstname, lastname, firstnamephonetic, lastnamephonetic, middlename,
@@ -209,7 +208,7 @@ function local_contactlist_get_chat_html($userid) {
     global $PAGE;
 
     $chaturl = (string)new moodle_url("/message/index.php", ['id' => $userid]);
-    $PAGE->requires->js_call_amd('core_message/message_user_button', 'send', array('#message-user-button' . $userid));
+    $PAGE->requires->js_call_amd('core_message/message_user_button', 'send', ['#message-user-button' . $userid]);
     return html_writer::link($chaturl,
         '<span><i class="icon fa fa-comment fa-fw iconsmall"  title="Message" aria-label="Message"></i></span>',
         ['id' => 'message-user-button'.$userid, 'role' => 'button',

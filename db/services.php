@@ -23,24 +23,24 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-$services = array(
-    'localcontactlist' => array(
-        'functions' => array('localcontactlist_update_settings'),
+$services = [
+    'localcontactlist' => [
+        'functions' => ['localcontactlist_update_settings'],
         'shortname' => 'localcontactlist',
         'requiredcapability' => 'local/contactlist:view',
         'restrictedusers' => 0,
         'enabled' => 1,
-    )
-);
+    ],
+];
 
-$functions = array(
-    'localcontactlist_update_settings' => array(
+$functions = [
+    'localcontactlist_update_settings' => [
         'classname' => 'local_contactlist_external',
         'methodname' => 'update_settings',
         'classpath' => 'local/contactlist/externallib.php',
         'description' => 'update_settings',
         'type' => 'write',
         'ajax' => true,
-        'loginrequired' => true
-    )
-);
+        'loginrequired' => true,
+    ],
+];

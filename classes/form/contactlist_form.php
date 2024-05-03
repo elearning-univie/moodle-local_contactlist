@@ -51,10 +51,10 @@ class contactlist_form extends \moodleform {
         $PAGE->set_url(new \moodle_url('/local/contactlist/studentview.php', ['id' => $courseid]));
         $mform = $this->_form;
 
-        $options = array(
+        $options = [
             1 => get_string('visible', 'local_contactlist'),
-            2 => get_string('invisible', 'local_contactlist')
-        );
+            2 => get_string('invisible', 'local_contactlist'),
+        ];
 
         $visib = local_contactlist_courselevel_visibility($USER->id, $courseid);
 

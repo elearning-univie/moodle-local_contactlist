@@ -41,11 +41,10 @@ class local_contactlist_external extends external_api {
      * @return external_function_parameters
      */
     public static function update_settings_parameters() {
-        return new external_function_parameters(
-            array(
+        return new external_function_parameters([
                 'courseid' => new external_value(PARAM_INT, 'course id'),
-                'updateval' => new external_value(PARAM_INT, 'visibility 0 = hidden, 1 = visible')
-            )
+                'updateval' => new external_value(PARAM_INT, 'visibility 0 = hidden, 1 = visible'),
+            ],
         );
     }
 
@@ -61,7 +60,7 @@ class local_contactlist_external extends external_api {
         global $USER;
 
         $params = self::validate_parameters(self::update_settings_parameters(),
-            array('courseid' => $courseid, 'updateval' => $updateval));
+            ['courseid' => $courseid, 'updateval' => $updateval]);
         $context = context_course::instance($courseid, MUST_EXIST);
         if (has_capability('local/contactlist:view', $context) && ($updateval == 1 || $updateval == 0)) {
             local_contactlist_save_update($USER->id, $params['courseid'], $params['updateval']);
