@@ -86,7 +86,6 @@ if ($isfrontpage) {
     $PAGE->set_pagelayout('incourse');
 }
 
-$PAGE->set_pagetype('course-view-' . $course->format);
 if ($node) {
     $node->force_open();
 }
