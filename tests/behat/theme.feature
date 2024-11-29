@@ -1,0 +1,48 @@
+# 400 - perhaps not exactly the test we were looking for 
+# changes the url as instructed in the wiki and makes sure the plugin components are seen on the screen
+
+@local @local_contactlist
+Feature: Testing the plugin with different themes
+    
+Background:
+    Given the following "users" exist:
+      | username | firstname | lastname | email | idnumber | profile_field_contactlistdd |
+      | student1 | Student | 1 | student1@example.com | 1 | Yes |
+      | student2 | Student | 2 | student2@example.com | 2 | Yes |
+    And the following "courses" exist:
+      | fullname | shortname | format |
+      | Course 1 | C1 | topics |
+    And the following "course enrolments" exist:
+      | user | course | role |
+      | student1 | C1 | student |
+      | student2 | C1 | student |
+
+    @javascript
+    Scenario: Verifying the plugin displays correctly in the current subtheme
+        When I log in as "student2"
+        And I am on "Course 1" course homepage
+        And I follow "Contactlist"
+        And I click on "Use moodle-wide contactlist visibility setting (default)." "checkbox"
+        And I set the following fields to these values:
+        | Contact information (name, email, profile picture and chat) visibility in this course | Visible |
+        And I click on "Save changes" "button"
+        Then I log out
+        When I log in as "student1"
+        And I am on "Course 1" course homepage
+        And I follow "Contactlist"
+        And I follow "Student 2"
+        And I click on "Message" "button"
+        And I send "Hi!" message in the message area
+        And I should see "Hi!" in the "Student 2" "core_message > Message conversation"
+        Then I should see "##today##%d %B##" in the "Student 2" "core_message > Message conversation"
+        When I set the theme to "classic"
+        And I wait to be redirected
+        And I click on "Message" "button"
+        And I should see "Hi!" in the "Student 2" "core_message > Message conversation"
+        Then I should see "##today##%d %B##" in the "Student 2" "core_message > Message conversation"
+        When I set the theme to "boost"
+        And I wait to be redirected
+        And I click on "Message" "button"
+        And I should see "Hi!" in the "Student 2" "core_message > Message conversation"
+        Then I should see "##today##%d %B##" in the "Student 2" "core_message > Message conversation"
+        
