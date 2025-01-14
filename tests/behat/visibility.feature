@@ -1,7 +1,6 @@
 @local @local_contactlist
 Feature: Manage visibility of contact list as an administrator
 
-
   Background:
     Given the following "users" exist:
       | username | firstname | lastname | email | idnumber | profile_field_contactlistdd |
