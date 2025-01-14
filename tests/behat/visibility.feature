@@ -1,5 +1,3 @@
-# 300
-
 @local @local_contactlist
 Feature: Manage visibility of contact list as an administrator
 
