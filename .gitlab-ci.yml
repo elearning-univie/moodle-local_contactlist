@@ -1,7 +1,3 @@
-default:
-  tags:
-    - moodle
-
 cache:
   paths:
     - .composer/cache
