@@ -1,8 +1,5 @@
-# 300
-
 @local @local_contactlist
 Feature: Manage visibility of contact list as an administrator
-
 
   Background:
     Given the following "users" exist:
@@ -42,4 +39,3 @@ Feature: Manage visibility of contact list as an administrator
     When I log in as "student1"
     And I am on "Course 1" course homepage
     Then I should see "Contactlist"
-
