@@ -24,7 +24,6 @@
  * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['contactlist:view'] = 'See contactlist';
 $string['email'] = 'Email address';
 $string['errornotallowedonpage'] = 'You are not registerd in this course!';
 $string['errorlistnotshown'] = 'This course does not offer a contact list.';
