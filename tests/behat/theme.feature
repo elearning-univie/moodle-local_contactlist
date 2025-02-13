@@ -1,15 +1,15 @@
 @local @local_contactlist
 Feature: Testing the plugin with different themes
-    
-Background:
-  Given the following "users" exist:
+
+  Background:
+    Given the following "users" exist:
     | username | firstname | lastname | email | idnumber | profile_field_contactlistdd |
     | student1 | Student | 1 | student1@example.com | 1 | Yes |
     | student2 | Student | 2 | student2@example.com | 2 | Yes |
-  And the following "courses" exist:
+    And the following "courses" exist:
     | fullname | shortname | format |
     | Course 1 | C1 | topics |
-  And the following "course enrolments" exist:
+    And the following "course enrolments" exist:
     | user | course | role |
     | student1 | C1 | student |
     | student2 | C1 | student |
@@ -24,15 +24,12 @@ Background:
     | Contact information (name, email, profile picture and chat) visibility in this course | Visible |
     And I click on "Save changes" "button"
     Then I log out
-
     When I log in as "student1"
     And I am on "Course 1" course homepage
     And I follow "Contactlist"
-
     And I click on "Save changes" "button"
     Then I should see "Use moodle-wide contactlist visibility setting (default)."
     And I should see "Contact information (name, email, profile picture and chat) visibility in this course"
-
     When I follow "Student 2"
     And I click on "Message" "button"
     And I send "Hi!" message in the message area
@@ -44,7 +41,6 @@ Background:
     And I should see "Add to contacts"
     And I should see "User info"
     Then I log out
-       
     When I log in as "student1"
     And I set the theme to "classic"
     And I wait to be redirected
@@ -55,7 +51,6 @@ Background:
     And I should see "Contact information (name, email, profile picture and chat) visibility in this course"
     And I follow "Student 2"
     And I click on "Message" "button"
-
     When I click on "conversation-actions-menu-button" "button"
     Then I should see "Mute"
     And I should see "Block user"
@@ -67,8 +62,7 @@ Background:
     Then I should see "Hello!" in the "Student 2" "core_message > Message conversation"
     And I should see "##today##%d %B##" in the "Student 2" "core_message > Message conversation"
     Then I log out
-        
-    When I log in as "student1"        
+    When I log in as "student1"
     And I set the theme to "boost"
     And I wait to be redirected
     And I am on "Course 1" course homepage
@@ -78,7 +72,6 @@ Background:
     And I click on "Save changes" "button"
     And I follow "Student 2"
     And I click on "Message" "button"
-
     When I click on "conversation-actions-menu-button" "button"
     Then I should see "Mute"
     And I should see "Block user"
@@ -88,7 +81,6 @@ Background:
     And I should see "##today##%d %B##" in the "Student 2" "core_message > Message conversation"
     And I should see "Hello!" in the "Student 2" "core_message > Message conversation"
     And I should see "##today##%d %B##" in the "Student 2" "core_message > Message conversation"
-        
     When I send "Servus!" message in the message area
     Then I should see "Servus!" in the "Student 2" "core_message > Message conversation"
     And I should see "##today##%d %B##" in the "Student 2" "core_message > Message conversation"
