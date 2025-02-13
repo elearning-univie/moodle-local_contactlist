@@ -77,15 +77,15 @@ class behat_local_contactlist extends behat_base {
     public function i_set_the_theme_to($theme) {
         $session = $this->getSession();
         $driver = $session->getDriver();
-        $currentUrl = $session->getCurrentUrl();
-        $newUrl = $currentUrl . (strpos($currentUrl, '?') === false ? '?' : '&') . "theme=$theme";
-        $driver->visit($newUrl);
+        $currenturl = $session->getCurrentUrl();
+        $newurl = $currenturl . (strpos($currenturl, '?') === false ? '?' : '&') . "theme=$theme";
+        $driver->visit($newurl);
         $session->wait(5000, "document.readyState === 'complete'");
-        $loadedUrl = $session->getCurrentUrl();
-        if (strpos($loadedUrl, "theme=$theme") === false) {
+        $loadedurl = $session->getCurrentUrl();
+        if (strpos($loadedurl, "theme=$theme") === false) {
             throw new \moodle_exception(get_string('theme_not_applied', 'block_usearch', (object)[
                 'expected' => "theme=$theme",
-                'actual' => $loadedUrl,
+                'actual' => $loadedurl,
             ]));
         }
     }
