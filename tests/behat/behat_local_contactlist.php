@@ -71,25 +71,21 @@ class behat_local_contactlist extends behat_base {
      * Sets the theme by appending theme to the current URL and verifies the page loads.
      *
      * @When I set the theme to :theme
-     * 
      * @param string $theme The theme to set "boost" or "classic"
      * @throws moodle_exception If the theme cannot be changed
      */
     public function i_set_the_theme_to($theme) {
         $session = $this->getSession();
         $driver = $session->getDriver();
-
-        $current_url = $session->getCurrentUrl();
-        $new_url = $current_url . (strpos($current_url, '?') === false ? '?' : '&') . "theme=$theme";
-        
-        $driver->visit($new_url);
+        $currentUrl = $session->getCurrentUrl();
+        $newUrl = $currentUrl . (strpos($currentUrl, '?') === false ? '?' : '&') . "theme=$theme";
+        $driver->visit($newUrl);
         $session->wait(5000, "document.readyState === 'complete'");
-        
-        $loaded_url = $session->getCurrentUrl();
-        if (strpos($loaded_url, "theme=$theme") === false) {
+        $loadedUrl = $session->getCurrentUrl();
+        if (strpos($loadedUrl, "theme=$theme") === false) {
             throw new \moodle_exception(get_string('theme_not_applied', 'block_usearch', (object)[
                 'expected' => "theme=$theme",
-                'actual' => $loaded_url,
+                'actual' => $loadedUrl,
             ]));
         }
     }
