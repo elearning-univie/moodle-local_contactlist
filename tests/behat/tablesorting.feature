@@ -24,7 +24,7 @@ Feature: Contactlist can be sorted
     Given I log in as "teacher1"
     And I am on the "local_contactlist > C1" page
     Then the following should exist in the "contactlist" table:
-      | First name / Last name | Email address |
+      | First name  | Email address |
       | Annie Edison | student1@example.com |
       | George Bradley | student2@example.com |
       | Travis Sutcliff | student3@example.com |
