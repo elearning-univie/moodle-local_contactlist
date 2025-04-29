@@ -24,7 +24,6 @@
  * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['contactlist:view'] = 'See contactlist';
 $string['email'] = 'Email address';
 $string['errornotallowedonpage'] = 'You are not registerd in this course!';
 $string['errorlistnotshown'] = 'This course does not offer a contact list.';
@@ -57,3 +56,4 @@ $string['visible'] = 'Visible';
 $string['visib'] = 'Contactlist visibility';
 $string['visib_help'] = 'Set your contactlist visibility in this course. If you don\'t select a value, the moodle-wide value will be taken from your user profile privacy setting. If you choose to share your contact information, your name, profile picture and email address will be visible for your fellow students in this course.';
 $string['contactlist:view'] = 'View contactlist';
+$string['theme_not_applied'] = 'The theme could not be applied. Expected URL to include "{$a->expected}", but got "{$a->actual}".';
