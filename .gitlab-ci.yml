@@ -41,7 +41,7 @@ variables:
     - failed report
   parallel:
     matrix:
-      - MOODLE_BRANCH: [ "MOODLE_405_STABLE" ]
+      - MOODLE_BRANCH: [ "MOODLE_500_STABLE" ]
         PHP_VERSION: [ "8.1", "8.2", "8.3" ]
 
 test:postgres:
@@ -57,7 +57,7 @@ test:postgres:
 test:mysql:
   <<: *job_configuration
   services:
-    - name: mysql:8.0.23
+    - name: mysql:8.4
       command: ["mysqld", "--port=6033"]
     - docker:dind
   variables:

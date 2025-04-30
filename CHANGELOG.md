@@ -1,5 +1,8 @@
 # Change Log
 
+## 5.0.0
+* Moodle 5.0 compatible version
+
 ## 4.5.0
 * Moodle 4.5 compatible version
 
