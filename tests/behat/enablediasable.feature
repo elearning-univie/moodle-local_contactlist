@@ -29,7 +29,7 @@ Feature: Global and local visibility in contactlist
 
     Then I log in as "user2"
     And I am on "Course 1" course homepage
-    And I follow "Contactlist"
+    And I navigate to "Contactlist" in current page administration
     Then I should see "Use moodle-wide contactlist visibility setting"
     And I should see "user1@example.com"
     And I log out
@@ -43,6 +43,6 @@ Feature: Global and local visibility in contactlist
 
     Then I log in as "user2"
     And I am on "Course 1" course homepage
-    And I follow "Contactlist"
+    And I navigate to "Contactlist" in current page administration
     Then I should see "Use moodle-wide contactlist visibility setting"
     And I should not see "user1@example.com"

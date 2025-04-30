@@ -18,7 +18,7 @@ Feature: Students can use the contactlist to message other students
   Scenario: Send a message to a student from the contact list
     When I log in as "student2"
     And I am on "Course 1" course homepage
-    And I follow "Contactlist"
+    And I navigate to "Contactlist" in current page administration
     And I click on "Use moodle-wide contactlist visibility setting (default)." "checkbox"
     And I set the following fields to these values:
     | Contact information (name, email, profile picture and chat) visibility in this course | Visible |
@@ -26,7 +26,7 @@ Feature: Students can use the contactlist to message other students
     Then I log out
     When I log in as "student1"
     And I am on "Course 1" course homepage
-    And I follow "Contactlist"
+    And I navigate to "Contactlist" in current page administration
     And I follow "Student 2"
     And I click on "Message" "button"
     And I send "Hi!" message in the message area

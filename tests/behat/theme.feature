@@ -18,7 +18,7 @@ Feature: Testing the plugin with different themes
   Scenario: Verifying the plugin displays correctly in the current subtheme
     When I log in as "student2"
     And I am on "Course 1" course homepage
-    And I follow "Contactlist"
+    And I navigate to "Contactlist" in current page administration
     And I click on "Use moodle-wide contactlist visibility setting (default)." "checkbox"
     And I set the following fields to these values:
     | Contact information (name, email, profile picture and chat) visibility in this course | Visible |
@@ -26,7 +26,7 @@ Feature: Testing the plugin with different themes
     Then I log out
     When I log in as "student1"
     And I am on "Course 1" course homepage
-    And I follow "Contactlist"
+    And I navigate to "Contactlist" in current page administration
     And I click on "Save changes" "button"
     Then I should see "Use moodle-wide contactlist visibility setting (default)."
     And I should see "Contact information (name, email, profile picture and chat) visibility in this course"
@@ -45,7 +45,7 @@ Feature: Testing the plugin with different themes
     And I set the theme to "classic"
     And I wait to be redirected
     And I am on "Course 1" course homepage
-    And I follow "Contactlist"
+    And I navigate to "Contactlist" in current page administration
     And I click on "Save changes" "button"
     Then I should see "Use moodle-wide contactlist visibility setting (default)."
     And I should see "Contact information (name, email, profile picture and chat) visibility in this course"
@@ -66,7 +66,7 @@ Feature: Testing the plugin with different themes
     And I set the theme to "boost"
     And I wait to be redirected
     And I am on "Course 1" course homepage
-    And I follow "Contactlist"
+    And I navigate to "Contactlist" in current page administration
     And I should see "Use moodle-wide contactlist visibility setting (default)."
     And I should see "Contact information (name, email, profile picture and chat) visibility in this course"
     And I click on "Save changes" "button"

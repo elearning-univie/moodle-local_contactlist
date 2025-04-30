@@ -23,7 +23,7 @@ Feature: Possibility to disable visibility in contact list
     And I open my profile in edit mode
     Then the field "id_profile_field_contactlistdd" matches value "No"
     And I am on "Course 1" course homepage
-    And I follow "Contactlist"
+    And I navigate to "Contactlist" in current page administration
     And I set the field "id_usedefault" to "0"
     And I set the field "id_visib" to "Visible"
     And I click on "id_submitbutton" "button"
@@ -31,7 +31,7 @@ Feature: Possibility to disable visibility in contact list
 
     And I log in as "user2"
     And I am on "Course 1" course homepage
-    And I follow "Contactlist"
+    And I navigate to "Contactlist" in current page administration
     Then I should see "Use moodle-wide contactlist visibility setting"
     And I should see "user1@example.com"
     And I click on "User One" "text"
@@ -40,7 +40,7 @@ Feature: Possibility to disable visibility in contact list
 
     And I log in as "user1"
     And I am on "Course 1" course homepage
-    And I follow "Contactlist"
+    And I navigate to "Contactlist" in current page administration
     And I follow "Change your moodle-wide contactlist visibility setting HERE."
     And I switch to a second window
     And I expand all fieldsets
