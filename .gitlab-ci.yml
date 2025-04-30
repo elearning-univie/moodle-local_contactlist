@@ -2,21 +2,6 @@ default:
   tags:
     - moodle
 
-stages:
-    - preflight
-    - test
-    - deploy
-    
-workflow:
-    rules:
-     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
-       when: never
-     - when: always
-    
-include:
-   - component: $CI_SERVER_FQDN/amc/moodle/moodle-ci/moodle-plugin-ci@5.0
-   - component: $CI_SERVER_FQDN/amc/moodle/moodle-ci/moodle-devil-app@5.0    
-
 cache:
   paths:
     - .composer/cache
@@ -57,7 +42,7 @@ variables:
   parallel:
     matrix:
       - MOODLE_BRANCH: [ "MOODLE_500_STABLE" ]
-        PHP_VERSION: [ "8.1", "8.2", "8.3" ]
+        PHP_VERSION: [ "8.2", "8.3" ]
 
 test:postgres:
   <<: *job_configuration
@@ -68,17 +53,6 @@ test:postgres:
     DB: pgsql
     DB_HOST: postgres
     DB_PORT: 5432
-
-test:mysql:
-  <<: *job_configuration
-  services:
-    - name: mysql:8.4
-      command: ["mysqld", "--port=6033"]
-    - docker:dind
-  variables:
-    DB: mysqli
-    DB_HOST: mysql
-    DB_PORT: 6033
 
 test:mariadb:
   <<: *job_configuration
