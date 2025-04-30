@@ -27,7 +27,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-//2025290400
+
 $plugin->version   = 2024100700;
 $plugin->requires  = 2023100900;
 $plugin->component = 'local_contactlist';
