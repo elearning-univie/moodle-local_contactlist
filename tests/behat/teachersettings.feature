@@ -27,8 +27,7 @@ Feature: Possibility to disable the contactlist in a course
 
     Given I log in as "student1"
     And I am on the "C1" "Course" page
-    And I click on "More"
-    And I should see "Contactlist"
+    And I navigate to "Contactlist" in current page administration
     And I log out
 
     Given I log in as "teacher1"
