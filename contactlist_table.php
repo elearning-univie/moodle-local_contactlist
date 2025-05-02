@@ -78,7 +78,7 @@ class contactlist_table extends \table_sql {
         $headers[] = \core_user\fields::get_display_name('email');
         $columns[] = 'email';
         $extrafields[] = 'email';
-        
+
         if (!empty($CFG->messaging)) {
             $headers[] = get_string('chat', 'local_contactlist');
             $columns[] = 'chat';
@@ -87,8 +87,6 @@ class contactlist_table extends \table_sql {
             $this->column_class('chat', 'contactlist_studentview_cc');
             $this->no_sorting('chat');
         }
-
-
 
         $this->define_columns($columns);
         $this->define_headers($headers);
