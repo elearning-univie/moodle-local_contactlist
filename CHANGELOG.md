@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v5.0-r1 (2025-05-05)
+## v5.0-r1 (2025-05-02)
 * [FEATURE] Add further behat tests and update existing ones
 * [UPDATE] Update of readme file
 * Moodle 5.0 compatible version
