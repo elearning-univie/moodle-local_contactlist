@@ -1,6 +1,8 @@
-# Change Log
+# CHANGELOG
 
-## 5.0.0
+## v5.0-r1 (2025-05-02)
+* [FEATURE] Add further behat tests and update existing ones
+* [UPDATE] Update of readme file
 * Moodle 5.0 compatible version
 
 ## 4.5.0
@@ -16,12 +18,13 @@
 * Moodle 4.2 compatible version
 
 ## 4.1.0
-* Fixed sorting
-* Message column will not be rendered when messaging is disabled
-* Fixed pagination
-* Removed unused code
-* Added some behat tests
 * Moodle 4.1 compatible version
+* [FIX] Sorting of columns
+* [FIX] Message column will not be rendered when messaging is disabled
+* [FIX] Pagination
+* [UPDATE] Removed unused code
+* [FEATURE] Added some behat tests
+
 
 ## 4.0.1
 * fix a bug where users changing their option to "no" will never be displayed for case-sensitive databases
