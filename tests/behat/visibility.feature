@@ -38,4 +38,4 @@ Feature: Manage visibility of contact list as an administrator
     And I log out
     When I log in as "student1"
     And I am on "Course 1" course homepage
-    Then I should see "Contactlist"
+    Then I navigate to "Contactlist" in current page administration

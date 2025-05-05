@@ -28,8 +28,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2024100700;
+$plugin->version   = 2025050200;
 $plugin->requires  = 2023100900;
 $plugin->component = 'local_contactlist';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release   = "v4.5.0";
+$plugin->release   = "v5.0.0";

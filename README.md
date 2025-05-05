@@ -105,4 +105,3 @@ You should have received a copy of the GNU General Public License with Moodle. I
 
 
 Good luck and have fun!
-  

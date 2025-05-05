@@ -27,7 +27,7 @@ Feature: Global visibility in contactlist
 
     Then I log in as "user2"
     And I am on "Course 1" course homepage
-    And I follow "Contactlist"
+    And I navigate to "Contactlist" in current page administration
     Then I should see "You are currently INVISIBLE in this course!"
     And I should not see "user1@example.com"
     And I should not see "user2@example.com"

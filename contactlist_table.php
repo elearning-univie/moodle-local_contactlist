@@ -75,6 +75,10 @@ class contactlist_table extends \table_sql {
         $headers[] = get_string('fullname');
         $columns[] = 'fullname';
 
+        $headers[] = \core_user\fields::get_display_name('email');
+        $columns[] = 'email';
+        $extrafields[] = 'email';
+
         if (!empty($CFG->messaging)) {
             $headers[] = get_string('chat', 'local_contactlist');
             $columns[] = 'chat';
@@ -83,10 +87,6 @@ class contactlist_table extends \table_sql {
             $this->column_class('chat', 'contactlist_studentview_cc');
             $this->no_sorting('chat');
         }
-
-        $headers[] = \core_user\fields::get_display_name('email');
-        $columns[] = 'email';
-        $extrafields[] = 'email';
 
         $this->define_columns($columns);
         $this->define_headers($headers);
@@ -131,7 +131,8 @@ class contactlist_table extends \table_sql {
             return local_contactlist_get_chat_html($data->{$colname});
         }
         if ($colname == 'email') {
-            return s($data->{$colname});
+            $emaillink = '<a href="mailto:' . s($data->{$colname}) . '">' . s($data->{$colname}) . '</a>';
+            return $emaillink;
         }
     }
 
