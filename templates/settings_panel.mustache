@@ -1,0 +1,101 @@
+{{!
+  This file is part of Moodle - http://moodle.org/
+
+  Moodle is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Moodle is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    Template for the contact list personal settings panel.
+    Includes the colored info bar (collapse toggle) and the collapsible settings form.
+
+    @template local_contactlist/settings_panel
+}}
+
+<div class="alert {{alertclass}} d-flex align-items-center mt-1 mb-3"
+     id="local-contactlist-info-box"
+     role="alert">
+    <span>
+        <i class="fa fa-circle-info fa-fw me-2" aria-hidden="true"></i>
+        {{statustext}}
+    </span>
+    <a href="#contactlist-settings-collapse"
+       id="contactlist-settings-toggle"
+       data-bs-toggle="collapse"
+       aria-expanded="{{#expanded}}true{{/expanded}}{{^expanded}}false{{/expanded}}"
+       aria-controls="contactlist-settings-collapse"
+       class="text-primary text-decoration-none ms-auto ps-4 text-nowrap flex-shrink-0">
+        <span id="contactlist-toggle-text">{{toggletext}}</span>
+        <i class="fa {{chevronclass}} ms-2" id="contactlist-toggle-icon" aria-hidden="true"></i>
+    </a>
+</div>
+<div id="contactlist-settings-collapse" class="local-contactlist-settings-card card border rounded mb-4 collapse{{#expanded}} show{{/expanded}}">
+        <div class="p-3 p-md-4">
+            <form method="post" action="{{formaction}}">
+                <input type="hidden" name="id"      value="{{courseid}}">
+                <input type="hidden" name="sesskey" value="{{sesskey}}">
+
+                <h5 class="mt-1 mb-1">{{str_personalsettings}}</h5>
+                <p class="text-muted mb-3">{{str_personalsettings_desc}}</p>
+
+                <div style="display: grid; grid-template-columns: max-content auto; gap: 0.5rem 1rem; align-items: center;">
+
+                    <span>{{str_currentprofilesetting}}:</span>
+                    <div class="d-flex align-items-center gap-2">
+                        <select disabled
+                                autocomplete="off"
+                                class="form-select w-auto"
+                                aria-label="{{str_currentprofilesetting}}">
+                            {{#profileopts}}
+                            <option value="{{value}}"{{#selected}} selected{{/selected}}>{{label}}</option>
+                            {{/profileopts}}
+                        </select>
+                        <a href="{{profilelink}}" id="contactlist-profile-link" target="_blank" rel="noopener noreferrer">{{str_change}}</a>
+                    </div>
+
+                    <h5 class="mb-0 mt-2" style="grid-column: 1 / -1;">{{str_coursevisibility}}</h5>
+
+                    <div class="d-flex align-items-center gap-1">
+                        <label for="contactlist-usedefault" class="form-check-label mb-0">
+                            {{str_useprofilesetting}}
+                        </label>
+                        {{{helpicon}}}
+                    </div>
+                    <div>
+                        <input type="checkbox"
+                               name="usedefault"
+                               value="1"
+                               id="contactlist-usedefault"
+                               class="form-check-input"
+                               {{#usedefault}}checked{{/usedefault}}>
+                    </div>
+
+                    <label for="contactlist-visib" class="form-label mb-0">{{str_individualsetting}}</label>
+                    <div>
+                        <select name="visib"
+                                id="contactlist-visib"
+                                autocomplete="off"
+                                class="form-select w-auto">
+                            {{#visiboptions}}
+                            <option value="{{value}}"{{#selected}} selected{{/selected}}>{{label}}</option>
+                            {{/visiboptions}}
+                        </select>
+                    </div>
+
+                    <span></span>
+                    <div>
+                        <button type="submit" class="btn btn-primary mt-2">{{str_save}}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+</div>

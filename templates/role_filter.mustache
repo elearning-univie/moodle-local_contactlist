@@ -1,0 +1,36 @@
+{{!
+  This file is part of Moodle - http://moodle.org/
+
+  Moodle is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Moodle is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    Role filter dropdown for the contact list.
+
+}}
+<div class="mb-3">
+    <form id="contactlist-role-form" method="get" action="{{formaction}}" class="d-flex align-items-center gap-2">
+        <input type="hidden" name="contextid" value="{{contextid}}">
+        <input type="hidden" name="id" value="{{courseid}}">
+        <input type="hidden" name="perpage" value="{{perpage}}">
+        <label for="contactlist-role-filter" class="form-label mb-0 fw-semibold">
+            {{#str}} courserole, local_contactlist {{/str}}
+        </label>
+        <select id="contactlist-role-filter" name="roleid" class="form-select w-auto">
+            <option value="0" {{#allselected}}selected{{/allselected}}>{{#str}} all {{/str}}</option>
+            {{#roles}}
+            <option value="{{id}}" {{#selected}}selected{{/selected}}>{{name}}</option>
+            {{/roles}}
+        </select>
+    </form>
+</div>

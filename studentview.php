@@ -26,21 +26,22 @@ require_once(__DIR__ . '/../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 require_once($CFG->dirroot . '/local/contactlist/locallib.php');
 require_once($CFG->dirroot . '/local/contactlist/contactlist_table.php');
-
 require_once($CFG->libdir.'/tablelib.php');
 
 global $PAGE, $OUTPUT, $USER, $DB, $COURSE;
 
-$page         = optional_param('page', 0, PARAM_INT);
-$perpage      = optional_param('perpage', 20, PARAM_INT);
-$contextid    = optional_param('contextid', 0, PARAM_INT);
-$courseid     = optional_param('id', 0, PARAM_INT);
+$page      = optional_param('page', 0, PARAM_INT);
+$perpage   = optional_param('perpage', 20, PARAM_INT);
+$contextid = optional_param('contextid', 0, PARAM_INT);
+$courseid  = optional_param('id', 0, PARAM_INT);
+$roleid    = optional_param('roleid', 0, PARAM_INT);
 
 $PAGE->set_url(new moodle_url('/local/contactlist/studentview.php', [
-    'page' => $page,
-    'perpage' => $perpage,
+    'page'      => $page,
+    'perpage'   => $perpage,
     'contextid' => $contextid,
-    'id' => $courseid,
+    'id'        => $courseid,
+    'roleid'    => $roleid,
 ]));
 
 if ($contextid) {
@@ -66,10 +67,10 @@ if ($node) {
 }
 
 $customfieldcategory = $DB->get_record('customfield_category', ['name' => 'Privacy Settings']);
-$customfieldfield = $DB->get_record('customfield_field',
-                    ['categoryid' => $customfieldcategory->id, 'shortname' => 'conlistcoursevis']);
-$customfielddata = $DB->get_record('customfield_data',
-                   ['fieldid' => $customfieldfield->id, 'instanceid' => $context->instanceid]);
+$customfieldfield    = $DB->get_record('customfield_field',
+                       ['categoryid' => $customfieldcategory->id, 'shortname' => 'conlistcoursevis']);
+$customfielddata     = $DB->get_record('customfield_data',
+                       ['fieldid' => $customfieldfield->id, 'instanceid' => $context->instanceid]);
 
 if (($customfielddata && $customfielddata->intvalue == 2) || !has_capability('local/contactlist:view', $context)) {
     echo $OUTPUT->header();
@@ -79,49 +80,75 @@ if (($customfielddata && $customfielddata->intvalue == 2) || !has_capability('lo
 }
 
 $systemcontext = context_system::instance();
-$isfrontpage = ($course->id == SITEID);
+$isfrontpage   = ($course->id == SITEID);
 
 if ($isfrontpage) {
     $PAGE->set_pagelayout('admin');
     course_require_view_participants($systemcontext);
 } else {
     $PAGE->set_pagelayout('incourse');
+    $PAGE->add_body_class('limitedwidth');
 }
 
 if ($node) {
     $node->force_open();
 }
 
-echo $OUTPUT->header();
-echo $OUTPUT->heading($pagetitle);
-echo html_writer::tag('br', null);
-$mform = new \local_contactlist\form\contactlist_form();
-$formdata = $mform->get_data();
-
-if ($formdata) {
-    local_contactlist_save_update($USER->id, $courseid, $formdata->visib, $formdata->usedefault);
-    $mform = new \local_contactlist\form\contactlist_form();
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && confirm_sesskey()) {
+    $visib      = optional_param('visib', 2, PARAM_INT);
+    $usedefault = optional_param('usedefault', 0, PARAM_INT);
+    local_contactlist_save_update($USER->id, $courseid, $visib, $usedefault);
+    redirect(new moodle_url('/local/contactlist/studentview.php', [
+        'contextid' => $context->id,
+        'id'        => $courseid,
+    ]));
 }
 
-$localvsglobal = local_contactlist_get_course_visibility_info_string($USER->id, $courseid);
-echo $localvsglobal;
+// Get user preference for panel expanded/collapsed state.
+$expanded = (bool) get_user_preferences('local_contactlist_settings_expanded', 1);
 
-$mform->display();
+$PAGE->requires->js_call_amd('local_contactlist/contactlist', 'init', [
+    get_string('hidepersonalsettings', 'local_contactlist'),
+    get_string('showpersonalsettings', 'local_contactlist'),
+]);
 
+echo $OUTPUT->header();
+echo $OUTPUT->heading($pagetitle);
+
+$visibleno = local_contactlist_get_total_visible($courseid);
+$totalno   = local_contactlist_get_total_course($courseid);
+echo $OUTPUT->render_from_template('local_contactlist/participants_info', [
+    'totalvsvisible' => get_string('totalvsvisible', 'local_contactlist', ['visible' => $visibleno, 'total' => $totalno]),
+]);
+
+$templatectx = local_contactlist_get_settings_panel_context($USER->id, $courseid, $expanded);
+echo $OUTPUT->render_from_template('local_contactlist/settings_panel', $templatectx);
+
+// Role filter.
+$courseroles = local_contactlist_get_course_roles($courseid);
+$rolerows = [];
+foreach ($courseroles as $role) {
+    $rolerows[] = ['id' => $role['id'], 'name' => $role['name'], 'selected' => $role['id'] == $roleid];
+}
+echo $OUTPUT->render_from_template('local_contactlist/role_filter', [
+    'formaction' => (new moodle_url('/local/contactlist/studentview.php'))->out(false),
+    'contextid'  => $context->id,
+    'courseid'   => $courseid,
+    'perpage'    => $perpage,
+    'allselected' => $roleid == 0,
+    'roles'      => $rolerows,
+]);
+
+// Participants table.
 $perpage = 20;
 $baseurl = new moodle_url('/local/contactlist/studentview.php', [
     'contextid' => $context->id,
-    'id' => $courseid,
-    'perpage' => $perpage,
+    'id'        => $courseid,
+    'perpage'   => $perpage,
+    'roleid'    => $roleid,
 ]);
-$participanttable = new contactlist_table($courseid);
+$participanttable = new contactlist_table($courseid, $roleid);
 $participanttable->define_baseurl($baseurl);
-
-$visibleno = local_contactlist_get_total_visible($courseid);
-$totalno = local_contactlist_get_total_course($courseid);
-$visbilityinfo = get_string('totalvsvisible', 'local_contactlist', ['visible' => $visibleno, 'total' => $totalno]);
-
-echo html_writer::tag('br', null);
-echo $visbilityinfo;
 $participanttable->out($perpage, true);
+
 echo $OUTPUT->footer();

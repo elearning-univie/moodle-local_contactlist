@@ -15,26 +15,29 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Capabilities
+ * Admin settings for local_contactlist plugin.
  *
- * @package       local_contactlist
- * @author        Angela Baier, Adrian Czermak, Thomas Wedekind, Karri Pajarinen
- * @copyright     2020 University of Vienna
+ * @package    local_contactlist
+ * @copyright  2020 University of Vienna
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
-$capabilities = [
-    'local/contactlist:view' => [
-        'captype' => 'read',
-        'contextlevel' => CONTEXT_COURSE,
-        'archetypes' => [
-            'guest' => CAP_PROHIBIT,
-            'student' => CAP_ALLOW,
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW,
-        ],
-    ],
-];
+$settings = new admin_settingpage(
+    'local_contactlist',
+    new lang_string('pluginname', 'local_contactlist'),
+    'moodle/site:config'
+);
+
+if ($ADMIN->fulltree) {
+    $settings->add(new \local_contactlist\admin\setting_defaultvisibility(
+        'local_contactlist/defaultvisibility',
+        get_string('defaultvisibility', 'local_contactlist'),
+        get_string('defaultvisibility_desc', 'local_contactlist'),
+        '1',
+        ['1' => get_string('yes'), '0' => get_string('no')]
+    ));
+}
+
+$ADMIN->add('localplugins', $settings);
