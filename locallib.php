@@ -23,13 +23,49 @@
  */
 
 /**
+ * Returns the roles used in a course with display names respecting local overrides.
+ *
+ * @param int $courseid
+ * @return array Array of ['id' => roleid, 'name' => display_name]
+ */
+function local_contactlist_get_course_roles(int $courseid) {
+    global $DB;
+
+    $context = context_course::instance($courseid);
+
+    $sql = "SELECT DISTINCT r.id, r.name, r.shortname, r.sortorder
+              FROM {role_assignments} ra
+              JOIN {role} r ON r.id = ra.roleid
+             WHERE ra.contextid = :contextid
+          ORDER BY r.sortorder";
+
+    $roles = $DB->get_records_sql($sql, ['contextid' => $context->id]);
+
+    $rolenames = role_fix_names($roles, $context, ROLENAME_ALIAS, true);
+
+    $result = [];
+    foreach ($roles as $role) {
+        $result[] = ['id' => $role->id, 'name' => $rolenames[$role->id]];
+    }
+    return $result;
+}
+
+/**
  * get number of visible course participants from DB.
  *
  * @param int $courseid
+ * @param int $roleid Optional role filter (0 = all roles).
  * @return int
  */
-function local_contactlist_get_total_visible(int $courseid) {
+function local_contactlist_get_total_visible(int $courseid, int $roleid = 0) {
     global $DB;
+
+    $params = ['cid' => $courseid];
+    $rolefilter = '';
+    if ($roleid > 0) {
+        $rolefilter = ' AND asg.roleid = :roleid';
+        $params['roleid'] = $roleid;
+    }
 
     $sql = "SELECT COUNT(uid)
               FROM (
@@ -38,16 +74,17 @@ function local_contactlist_get_total_visible(int $courseid) {
                       JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
                       JOIN {user} u ON u.id = asg.userid
                       JOIN {course} course ON context.instanceid = course.id
-                 LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
+                      JOIN {user_info_field} uinfofield ON uinfofield.shortname = 'contactlistdd'
+                 LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid AND uinfo.fieldid = uinfofield.id
                  LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
-                     WHERE course.id = :cid
+                     WHERE course.id = :cid{$rolefilter}
                     ) join1
               WHERE (join1.data IS NULL AND visib = 1)
                  OR (join1.data LIKE 'No' AND visib = 1)
                  OR (join1.data LIKE 'Yes' AND visib IS NULL)
                  OR (join1.data LIKE 'Yes' AND visib = 1)";
 
-    return $DB->count_records_sql($sql, ['cid' => $courseid]);
+    return $DB->count_records_sql($sql, $params);
 }
 
 /**
@@ -82,8 +119,10 @@ function local_contactlist_save_update($userid, $courseid, $show, $showdefault) 
 
     $record = local_contactlist_courselevel_visibility($userid, $courseid);
 
-    if ($showdefault == 1 && $record) {
-        $DB->delete_records('local_contactlist_course_vis', ['courseid' => $courseid, 'userid' => $userid]);
+    if ($showdefault == 1) {
+        if ($record) {
+            $DB->delete_records('local_contactlist_course_vis', ['courseid' => $courseid, 'userid' => $userid]);
+        }
         return;
     }
 
@@ -129,7 +168,7 @@ function local_contactlist_courselevel_visibility($userid, $courseid) {
  * @return moodle_recordset
  */
 function local_contactlist_get_list($courseid, $additionalwhere = '', $additionalparams = [],
-                                    $sort = '', $limitfrom = 0, $limitnum = 0) {
+                                    $sort = '', $limitfrom = 0, $limitnum = 0, $roleid = 0) {
     global $DB;
 
     $wheres = [];
@@ -138,6 +177,12 @@ function local_contactlist_get_list($courseid, $additionalwhere = '', $additiona
         'contextlevel' => CONTEXT_USER,
         'courseid' => $courseid,
     ];
+
+    $rolefilter = '';
+    if ($roleid > 0) {
+        $rolefilter = ' AND asg.roleid = :roleid';
+        $params['roleid'] = $roleid;
+    }
 
     $select = "SELECT uid AS id, picture, firstname, lastname, firstnamephonetic, lastnamephonetic, middlename,
                alternatename, imagealt, uid AS chat, email, join1.data, visib ";
@@ -148,9 +193,10 @@ function local_contactlist_get_list($courseid, $additionalwhere = '', $additiona
                      JOIN {context} context ON asg.contextid = context.id AND context.contextlevel = 50
                      JOIN {user} u ON u.id = asg.userid
                      JOIN {course} course ON context.instanceid = course.id
-                LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid
+                     JOIN {user_info_field} uinfofield ON uinfofield.shortname = 'contactlistdd'
+                LEFT JOIN {user_info_data} uinfo ON u.id = uinfo.userid AND uinfo.fieldid = uinfofield.id
                 LEFT JOIN {local_contactlist_course_vis} clvis ON u.id = clvis.userid AND clvis.courseid = course.id
-                    WHERE course.id = :courseid
+                    WHERE course.id = :courseid{$rolefilter}
                   ) join1 ";
 
     $where1 = "WHERE ((join1.data IS NULL AND visib = 1)
@@ -174,28 +220,102 @@ function local_contactlist_get_list($courseid, $additionalwhere = '', $additiona
 }
 
 /**
- * get comparison info global/local visibility
+ * Determine if a user is currently visible in a course's contact list.
+ *
  * @param int $userid
  * @param int $courseid
- * @return string
+ * @return bool
  */
-function local_contactlist_get_course_visibility_info_string($userid, $courseid) {
+function local_contactlist_is_visible($userid, $courseid) {
     $globalvisib = local_contactlist_get_global_setting($userid);
-    $localvisib = local_contactlist_courselevel_visibility($userid, $courseid);
+    $localvisib  = local_contactlist_courselevel_visibility($userid, $courseid);
 
-    $isvisible = false;
     $globalvisib = ($globalvisib && $globalvisib->data == 'Yes');
 
-    if ($localvisib && ($localvisib->visib == 1 || ($globalvisib && $localvisib->visib != 2))) {
-        $isvisible = true;
-    } else if (!$localvisib && $globalvisib == 1) {
-        $isvisible = true;
+    if ($localvisib) {
+        if ($localvisib->visib == 1) {
+            return true;
+        }
+        if ($globalvisib && $localvisib->visib != 2) {
+            return true;
+        }
+        return false;
     }
 
-    $infostring = $isvisible ? get_string('localvisible', 'local_contactlist') :
-        get_string('localinvisible', 'local_contactlist');
+    return $globalvisib;
+}
 
-    return '<p id="local-contactlist-info-box" class="alert alert-success">' . $infostring . '</p>';
+/**
+ * Build the template context for the personal settings panel.
+ *
+ * @param int  $userid
+ * @param int  $courseid
+ * @param bool $expanded Whether the panel starts expanded.
+ * @return array Mustache template context.
+ */
+function local_contactlist_get_settings_panel_context($userid, $courseid, $expanded = true) {
+    global $OUTPUT;
+    $isvisible    = local_contactlist_is_visible($userid, $courseid);
+    $globalsetting = local_contactlist_get_global_setting($userid);
+    $localvisib   = local_contactlist_courselevel_visibility($userid, $courseid);
+
+    // Info bar.
+    $alertclass   = $isvisible ? 'alert-success' : 'alert-warning';
+    $statustext   = $isvisible
+        ? get_string('localvisible', 'local_contactlist')
+        : get_string('localinvisible', 'local_contactlist');
+    $toggletext   = $expanded
+        ? get_string('hidepersonalsettings', 'local_contactlist')
+        : get_string('showpersonalsettings', 'local_contactlist');
+    $chevronclass = $expanded ? 'fa-chevron-up' : 'fa-chevron-down';
+
+    // Profile setting (read-only display).
+    $profileval  = ($globalsetting && $globalsetting->data === 'Yes') ? 'Yes' : 'No';
+    $profileopts = [
+        ['value' => 'Yes', 'label' => get_string('visible', 'local_contactlist'),   'selected' => $profileval === 'Yes'],
+        ['value' => 'No',  'label' => get_string('invisible', 'local_contactlist'), 'selected' => $profileval === 'No'],
+    ];
+
+    // Course-level visibility setting.
+    $usedefault   = 0;
+    $localsetting = 2;
+    if (!$localvisib) {
+        $usedefault = 1;
+        if ($globalsetting && $globalsetting->data === 'Yes') {
+            $localsetting = 1;
+        }
+    } else {
+        $localsetting = $localvisib->visib;
+    }
+
+    $visiboptions = [
+        ['value' => 1, 'label' => get_string('visible', 'local_contactlist'),   'selected' => $localsetting == 1],
+        ['value' => 2, 'label' => get_string('invisible', 'local_contactlist'), 'selected' => $localsetting == 2],
+    ];
+
+    return [
+        'alertclass'                => $alertclass,
+        'helpicon'                  => $OUTPUT->help_icon('localvisibility', 'local_contactlist'),
+        'statustext'                => $statustext,
+        'toggletext'                => $toggletext,
+        'chevronclass'              => $chevronclass,
+        'expanded'                  => $expanded,
+        'formaction'                => (new moodle_url('/local/contactlist/studentview.php'))->out(false),
+        'courseid'                  => $courseid,
+        'sesskey'                   => sesskey(),
+        'profileopts'               => $profileopts,
+        'profilelink'               => local_contactlist_get_profile_link($userid, $courseid),
+        'usedefault'                => (bool) $usedefault,
+        'visiboptions'              => $visiboptions,
+        'str_personalsettings'      => get_string('personalsettings', 'local_contactlist'),
+        'str_personalsettings_desc' => get_string('personalsettings_desc', 'local_contactlist'),
+        'str_currentprofilesetting' => get_string('currentprofilesetting', 'local_contactlist'),
+        'str_change'                => get_string('change', 'local_contactlist'),
+        'str_coursevisibility'      => get_string('coursevisibility', 'local_contactlist'),
+        'str_useprofilesetting'     => get_string('useprofilesetting', 'local_contactlist'),
+        'str_individualsetting'     => get_string('individualsetting', 'local_contactlist'),
+        'str_save'                  => get_string('save', 'local_contactlist'),
+    ];
 }
 
 /**

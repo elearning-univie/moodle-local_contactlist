@@ -18,9 +18,7 @@
  * Version information for the contactlist local plugin.
  *
  * @package       local_contactlist
- * @author        Angela Baier
- * @author        Adrian Czermak
- * @author        Thomas Wedekind
+ * @author        Angela Baier, Adrian Czermak, Thomas Wedekind, Karri Pajarinen
  * @copyright     2020 University of Vienna
  * @since         Moodle 3.10+
  * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -28,7 +26,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2025050200;
+$plugin->version   = 2025050200.05;
 $plugin->requires  = 2024100700;
 $plugin->component = 'local_contactlist';
 $plugin->maturity = MATURITY_STABLE;

@@ -23,6 +23,23 @@
  */
 
 /**
+ * Register user preferences used by this plugin.
+ *
+ * @return array
+ */
+function local_contactlist_user_preferences(): array {
+    return [
+        'local_contactlist_settings_expanded' => [
+            'type'               => PARAM_INT,
+            'null'               => NULL_NOT_ALLOWED,
+            'default'            => 1,
+            'choices'            => [0, 1],
+            'permissioncallback' => [core_user::class, 'is_current_user'],
+        ],
+    ];
+}
+
+/**
  * Adds the contactlist to the course navigation
  *
  * @param navigation_node $navigation

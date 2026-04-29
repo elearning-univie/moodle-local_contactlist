@@ -54,11 +54,17 @@ class contactlist_table extends \table_sql {
     protected $context;
 
     /**
+     * @var int $roleid The role filter (0 = all roles).
+     */
+    protected $roleid;
+
+    /**
      * Sets up the table.
      *
      * @param int $courseid
+     * @param int $roleid Optional role filter (0 = all roles).
      */
-    public function __construct($courseid) {
+    public function __construct($courseid, $roleid = 0) {
         parent::__construct('user-index-participants-' . $courseid);
         global $CFG;
 
@@ -69,6 +75,7 @@ class contactlist_table extends \table_sql {
 
         // Get the context.
         $this->courseid = $courseid;
+        $this->roleid = $roleid;
         $context = \context_course::instance($courseid, MUST_EXIST);
         $this->context = $context;
 
@@ -145,7 +152,7 @@ class contactlist_table extends \table_sql {
     public function query_db($pagesize, $useinitialsbar = true) {
         list($twhere, $tparams) = $this->get_sql_where();
 
-        $total = local_contactlist_get_total_visible($this->courseid);
+        $total = local_contactlist_get_total_visible($this->courseid, $this->roleid);
 
         $this->pagesize($pagesize, $total);
 
@@ -155,7 +162,7 @@ class contactlist_table extends \table_sql {
         }
 
         $rawdata = local_contactlist_get_list(
-            $this->courseid, $twhere, $tparams, $sort, $this->get_page_start(), $this->get_page_size());
+            $this->courseid, $twhere, $tparams, $sort, $this->get_page_start(), $this->get_page_size(), $this->roleid);
         $this->rawdata = [];
 
         foreach ($rawdata as $user) {
@@ -181,6 +188,16 @@ class contactlist_table extends \table_sql {
             return parent::show_hide_link($column, $index);
         }
         return '';
+    }
+
+    /**
+     * Override the default "nothing to display" output with a styled info alert.
+     */
+    public function print_nothing_to_display() {
+        global $OUTPUT;
+        echo $OUTPUT->render_from_template('local_contactlist/empty_state', [
+            'role_filtered' => $this->roleid > 0,
+        ]);
     }
 }
 

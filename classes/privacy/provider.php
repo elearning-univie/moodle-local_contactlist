@@ -72,6 +72,12 @@ class provider implements
             ],
             'privacy:metadata:local_contactlist_course_vis'
             );
+
+        $collection->add_user_preference(
+            'local_contactlist_settings_expanded',
+            'privacy:metadata:user_preferences:local_contactlist_settings_expanded'
+        );
+
         return $collection;
     }
     /**
@@ -148,16 +154,20 @@ class provider implements
 
         foreach ($contexts as $context) {
             if ($context->contextlevel == CONTEXT_COURSE) {
-                $params = [
-                    'instanceid'    => $context->instanceid,
-                    'userid' => $user->id,
-                ];
-                $sql = "SELECT courseid, userid, visib
-                    FROM {local_contactlist_course_vis} ctl
-                    WHERE ctl.courseid = :instanceid
-                    AND ctl.userid = :userid";
-                $data = $DB->get_records_sql($sql, $params);
-                writer::with_context($context)->export_data([], (object) $data);
+                $record = $DB->get_record('local_contactlist_course_vis', [
+                    'courseid' => $context->instanceid,
+                    'userid'   => $user->id,
+                ]);
+                if ($record) {
+                    $course = get_course($context->instanceid);
+                    writer::with_context($context)->export_data(
+                        [get_string('pluginname', 'local_contactlist')],
+                        (object) [
+                            'course'     => format_string($course->fullname, true, ['context' => $context]),
+                            'visibility' => $record->visib == 1 ? get_string('yes') : get_string('no'),
+                        ]
+                    );
+                }
             }
             if ($context->contextlevel == CONTEXT_USER) {
                 $sql = "SELECT userid, fieldid, data, dataformat
@@ -165,6 +175,17 @@ class provider implements
                     WHERE uid.userid = :instanceid";
                 $data = $DB->get_records_sql($sql, ['instanceid' => $context->instanceid]);
                 writer::with_context($context)->export_data([], (object) $data);
+
+                // Export personal settings panel expanded/collapsed preference.
+                $preference = get_user_preferences('local_contactlist_settings_expanded', null, $context->instanceid);
+                if ($preference !== null) {
+                    writer::with_context($context)->export_user_preference(
+                        'local_contactlist',
+                        'local_contactlist_settings_expanded',
+                        $preference,
+                        get_string('privacy:metadata:user_preferences:local_contactlist_settings_expanded', 'local_contactlist')
+                    );
+                }
             }
         }
     }

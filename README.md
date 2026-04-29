@@ -3,7 +3,7 @@ Contactlist
 
 This file is part of the local_contactlist plugin for Moodle - <http://moodle.org/>
 
-*Author:* Angela Baier, Thomas Wedekind
+*Author:* Angela Baier, Adrian Czermak, Thomas Wedekind, Karri Pajarinen
 
 *Copyright:* 2020 [University of Vienna](https://www.univie.ac.at/)
 

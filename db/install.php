@@ -18,7 +18,7 @@
  *  * Install script for local contactlist plugin
  *
  * @package       local_contactlist
- * @author        Angela Baier
+ * @author        Angela Baier, Adrian Czermak, Thomas Wedekind, Karri Pajarinen
  * @copyright     2020 University of Vienna
  * @since         Moodle 3.8+
  * @license       http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

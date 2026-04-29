@@ -66,11 +66,6 @@
     transform: translate3d(22px, 2px, 0);
 }
 
-#local-contactlist-info-box {
-    max-width: max-content;
-    margin-left: 15px;
-}
-
 .contactlist_studentview_fnc {
     width: 30%;
     white-space: nowrap;
@@ -79,4 +74,5 @@
 .contactlist_studentview_cc {
     width: 10%;
     white-space: nowrap;
+    text-align: center;
 }
