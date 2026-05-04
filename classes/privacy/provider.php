@@ -99,12 +99,12 @@ class provider implements
 
         $contextlist->add_from_sql($sql, $params);
 
-        // Global visibility settings controlled by plugin.
+        // Always include the user's own context for the global profile setting.
         $params = ['userid' => $userid, 'contextlevel' => CONTEXT_USER];
         $sql = "SELECT ctx.id
-                FROM {context} ctx
-                JOIN {user_info_data} uid ON uid.userid = ctx.instanceid AND uid.userid = :userid
-                WHERE ctx.contextlevel = :contextlevel";
+                  FROM {context} ctx
+                 WHERE ctx.instanceid = :userid
+                   AND ctx.contextlevel = :contextlevel";
         $contextlist->add_from_sql($sql, $params);
 
         return $contextlist;
@@ -170,11 +170,20 @@ class provider implements
                 }
             }
             if ($context->contextlevel == CONTEXT_USER) {
-                $sql = "SELECT userid, fieldid, data, dataformat
-                    FROM {user_info_data} uid
-                    WHERE uid.userid = :instanceid";
-                $data = $DB->get_records_sql($sql, ['instanceid' => $context->instanceid]);
-                writer::with_context($context)->export_data([], (object) $data);
+                $globalinfofield = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
+                $globalvisibility = $DB->get_record('user_info_data', [
+                    'userid'  => $user->id,
+                    'fieldid' => $globalinfofield->id,
+                ]);
+                $profilevalue = ($globalvisibility && $globalvisibility->data === 'Yes')
+                    ? get_string('yes')
+                    : get_string('no');
+                writer::with_context($context)->export_data(
+                    [get_string('pluginname', 'local_contactlist')],
+                    (object) [
+                        'profile_visibility' => $profilevalue,
+                    ]
+                );
 
                 // Export personal settings panel expanded/collapsed preference.
                 $preference = get_user_preferences('local_contactlist_settings_expanded', null, $context->instanceid);
