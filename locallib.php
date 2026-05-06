@@ -270,11 +270,10 @@ function local_contactlist_get_settings_panel_context($userid, $courseid, $expan
     $chevronclass = $expanded ? 'fa-chevron-up' : 'fa-chevron-down';
 
     // Profile setting (read-only display).
-    $profileval  = ($globalsetting && $globalsetting->data === 'Yes') ? 'Yes' : 'No';
-    $profileopts = [
-        ['value' => 'Yes', 'label' => get_string('visible', 'local_contactlist'),   'selected' => $profileval === 'Yes'],
-        ['value' => 'No',  'label' => get_string('invisible', 'local_contactlist'), 'selected' => $profileval === 'No'],
-    ];
+    $profileval          = ($globalsetting && $globalsetting->data === 'Yes') ? 'Yes' : 'No';
+    $currentprofilevalue = $profileval === 'Yes'
+        ? get_string('visible', 'local_contactlist')
+        : get_string('invisible', 'local_contactlist');
 
     // Course-level visibility setting.
     $usedefault   = 0;
@@ -303,7 +302,7 @@ function local_contactlist_get_settings_panel_context($userid, $courseid, $expan
         'formaction'                => (new moodle_url('/local/contactlist/studentview.php'))->out(false),
         'courseid'                  => $courseid,
         'sesskey'                   => sesskey(),
-        'profileopts'               => $profileopts,
+        'currentprofilevalue'       => $currentprofilevalue,
         'profilelink'               => local_contactlist_get_profile_link($userid, $courseid),
         'usedefault'                => (bool) $usedefault,
         'visiboptions'              => $visiboptions,

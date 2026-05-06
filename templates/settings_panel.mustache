@@ -51,14 +51,8 @@
 
                     <span>{{str_currentprofilesetting}}:</span>
                     <div class="d-flex align-items-center gap-2">
-                        <select disabled
-                                autocomplete="off"
-                                class="form-select w-auto"
-                                aria-label="{{str_currentprofilesetting}}">
-                            {{#profileopts}}
-                            <option value="{{value}}"{{#selected}} selected{{/selected}}>{{label}}</option>
-                            {{/profileopts}}
-                        </select>
+                        <span class="form-select w-auto pe-none"
+                              style="background-color:var(--bs-secondary-bg,#e9ecef);cursor:default;">{{currentprofilevalue}}</span>
                         <a href="{{profilelink}}" id="contactlist-profile-link" target="_blank" rel="noopener noreferrer">{{str_change}}</a>
                     </div>
 
