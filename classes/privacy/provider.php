@@ -89,13 +89,14 @@ class provider implements
     public static function get_contexts_for_userid(int $userid): contextlist {
         $contextlist = new contextlist();
 
-        // Local plugin visibility settings.
+        // All course contexts where the user is enrolled.
         $params = ['userid' => $userid, 'contextlevel' => CONTEXT_COURSE];
-        $sql = "SELECT ctx.id
-                FROM {context} ctx
-                JOIN {course} c ON ctx.instanceid = c.id AND ctx.contextlevel = :contextlevel
-                JOIN {local_contactlist_course_vis} ctl ON c.id = ctl.courseid
-                WHERE ctl.userid = :userid";
+        $sql = "SELECT DISTINCT ctx.id
+                  FROM {context} ctx
+                  JOIN {course} c ON ctx.instanceid = c.id AND ctx.contextlevel = :contextlevel
+                  JOIN {enrol} e ON e.courseid = c.id
+                  JOIN {user_enrolments} ue ON ue.enrolid = e.id
+                 WHERE ue.userid = :userid";
 
         $contextlist->add_from_sql($sql, $params);
 
@@ -152,36 +153,35 @@ class provider implements
         $user = $contextlist->get_user();
         $contexts = $contextlist->get_contexts();
 
+        // Load global profile setting once for reuse across all course exports.
+        $globalinfofield = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
+        $globalvisibility = $globalinfofield ? $DB->get_record('user_info_data', [
+            'userid'  => $user->id,
+            'fieldid' => $globalinfofield->id,
+        ]) : null;
+        $globalvisible = ($globalvisibility && $globalvisibility->data === 'Yes');
+
         foreach ($contexts as $context) {
             if ($context->contextlevel == CONTEXT_COURSE) {
-                $record = $DB->get_record('local_contactlist_course_vis', [
+                $course = get_course($context->instanceid);
+                $override = $DB->get_record('local_contactlist_course_vis', [
                     'courseid' => $context->instanceid,
                     'userid'   => $user->id,
                 ]);
-                if ($record) {
-                    $course = get_course($context->instanceid);
-                    writer::with_context($context)->export_data(
-                        [get_string('pluginname', 'local_contactlist')],
-                        (object) [
-                            'course'     => format_string($course->fullname, true, ['context' => $context]),
-                            'visibility' => $record->visib == 1 ? get_string('yes') : get_string('no'),
-                        ]
-                    );
-                }
-            }
-            if ($context->contextlevel == CONTEXT_USER) {
-                $globalinfofield = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
-                $globalvisibility = $DB->get_record('user_info_data', [
-                    'userid'  => $user->id,
-                    'fieldid' => $globalinfofield->id,
-                ]);
-                $profilevalue = ($globalvisibility && $globalvisibility->data === 'Yes')
-                    ? get_string('yes')
-                    : get_string('no');
+                $visible = $override ? ($override->visib == 1) : $globalvisible;
                 writer::with_context($context)->export_data(
                     [get_string('pluginname', 'local_contactlist')],
                     (object) [
-                        'profile_visibility' => $profilevalue,
+                        'course'     => format_string($course->fullname, true, ['context' => $context]),
+                        'visibility' => $visible ? get_string('yes') : get_string('no'),
+                    ]
+                );
+            }
+            if ($context->contextlevel == CONTEXT_USER) {
+                writer::with_context($context)->export_data(
+                    [get_string('pluginname', 'local_contactlist')],
+                    (object) [
+                        'profile_visibility' => $globalvisible ? get_string('yes') : get_string('no'),
                     ]
                 );
 
