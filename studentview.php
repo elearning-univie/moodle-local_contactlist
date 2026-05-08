@@ -65,10 +65,8 @@ if ($node) {
     $node->make_active();
 }
 
-$customfieldcategory = $DB->get_record('customfield_category', ['name' => 'Privacy Settings']);
-$customfieldfield = $DB->get_record('customfield_field',
-                    ['categoryid' => $customfieldcategory->id, 'shortname' => 'conlistcoursevis']);
-$customfielddata = $DB->get_record('customfield_data',
+$customfieldfield = $DB->get_record('customfield_field', ['shortname' => 'conlistcoursevis']);
+$customfielddata  = $DB->get_record('customfield_data',
                    ['fieldid' => $customfieldfield->id, 'instanceid' => $context->instanceid]);
 
 if (($customfielddata && $customfielddata->intvalue == 2) || !has_capability('local/contactlist:view', $context)) {
