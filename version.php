@@ -32,4 +32,4 @@ $plugin->version   = 2026050700;
 $plugin->requires  = 2024100700;
 $plugin->component = 'local_contactlist';
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release   = "v5.0-r2";
+$plugin->release   = "v5.1-r1";
