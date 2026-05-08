@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## v5.0-r2 (2026-05-08)
+* [FIX] Contact list visibility now works correctly when the custom course field category has been renamed (backported from v5.2)
+
 ## v5.0-r1 (2025-05-02)
 * [FEATURE] Add further behat tests and update existing ones
 * [UPDATE] Update of readme file
