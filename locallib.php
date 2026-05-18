@@ -165,10 +165,18 @@ function local_contactlist_courselevel_visibility($userid, $courseid) {
  * @param string $sort Optional SQL sort.
  * @param int $limitfrom Return a subset of records, starting at this point (optional).
  * @param int $limitnum Return a subset comprising this many records (optional, required if $limitfrom is set).
+ * @param int $roleid Optional role filter (0 = all roles).
  * @return moodle_recordset
  */
-function local_contactlist_get_list($courseid, $additionalwhere = '', $additionalparams = [],
-                                    $sort = '', $limitfrom = 0, $limitnum = 0, $roleid = 0) {
+function local_contactlist_get_list(
+    $courseid,
+    $additionalwhere = '',
+    $additionalparams = [],
+    $sort = '',
+    $limitfrom = 0,
+    $limitnum = 0,
+    $roleid = 0
+) {
     global $DB;
 
     $wheres = [];
@@ -288,7 +296,7 @@ function local_contactlist_get_settings_panel_context($userid, $courseid, $expan
     }
 
     $visiboptions = [
-        ['value' => 1, 'label' => get_string('visible', 'local_contactlist'),   'selected' => $localsetting == 1],
+        ['value' => 1, 'label' => get_string('visible', 'local_contactlist'), 'selected' => $localsetting == 1],
         ['value' => 2, 'label' => get_string('invisible', 'local_contactlist'), 'selected' => $localsetting == 2],
     ];
 
@@ -328,10 +336,12 @@ function local_contactlist_get_chat_html($userid) {
 
     $chaturl = (string)new moodle_url("/message/index.php", ['id' => $userid]);
     $PAGE->requires->js_call_amd('core_message/message_user_button', 'send', ['#message-user-button' . $userid]);
-    return html_writer::link($chaturl,
+    return html_writer::link(
+        $chaturl,
         '<span><i class="icon fa fa-comment fa-fw iconsmall"  title="Message" aria-label="Message"></i></span>',
-        ['id' => 'message-user-button'.$userid, 'role' => 'button',
-            'data-conversationid' => 0, 'data-userid' => $userid, 'class' => 'btn']);
+        ['id' => 'message-user-button' . $userid, 'role' => 'button',
+            'data-conversationid' => 0, 'data-userid' => $userid, 'class' => 'btn']
+    );
 }
 
 /**
@@ -350,7 +360,6 @@ function local_contactlist_get_profile_link($userid, $courseid) {
     $returnurl = (string)new moodle_url("/local/contactlist/studentview.php", ['id' => $courseid]);
     return (string)new moodle_url("/user/edit.php", ['id' => $userid, 'returnto' => 'url',
         'aria-expanded' => 'true', 'returnurl' => $returnurl], $anchor);
-
 }
 
 /**

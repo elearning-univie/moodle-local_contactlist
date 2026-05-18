@@ -41,8 +41,7 @@ use core_privacy\local\request\writer;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @covers \local_contactlist\privacy\provider
  */
-class provider_test extends \core_privacy\tests\provider_testcase {
-
+final class provider_test extends \core_privacy\tests\provider_testcase {
     /**
      * Test for provider::get_metadata().
      */
@@ -124,7 +123,7 @@ class provider_test extends \core_privacy\tests\provider_testcase {
         $user3 = $this->getDataGenerator()->create_user(['profile_field_contactlistdd' => 'Yes']);
         $this->getDataGenerator()->enrol_user($user3->id, $course->id, 'student');
         $usercontext = \context_user::instance($user3->id);
-        $userlist = new \core_privacy\local\request\userlist($usercontext , $component);
+        $userlist = new \core_privacy\local\request\userlist($usercontext, $component);
         provider::get_users_in_context($userlist);
         $this->assertCount(1, $userlist);
         $this->assertTrue(in_array($user3->id, $userlist->get_userids()));
@@ -157,13 +156,11 @@ class provider_test extends \core_privacy\tests\provider_testcase {
      * Test for provider::delete_data_for_all_users_in_context().
      */
     public function test_delete_data_for_all_users_in_context(): void {
-
     }
 
     /**
      * Test for provider::delete_data_for_user().
      */
     public function test_delete_data_for_user(): void {
-
     }
 }

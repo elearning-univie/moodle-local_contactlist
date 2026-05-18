@@ -75,8 +75,14 @@ function local_contactlist_extend_navigation_course(navigation_node $navigation,
     $url = new moodle_url('/local/contactlist/studentview.php', ['id' => $course->id]);
     $title = get_string('nodename', 'local_contactlist');
     $pix = new pix_icon('t/addcontact', $title);
-    $newnode = navigation_node::create($title, $url, navigation_node::TYPE_SETTING, 'contactlist',
-        'contactlist', $pix);
+    $newnode = navigation_node::create(
+        $title,
+        $url,
+        navigation_node::TYPE_SETTING,
+        'contactlist',
+        'contactlist',
+        $pix
+    );
 
     $navigation->add_node($newnode);
 }

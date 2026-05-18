@@ -23,10 +23,10 @@
  */
 
 require_once(__DIR__ . '/../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->dirroot . '/local/contactlist/locallib.php');
 require_once($CFG->dirroot . '/local/contactlist/contactlist_table.php');
-require_once($CFG->libdir.'/tablelib.php');
+require_once($CFG->libdir . '/tablelib.php');
 
 global $PAGE, $OUTPUT, $USER, $DB, $COURSE;
 
@@ -67,8 +67,8 @@ if ($node) {
 }
 
 $customfieldfield = $DB->get_record('customfield_field', ['shortname' => 'conlistcoursevis']);
-$customfielddata  = $DB->get_record('customfield_data',
-                   ['fieldid' => $customfieldfield->id, 'instanceid' => $context->instanceid]);
+$customfielddata = $DB->get_record('customfield_data',
+    ['fieldid' => $customfieldfield->id, 'instanceid' => $context->instanceid]);
 
 if (($customfielddata && $customfielddata->intvalue == 2) || !has_capability('local/contactlist:view', $context)) {
     echo $OUTPUT->header();

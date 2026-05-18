@@ -32,30 +32,19 @@ function xmldb_local_contactlist_uninstall() {
     global $DB;
 
     try {
-        $userinfocategory = $DB->get_record('user_info_category', ['name' => 'Privacy Settings']);
-        $id = $userinfocategory->id;
+        $userinfofield = $DB->get_record('user_info_field', ['shortname' => 'contactlistdd']);
+        if ($userinfofield) {
+            $DB->delete_records('user_info_data', ['fieldid' => $userinfofield->id]);
+            $DB->delete_records('user_info_field', ['id' => $userinfofield->id]);
+            $DB->delete_records('user_info_category', ['id' => $userinfofield->categoryid]);
+        }
 
-        $userinfofield = $DB->get_record('user_info_field',  ['categoryid' => $id]);
-        $fieldid = $userinfofield->id;
-
-        $DB->delete_records('user_info_data',  ['fieldid' => $fieldid]);
-
-        $DB->delete_records('user_info_field',  ['categoryid' => $id]);
-
-        $DB->delete_records('user_info_category', ['name' => 'Privacy Settings']);
-
-        $coursecategory = $DB->get_record('customfield_category', ['name' => 'Privacy Settings']);
-        $id = $coursecategory->id;
-
-        $coursefield = $DB->get_record('customfield_field',  ['categoryid' => $id]);
-        $fieldid = $coursefield->id;
-
-        $DB->delete_records('customfield_data',  ['fieldid' => $fieldid]);
-
-        $DB->delete_records('customfield_field',  ['categoryid' => $id]);
-
-        $DB->delete_records('customfield_category', ['name' => 'Privacy Settings']);
-
+        $coursefield = $DB->get_record('customfield_field', ['shortname' => 'conlistcoursevis']);
+        if ($coursefield) {
+            $DB->delete_records('customfield_data', ['fieldid' => $coursefield->id]);
+            $DB->delete_records('customfield_field', ['id' => $coursefield->id]);
+            $DB->delete_records('customfield_category', ['id' => $coursefield->categoryid]);
+        }
     } catch (\Throwable $e) {
         echo "$e->getMessage()";
     }

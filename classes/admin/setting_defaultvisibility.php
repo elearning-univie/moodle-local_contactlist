@@ -31,7 +31,6 @@ defined('MOODLE_INTERNAL') || die();
  * course custom field configdata when the admin setting is saved.
  */
 class setting_defaultvisibility extends \admin_setting_configselect {
-
     /**
      * Saves the setting value and updates the defaultvalue.
      *
@@ -43,12 +42,7 @@ class setting_defaultvisibility extends \admin_setting_configselect {
 
         global $DB;
 
-        $field = $DB->get_record_sql(
-            "SELECT cff.* FROM {customfield_field} cff
-               JOIN {customfield_category} cfc ON cff.categoryid = cfc.id
-              WHERE cfc.name = :catname AND cff.shortname = :shortname",
-            ['catname' => 'Privacy Settings', 'shortname' => 'conlistcoursevis']
-        );
+        $field = $DB->get_record('customfield_field', ['shortname' => 'conlistcoursevis']);
 
         if ($field && $field->configdata) {
             $configdata = json_decode($field->configdata, true);

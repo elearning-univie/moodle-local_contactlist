@@ -48,9 +48,9 @@ const savePreference = (expanded) => {
  */
 export const init = (hideText, showText) => {
 
-    const collapseEl  = document.getElementById('contactlist-settings-collapse');
-    const toggleText  = document.getElementById('contactlist-toggle-text');
-    const toggleIcon  = document.getElementById('contactlist-toggle-icon');
+    const collapseEl = document.getElementById('contactlist-settings-collapse');
+    const toggleText = document.getElementById('contactlist-toggle-text');
+    const toggleIcon = document.getElementById('contactlist-toggle-icon');
 
     if (collapseEl && toggleText && toggleIcon) {
         collapseEl.addEventListener('show.bs.collapse', () => {
@@ -69,7 +69,7 @@ export const init = (hideText, showText) => {
     }
 
     const useDefaultEl = document.getElementById('contactlist-usedefault');
-    const visibEl      = document.getElementById('contactlist-visib');
+    const visibEl = document.getElementById('contactlist-visib');
 
     if (useDefaultEl && visibEl) {
         const syncDisabled = () => {

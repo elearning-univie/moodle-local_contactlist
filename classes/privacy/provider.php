@@ -61,7 +61,7 @@ class provider implements
                 'data' => 'privacy:metadata:user_info_data:data',
             ],
             'privacy:metadata:user_info_data'
-            );
+        );
 
         $collection->add_database_table(
             'local_contactlist_course_vis',
@@ -71,7 +71,7 @@ class provider implements
                 'visib' => 'privacy:metadata:local_contactlist_course_vis:visib',
             ],
             'privacy:metadata:local_contactlist_course_vis'
-            );
+        );
 
         $collection->add_user_preference(
             'local_contactlist_settings_expanded',

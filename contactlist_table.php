@@ -37,7 +37,6 @@ require_once(__DIR__ . '/locallib.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class contactlist_table extends \table_sql {
-
     /**
      * @var int $courseid The course id
      */
@@ -150,7 +149,7 @@ class contactlist_table extends \table_sql {
        * @param bool $useinitialsbar do you want to use the initials bar.
        */
     public function query_db($pagesize, $useinitialsbar = true) {
-        list($twhere, $tparams) = $this->get_sql_where();
+        [$twhere, $tparams] = $this->get_sql_where();
 
         $total = local_contactlist_get_total_visible($this->courseid, $this->roleid);
 
@@ -162,7 +161,14 @@ class contactlist_table extends \table_sql {
         }
 
         $rawdata = local_contactlist_get_list(
-            $this->courseid, $twhere, $tparams, $sort, $this->get_page_start(), $this->get_page_size(), $this->roleid);
+            $this->courseid,
+            $twhere,
+            $tparams,
+            $sort,
+            $this->get_page_start(),
+            $this->get_page_size(),
+            $this->roleid
+        );
         $this->rawdata = [];
 
         foreach ($rawdata as $user) {
@@ -200,4 +206,3 @@ class contactlist_table extends \table_sql {
         ]);
     }
 }
-
