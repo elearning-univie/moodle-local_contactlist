@@ -1,6 +1,10 @@
 # CHANGELOG
 ===================
 
+## v5.2-r2 (2026-05-19)
+-----------
+* [FIX] Default visibility setting failed silently when course custom field category was renamed
+
 ## v5.2-r1 (2026-05-08)
 -----------
 * Moodle 5.2 compatible version
