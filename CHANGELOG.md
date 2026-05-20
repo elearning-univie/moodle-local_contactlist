@@ -1,12 +1,16 @@
 # CHANGELOG
 
+## v5.0-r3 (2026-05-19)
+-----------
+* [FIX] Default visibility setting failed silently when course custom field category was renamed
+
 ## v5.0-r2 (2026-05-08)
-* [FIX] Contact list visibility now works correctly when the custom course field category has been renamed (backported from v5.2)
+* [FIX] Contact list visibility now works correctly when the custom course field category has been renamed
 
 ## v5.0-r1 (2025-05-02)
+* Moodle 5.0 compatible version
 * [FEATURE] Add further behat tests and update existing ones
 * [UPDATE] Update of readme file
-* Moodle 5.0 compatible version
 
 ## 4.5.0
 * Moodle 4.5 compatible version
